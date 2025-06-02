@@ -11,9 +11,15 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
         # Füge Animationen für das TabWidget hinzu
         self.anim_tabs = AnimatedTabHelper(self.tw_rohteil_erstellen)
+        # TEST
+        self.pb_rechteck.clicked.connect(self.rechteck_erstellen)
+        self.le_rechteck_hoehe.editingFinished.connect(self.rechteck_erstellen)
+
+    @qtc.Slot()
+    def rechteck_erstellen(self):
+        print("Rechteck wurde erstellt!")
 
 
 if __name__ == "__main__":
@@ -21,7 +27,7 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
 
-    # with open("UI/Styles/Perstfic.qss", "r") as stylesheet_file:
-    #     app.setStyleSheet(stylesheet_file.read())
+    with open("UI/Styles/Perstfic.qss", "r") as stylesheet_file:
+        app.setStyleSheet(stylesheet_file.read())
 
     sys.exit(app.exec())
