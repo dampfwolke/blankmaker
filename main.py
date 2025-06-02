@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtCore as qtc
@@ -19,15 +20,20 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
     @qtc.Slot()
     def rechteck_erstellen(self):
-        print("Rechteck wurde erstellt!")
+        self.statusBar().showMessage(f"Rechteck wurde erstellt. {self.zeitstempel()}", 5000)
+        print(f"Rechteck wurde erstellt! {self.zeitstempel()}")
 
+    def zeitstempel(self) -> str:
+        aktuelle_zeit = datetime.now()
+        zeitstempel = aktuelle_zeit.strftime("%H:%M:%S")
+        return zeitstempel
 
 if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)
     window = MainWindow()
     window.show()
 
-    with open("UI/Styles/Perstfic.qss", "r") as stylesheet_file:
-        app.setStyleSheet(stylesheet_file.read())
+    # with open("UI/Styles/Perstfic.qss", "r") as stylesheet_file:
+    #     app.setStyleSheet(stylesheet_file.read())
 
     sys.exit(app.exec())

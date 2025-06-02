@@ -84,6 +84,7 @@ class Ui_frm_main_window(object):
         font1.setPointSize(12)
         font1.setBold(True)
         self.pb_rechteck.setFont(font1)
+        self.pb_rechteck.setAutoDefault(True)
 
         self.gridLayout.addWidget(self.pb_rechteck, 3, 1, 1, 1)
 
@@ -138,6 +139,12 @@ class Ui_frm_main_window(object):
         frm_main_window.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(frm_main_window)
         self.statusbar.setObjectName(u"statusbar")
+        font2 = QFont()
+        font2.setFamilies([u"Comic Sans MS"])
+        font2.setPointSize(14)
+        font2.setBold(True)
+        font2.setHintingPreference(QFont.PreferFullHinting)
+        self.statusbar.setFont(font2)
         frm_main_window.setStatusBar(self.statusbar)
 
         self.retranslateUi(frm_main_window)

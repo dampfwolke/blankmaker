@@ -139,6 +139,9 @@
         <property name="text">
          <string>Rechteck erstellen</string>
         </property>
+        <property name="autoDefault">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="3" column="0">
@@ -250,7 +253,16 @@
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="font">
+    <font>
+     <family>Comic Sans MS</family>
+     <pointsize>14</pointsize>
+     <bold>true</bold>
+     <hintingpreference>PreferFullHinting</hintingpreference>
+    </font>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
