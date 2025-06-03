@@ -33,12 +33,12 @@ class Ui_frm_main_window(object):
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.tw_rohteil_erstellen = QTabWidget(self.centralwidget)
         self.tw_rohteil_erstellen.setObjectName(u"tw_rohteil_erstellen")
-        self.tw_rohteil_erstellen.setMinimumSize(QSize(450, 200))
-        self.tw_rohteil_erstellen.setMaximumSize(QSize(16777215, 250))
+        self.tw_rohteil_erstellen.setMinimumSize(QSize(450, 225))
+        self.tw_rohteil_erstellen.setMaximumSize(QSize(16777215, 300))
         font = QFont()
         font.setFamilies([u"Comic Sans MS"])
         font.setPointSize(12)
-        font.setBold(True)
+        font.setBold(False)
         self.tw_rohteil_erstellen.setFont(font)
         self.tw_rohteil_erstellen.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.tab_rechteck = QWidget()
@@ -57,11 +57,7 @@ class Ui_frm_main_window(object):
         sizePolicy.setHeightForWidth(self.lb_rechteck_laenge.sizePolicy().hasHeightForWidth())
         self.lb_rechteck_laenge.setSizePolicy(sizePolicy)
         self.lb_rechteck_laenge.setMaximumSize(QSize(200, 50))
-        font1 = QFont()
-        font1.setFamilies([u"Comic Sans MS"])
-        font1.setPointSize(12)
-        font1.setBold(False)
-        self.lb_rechteck_laenge.setFont(font1)
+        self.lb_rechteck_laenge.setFont(font)
         self.lb_rechteck_laenge.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout.addWidget(self.lb_rechteck_laenge)
@@ -76,7 +72,7 @@ class Ui_frm_main_window(object):
         self.le_rechteck_laenge.setSizePolicy(sizePolicy)
         self.le_rechteck_laenge.setMinimumSize(QSize(100, 30))
         self.le_rechteck_laenge.setMaximumSize(QSize(150, 50))
-        self.le_rechteck_laenge.setFont(font1)
+        self.le_rechteck_laenge.setFont(font)
 
         self.horizontalLayout.addWidget(self.le_rechteck_laenge)
 
@@ -96,7 +92,7 @@ class Ui_frm_main_window(object):
         sizePolicy.setHeightForWidth(self.lb_rechteck_breite.sizePolicy().hasHeightForWidth())
         self.lb_rechteck_breite.setSizePolicy(sizePolicy)
         self.lb_rechteck_breite.setMaximumSize(QSize(200, 50))
-        self.lb_rechteck_breite.setFont(font1)
+        self.lb_rechteck_breite.setFont(font)
         self.lb_rechteck_breite.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_2.addWidget(self.lb_rechteck_breite)
@@ -111,7 +107,7 @@ class Ui_frm_main_window(object):
         self.le_rechteck_breite.setSizePolicy(sizePolicy)
         self.le_rechteck_breite.setMinimumSize(QSize(100, 30))
         self.le_rechteck_breite.setMaximumSize(QSize(150, 50))
-        self.le_rechteck_breite.setFont(font1)
+        self.le_rechteck_breite.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.le_rechteck_breite)
 
@@ -131,7 +127,7 @@ class Ui_frm_main_window(object):
         sizePolicy.setHeightForWidth(self.lb_rechteck_hoehe.sizePolicy().hasHeightForWidth())
         self.lb_rechteck_hoehe.setSizePolicy(sizePolicy)
         self.lb_rechteck_hoehe.setMaximumSize(QSize(200, 50))
-        self.lb_rechteck_hoehe.setFont(font1)
+        self.lb_rechteck_hoehe.setFont(font)
         self.lb_rechteck_hoehe.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_3.addWidget(self.lb_rechteck_hoehe)
@@ -146,7 +142,7 @@ class Ui_frm_main_window(object):
         self.le_rechteck_hoehe.setSizePolicy(sizePolicy)
         self.le_rechteck_hoehe.setMinimumSize(QSize(100, 30))
         self.le_rechteck_hoehe.setMaximumSize(QSize(150, 50))
-        self.le_rechteck_hoehe.setFont(font1)
+        self.le_rechteck_hoehe.setFont(font)
 
         self.horizontalLayout_3.addWidget(self.le_rechteck_hoehe)
 
@@ -171,7 +167,11 @@ class Ui_frm_main_window(object):
 
         self.pb_rechteck = QPushButton(self.wg_button_roh)
         self.pb_rechteck.setObjectName(u"pb_rechteck")
-        self.pb_rechteck.setFont(font)
+        font1 = QFont()
+        font1.setFamilies([u"Comic Sans MS"])
+        font1.setPointSize(12)
+        font1.setBold(True)
+        self.pb_rechteck.setFont(font1)
         self.pb_rechteck.setAutoDefault(True)
 
         self.horizontalLayout_4.addWidget(self.pb_rechteck)
@@ -195,7 +195,7 @@ class Ui_frm_main_window(object):
         self.lb_durchmesser = QLabel(self.wg_durchmesser)
         self.lb_durchmesser.setObjectName(u"lb_durchmesser")
         self.lb_durchmesser.setMaximumSize(QSize(200, 50))
-        self.lb_durchmesser.setFont(font1)
+        self.lb_durchmesser.setFont(font)
         self.lb_durchmesser.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_7.addWidget(self.lb_durchmesser)
@@ -210,7 +210,7 @@ class Ui_frm_main_window(object):
         self.le_durchmesser.setSizePolicy(sizePolicy)
         self.le_durchmesser.setMinimumSize(QSize(100, 30))
         self.le_durchmesser.setMaximumSize(QSize(150, 50))
-        self.le_durchmesser.setFont(font1)
+        self.le_durchmesser.setFont(font)
 
         self.horizontalLayout_7.addWidget(self.le_durchmesser)
 
@@ -228,7 +228,7 @@ class Ui_frm_main_window(object):
         self.lb_kreis_hoehe = QLabel(self.wg_z_kreis)
         self.lb_kreis_hoehe.setObjectName(u"lb_kreis_hoehe")
         self.lb_kreis_hoehe.setMaximumSize(QSize(200, 50))
-        self.lb_kreis_hoehe.setFont(font1)
+        self.lb_kreis_hoehe.setFont(font)
         self.lb_kreis_hoehe.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_6.addWidget(self.lb_kreis_hoehe)
@@ -243,7 +243,7 @@ class Ui_frm_main_window(object):
         self.le_z_kreis.setSizePolicy(sizePolicy)
         self.le_z_kreis.setMinimumSize(QSize(100, 30))
         self.le_z_kreis.setMaximumSize(QSize(150, 50))
-        self.le_z_kreis.setFont(font1)
+        self.le_z_kreis.setFont(font)
 
         self.horizontalLayout_6.addWidget(self.le_z_kreis)
 
@@ -268,7 +268,7 @@ class Ui_frm_main_window(object):
 
         self.pb_kreis = QPushButton(self.wg_button_kreis)
         self.pb_kreis.setObjectName(u"pb_kreis")
-        self.pb_kreis.setFont(font)
+        self.pb_kreis.setFont(font1)
 
         self.horizontalLayout_5.addWidget(self.pb_kreis)
 
@@ -287,11 +287,7 @@ class Ui_frm_main_window(object):
         self.gb_spannmittel.setObjectName(u"gb_spannmittel")
         self.gb_spannmittel.setMinimumSize(QSize(450, 120))
         self.gb_spannmittel.setMaximumSize(QSize(16777215, 300))
-        font2 = QFont()
-        font2.setFamilies([u"Comic Sans MS"])
-        font2.setPointSize(14)
-        font2.setBold(True)
-        self.gb_spannmittel.setFont(font2)
+        self.gb_spannmittel.setFont(font)
         self.gb_spannmittel.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
         self.verticalLayout_3 = QVBoxLayout(self.gb_spannmittel)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
@@ -304,7 +300,7 @@ class Ui_frm_main_window(object):
         sizePolicy.setHeightForWidth(self.lb_pfad.sizePolicy().hasHeightForWidth())
         self.lb_pfad.setSizePolicy(sizePolicy)
         self.lb_pfad.setMaximumSize(QSize(200, 200))
-        self.lb_pfad.setFont(font1)
+        self.lb_pfad.setFont(font)
         self.lb_pfad.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout_10.addWidget(self.lb_pfad)
@@ -316,11 +312,11 @@ class Ui_frm_main_window(object):
         self.le_pfad = QLineEdit(self.wg_zielpfad)
         self.le_pfad.setObjectName(u"le_pfad")
         self.le_pfad.setMinimumSize(QSize(400, 0))
-        font3 = QFont()
-        font3.setFamilies([u"Comic Sans MS"])
-        font3.setPointSize(10)
-        font3.setBold(False)
-        self.le_pfad.setFont(font3)
+        font2 = QFont()
+        font2.setFamilies([u"Comic Sans MS"])
+        font2.setPointSize(10)
+        font2.setBold(False)
+        self.le_pfad.setFont(font2)
 
         self.horizontalLayout_10.addWidget(self.le_pfad)
 
@@ -351,13 +347,13 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_9.addWidget(self.tb_spannmittel_aufklappen)
 
-        self.horizontalSpacer_6 = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_6 = QSpacerItem(15, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_9.addItem(self.horizontalSpacer_6)
 
         self.pb_spannmittel = QPushButton(self.wg_spannmittel_erstellen)
         self.pb_spannmittel.setObjectName(u"pb_spannmittel")
-        self.pb_spannmittel.setFont(font)
+        self.pb_spannmittel.setFont(font1)
         self.pb_spannmittel.setAutoDefault(True)
 
         self.horizontalLayout_9.addWidget(self.pb_spannmittel)
@@ -386,7 +382,7 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
         self.cb_datum_editieren = QCheckBox(self.wg_datum_editieren)
         self.cb_datum_editieren.setObjectName(u"cb_datum_editieren")
-        self.cb_datum_editieren.setFont(font1)
+        self.cb_datum_editieren.setFont(font)
 
         self.horizontalLayout_8.addWidget(self.cb_datum_editieren)
 
@@ -417,12 +413,12 @@ class Ui_frm_main_window(object):
         frm_main_window.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(frm_main_window)
         self.statusbar.setObjectName(u"statusbar")
-        font4 = QFont()
-        font4.setFamilies([u"Comic Sans MS"])
-        font4.setPointSize(14)
-        font4.setBold(True)
-        font4.setHintingPreference(QFont.PreferFullHinting)
-        self.statusbar.setFont(font4)
+        font3 = QFont()
+        font3.setFamilies([u"Comic Sans MS"])
+        font3.setPointSize(14)
+        font3.setBold(True)
+        font3.setHintingPreference(QFont.PreferFullHinting)
+        self.statusbar.setFont(font3)
         self.statusbar.setStyleSheet(u"QStatusBar {\n"
 "    color: green;             /* Textfarbe */\n"
 "    font-weight: bold;\n"
@@ -433,7 +429,7 @@ class Ui_frm_main_window(object):
         self.tb_spannmittel_aufklappen.clicked["bool"].connect(self.wg_datum_editieren.setHidden)
         self.cb_datum_editieren.clicked["bool"].connect(self.le_pfad.setEnabled)
 
-        self.tw_rohteil_erstellen.setCurrentIndex(1)
+        self.tw_rohteil_erstellen.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(frm_main_window)
