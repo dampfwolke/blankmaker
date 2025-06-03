@@ -33,7 +33,7 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
 
-    # with open("UI/Styles/Perstfic.qss", "r") as stylesheet_file:
-    #     app.setStyleSheet(stylesheet_file.read())
+    with open("UI/Styles/Perstfic.qss", "r") as stylesheet_file:
+        app.setStyleSheet(stylesheet_file.read())
 
     sys.exit(app.exec())

@@ -38,7 +38,8 @@ class AnimatedTabHelper:
         self.anim_new.setDuration(1000)
         self.anim_new.setStartValue(QPoint(richtung * w, 0))
         self.anim_new.setEndValue(QPoint(0, 0))
-        self.anim_new.setEasingCurve(QEasingCurve.OutInExpo)
+        self.anim_new.setEasingCurve(QEasingCurve.OutCubic)
+        #self.anim_new.setEasingCurve(QEasingCurve.OutInExpo)
 
         self.anim_old.start()
         self.anim_new.start()
