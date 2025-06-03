@@ -1,6 +1,6 @@
 import ezdxf
 
-def kreis_erstellen(diameter, height, base_offset=0.2):
+def kreis_erstellen(diameter, height, base_offset=0.35):
     """
     diameter: Durchmesser des Kreises in mm
     height: Höhe in mm
@@ -18,14 +18,14 @@ def kreis_erstellen(diameter, height, base_offset=0.2):
     msp.add_circle((0, 0, z_offset2), radius, dxfattribs={'layer': 'Roh', 'color': 198})
 
     # Dynamische Textgröße (mindestens 2.5 mm, maximal 10 mm)
-    text_height = max(2.5, min(diameter * 0.08, 10))
+    text_height = max(1.45, min(diameter * 0.05, 8))
 
     # Abstand zwischen Kreis und Text proportional zum Radius
     dim_offset = radius * base_offset
 
     # Position für Texte: entlang +X, mit dim_offset Abstand
     x_pos = radius + dim_offset
-    y_pos = 0
+    y_pos = 0 
     z_pos = z_offset2
 
     # Rotation 270° -> Text steht senkrecht nach unten
@@ -44,7 +44,7 @@ def kreis_erstellen(diameter, height, base_offset=0.2):
     diameter_text.dxf.insert = (x_pos, y_pos, z_pos)
 
     # Abstand zwischen den Texten: 1.5x Texthöhe (dynamisch)
-    text_spacing = text_height * 1.5
+    text_spacing = text_height * 1.3
 
     # Text 2: Höhe, unter Text 1 (weil Rotation 270° verschiebt sich in X-Richtung)
     height_text = msp.add_text(
@@ -65,4 +65,4 @@ if __name__ == "__main__":
     # Test mit verschiedenen Durchmessern
     #kreis_erstellen(15, 25)
     #kreis_erstellen(60, 30)
-    kreis_erstellen(120, 50)
+    kreis_erstellen(12, 50)
