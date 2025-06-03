@@ -76,7 +76,6 @@ class Ui_frm_main_window(object):
         self.le_rechteck_laenge.setSizePolicy(sizePolicy)
         self.le_rechteck_laenge.setMinimumSize(QSize(100, 30))
         self.le_rechteck_laenge.setMaximumSize(QSize(150, 50))
-        self.le_rechteck_laenge.setFont(font1)
 
         self.horizontalLayout.addWidget(self.le_rechteck_laenge)
 
@@ -101,7 +100,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_2.addWidget(self.lb_rechteck_breite)
 
-        self.horizontalSpacer_15 = QSpacerItem(76, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_15 = QSpacerItem(75, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_15)
 
@@ -210,7 +209,6 @@ class Ui_frm_main_window(object):
         self.le_durchmesser.setSizePolicy(sizePolicy)
         self.le_durchmesser.setMinimumSize(QSize(100, 30))
         self.le_durchmesser.setMaximumSize(QSize(150, 50))
-        self.le_durchmesser.setFont(font1)
 
         self.horizontalLayout_7.addWidget(self.le_durchmesser)
 
@@ -243,7 +241,6 @@ class Ui_frm_main_window(object):
         self.le_z_kreis.setSizePolicy(sizePolicy)
         self.le_z_kreis.setMinimumSize(QSize(100, 30))
         self.le_z_kreis.setMaximumSize(QSize(150, 50))
-        self.le_z_kreis.setFont(font1)
 
         self.horizontalLayout_6.addWidget(self.le_z_kreis)
 
@@ -433,7 +430,7 @@ class Ui_frm_main_window(object):
         self.tb_spannmittel_aufklappen.clicked["bool"].connect(self.wg_datum_editieren.setHidden)
         self.cb_datum_editieren.clicked["bool"].connect(self.le_pfad.setEnabled)
 
-        self.tw_rohteil_erstellen.setCurrentIndex(1)
+        self.tw_rohteil_erstellen.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(frm_main_window)

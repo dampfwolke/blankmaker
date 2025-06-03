@@ -1,0 +1,10 @@
+{
+  "styles": "Darkisi.qss",
+  "stylesheet": "UI/Styles/{styles}",
+  "nc_base_path": "K:/Esprit/NC-Files",
+  "projekt_prefix": "AT-25",
+  "nutzername": "Hasanovic",
+  "weitere_einstellungen": {
+    "pfad_template": "{base_path}/{projekt}-KW{kw}/{nutzer}/{wochentag}"
+  }
+}
