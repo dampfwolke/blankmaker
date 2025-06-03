@@ -16,6 +16,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.wg_datum_editieren.setHidden(True)
         self.le_pfad.setDisabled(True)
         self.de_datum.setDate(qtc.QDate.currentDate())
+        self.statusBar()
         # Füge Animationen für das TabWidget hinzu
         self.anim_tabs = AnimatedTabHelper(self.tw_rohteil_erstellen)
 
@@ -35,7 +36,7 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
 
-    # with open("UI/Styles/Perstfic.qss", "r") as stylesheet_file:
-    #     app.setStyleSheet(stylesheet_file.read())
+    with open("UI/Styles/Dtor.qss", "r") as stylesheet_file:
+        app.setStyleSheet(stylesheet_file.read())
 
     sys.exit(app.exec())

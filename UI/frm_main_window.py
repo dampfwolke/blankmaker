@@ -282,7 +282,7 @@ class Ui_frm_main_window(object):
 
         self.gb_spannmittel = QGroupBox(self.centralwidget)
         self.gb_spannmittel.setObjectName(u"gb_spannmittel")
-        self.gb_spannmittel.setMinimumSize(QSize(450, 200))
+        self.gb_spannmittel.setMinimumSize(QSize(450, 120))
         self.gb_spannmittel.setMaximumSize(QSize(16777215, 300))
         font2 = QFont()
         font2.setFamilies([u"Comic Sans MS"])
@@ -306,7 +306,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_10.addWidget(self.lb_pfad)
 
-        self.horizontalSpacer_8 = QSpacerItem(86, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_8 = QSpacerItem(80, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_10.addItem(self.horizontalSpacer_8)
 
@@ -348,7 +348,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_9.addWidget(self.tb_spannmittel_aufklappen)
 
-        self.horizontalSpacer_6 = QSpacerItem(31, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_6 = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_9.addItem(self.horizontalSpacer_6)
 
@@ -373,12 +373,17 @@ class Ui_frm_main_window(object):
 
         self.verticalLayout_3.addWidget(self.line)
 
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_3.addItem(self.verticalSpacer_3)
+
         self.wg_datum_editieren = QWidget(self.gb_spannmittel)
         self.wg_datum_editieren.setObjectName(u"wg_datum_editieren")
         self.horizontalLayout_8 = QHBoxLayout(self.wg_datum_editieren)
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
         self.cb_datum_editieren = QCheckBox(self.wg_datum_editieren)
         self.cb_datum_editieren.setObjectName(u"cb_datum_editieren")
+        self.cb_datum_editieren.setFont(font1)
 
         self.horizontalLayout_8.addWidget(self.cb_datum_editieren)
 
@@ -415,10 +420,16 @@ class Ui_frm_main_window(object):
         font4.setBold(True)
         font4.setHintingPreference(QFont.PreferFullHinting)
         self.statusbar.setFont(font4)
+        self.statusbar.setStyleSheet(u"QStatusBar {\n"
+"    background-color: #444;   /* dunkles Grau */\n"
+"    color: green;             /* Textfarbe */\n"
+"    font-weight: bold;\n"
+"}")
         frm_main_window.setStatusBar(self.statusbar)
 
         self.retranslateUi(frm_main_window)
         self.tb_spannmittel_aufklappen.clicked["bool"].connect(self.wg_datum_editieren.setHidden)
+        self.cb_datum_editieren.clicked["bool"].connect(self.le_pfad.setEnabled)
 
         self.tw_rohteil_erstellen.setCurrentIndex(0)
 
@@ -447,6 +458,6 @@ class Ui_frm_main_window(object):
         self.le_pfad.setText(QCoreApplication.translate("frm_main_window", u"\"C:\\Users\\Ismail\\Pictures\\\"", None))
         self.tb_spannmittel_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
         self.pb_spannmittel.setText(QCoreApplication.translate("frm_main_window", u"Spannmittel erstellen", None))
-        self.cb_datum_editieren.setText(QCoreApplication.translate("frm_main_window", u"Datum editieren", None))
+        self.cb_datum_editieren.setText(QCoreApplication.translate("frm_main_window", u"Zielpfad editieren", None))
     # retranslateUi
 
