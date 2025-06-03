@@ -37,7 +37,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         qt_date = self.de_datum.date()
         py_date = qt_date.toPython()
         kw, wochentag = kw_ermitteln(py_date)
-
         pfad = get_pfad_from_template(self.settings, kw, wochentag)
         self.le_pfad.setText(pfad)
 
