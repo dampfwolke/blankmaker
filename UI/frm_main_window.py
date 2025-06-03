@@ -306,7 +306,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_10.addWidget(self.lb_pfad)
 
-        self.horizontalSpacer_8 = QSpacerItem(80, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_8 = QSpacerItem(5, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_10.addItem(self.horizontalSpacer_8)
 
