@@ -421,7 +421,6 @@ class Ui_frm_main_window(object):
         font4.setHintingPreference(QFont.PreferFullHinting)
         self.statusbar.setFont(font4)
         self.statusbar.setStyleSheet(u"QStatusBar {\n"
-"    background-color: #444;   /* dunkles Grau */\n"
 "    color: green;             /* Textfarbe */\n"
 "    font-weight: bold;\n"
 "}")

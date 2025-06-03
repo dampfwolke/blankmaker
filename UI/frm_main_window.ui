@@ -943,7 +943,6 @@
    </property>
    <property name="styleSheet">
     <string notr="true">QStatusBar {
-    background-color: #444;   /* dunkles Grau */
     color: green;             /* Textfarbe */
     font-weight: bold;
 }</string>

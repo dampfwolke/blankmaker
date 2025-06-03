@@ -5,6 +5,7 @@ from PySide6 import QtCore as qtc
 from PySide6 import QtGui as qtg
 
 from utils.zeitstempel import zeitstempel
+from utils.kalenderwoche import kw_ermitteln
 
 from UI.frm_main_window import Ui_frm_main_window
 from UI.animated_tabhelper import AnimatedTabHelper  # <-- Animation importieren
@@ -24,6 +25,8 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.pb_rechteck.clicked.connect(self.rechteck_erstellen)
         self.le_rechteck_hoehe.editingFinished.connect(self.rechteck_erstellen)
 
+        self.le_pfad.setText(f"K:\\Esprit\\NC-Files\\AT-25-KW{kw_ermitteln()[0]}\\Hasanovic\\{kw_ermitteln()[1]}")
+
     @qtc.Slot()
     def rechteck_erstellen(self) -> None:
         self.statusBar().showMessage(f"Rechteck wurde erstellt. {zeitstempel(1)}", 5000)
@@ -36,7 +39,7 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
 
-    with open("UI/Styles/Dtor.qss", "r") as stylesheet_file:
-        app.setStyleSheet(stylesheet_file.read())
+    # with open("UI/Styles/Dtor.qss", "r") as stylesheet_file:
+    #     app.setStyleSheet(stylesheet_file.read())
 
     sys.exit(app.exec())
