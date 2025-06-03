@@ -21,8 +21,8 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
     @qtc.Slot()
     def rechteck_erstellen(self):
-        self.statusBar().showMessage(f"Rechteck wurde erstellt. {zeitstempel(2)}", 5000)
-        print(f"Rechteck wurde erstellt! {zeitstempel(2)}")
+        self.statusBar().showMessage(f"Rechteck wurde erstellt. {zeitstempel(1)}", 5000)
+        print(f"Rechteck wurde erstellt! {zeitstempel(1)}")
 
 
 if __name__ == "__main__":
