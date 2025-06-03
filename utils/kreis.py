@@ -1,30 +1,35 @@
 import ezdxf
-import math
 
-def kreis_erstellen(diameter, height, dim_offset=15):
+def kreis_erstellen(diameter, height, base_offset=0.2):
+    """
+    diameter: Durchmesser des Kreises in mm
+    height: Höhe in mm
+    base_offset: Anteil des Radius, der als Abstand zwischen Kreis und Text genommen wird (z.B. 0.2 = 20%)
+    """
     doc = ezdxf.new("R2010")
     msp = doc.modelspace()
 
-    # Grundwerte
     radius = diameter / 2
-    center = (0, 0)
     z_offset1 = -6
-    z_offset2 = height - 0
+    z_offset2 = height
 
     # Kreise zeichnen
-    msp.add_circle((center[0], center[1], z_offset1), radius, dxfattribs={'layer': 'Roh', 'color': 198})
-    msp.add_circle((center[0], center[1], z_offset2), radius, dxfattribs={'layer': 'Roh', 'color': 198})
+    msp.add_circle((0, 0, z_offset1), radius, dxfattribs={'layer': 'Roh', 'color': 198})
+    msp.add_circle((0, 0, z_offset2), radius, dxfattribs={'layer': 'Roh', 'color': 198})
 
-    # Dynamische Textgröße abhängig vom Durchmesser
-    text_height = max(2.5, diameter * 0.1)  # z. B. 5% des Durchmessers, mindestens 2.5 mm
+    # Dynamische Textgröße (mindestens 2.5 mm, maximal 10 mm)
+    text_height = max(2.5, min(diameter * 0.08, 10))
 
-    # Rotation auf 270° (senkrecht nach unten)
-    angle_deg = 270
+    # Abstand zwischen Kreis und Text proportional zum Radius
+    dim_offset = radius * base_offset
 
-    # Position des Texts berechnen (weiterhin entlang X-Achse vom Mittelpunkt weg)
-    dx = radius + dim_offset
-    dy = 10
-    text_z = z_offset2
+    # Position für Texte: entlang +X, mit dim_offset Abstand
+    x_pos = radius + dim_offset
+    y_pos = 0
+    z_pos = z_offset2
+
+    # Rotation 270° -> Text steht senkrecht nach unten
+    rotation = 270
 
     # Text 1: Durchmesser
     diameter_text = msp.add_text(
@@ -33,29 +38,31 @@ def kreis_erstellen(diameter, height, dim_offset=15):
             'layer': 'Roh',
             'color': 3,
             'height': text_height,
-            'rotation': angle_deg
+            'rotation': rotation
         }
     )
-    diameter_text.dxf.insert = (dx, dy, text_z)
+    diameter_text.dxf.insert = (x_pos, y_pos, z_pos)
 
-    # Text 2: Höhe, deutlich versetzt nach links (weil Rotation 270°, verschiebt sich X-Achse nach unten)
-    offset_x = -text_height * 2  # Abstand zwischen den Texten, hier 3x Textgröße nach links
-    offset_y = 0
+    # Abstand zwischen den Texten: 1.5x Texthöhe (dynamisch)
+    text_spacing = text_height * 1.5
 
+    # Text 2: Höhe, unter Text 1 (weil Rotation 270° verschiebt sich in X-Richtung)
     height_text = msp.add_text(
         f"Höhe = {height} mm",
         dxfattribs={
             'layer': 'Roh',
             'color': 3,
             'height': text_height,
-            'rotation': angle_deg
+            'rotation': rotation
         }
     )
-    height_text.dxf.insert = (dx + offset_x, dy + offset_y, text_z)
+    height_text.dxf.insert = (x_pos - text_spacing, y_pos, z_pos)
 
     # DXF speichern
     doc.saveas("!rohteil.dxf")
 
-
 if __name__ == "__main__":
-    kreis_erstellen(50, 25)
+    # Test mit verschiedenen Durchmessern
+    #kreis_erstellen(15, 25)
+    #kreis_erstellen(60, 30)
+    kreis_erstellen(120, 50)
