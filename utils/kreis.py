@@ -21,7 +21,7 @@ def kreis_erstellen(diameter, height, base_offset_factor=0.35):
 
     # Dynamische Textgröße (mindestens 1.45 mm, maximal 8 mm)
     # Kleinere Mindestgröße kann bei sehr kleinen Durchmessern sinnvoll sein
-    text_height = max(1.45, min(diameter * 0.05, 8))
+    text_height = max(1.2, min(diameter * 0.05, 8))
 
     # Abstand zwischen Kreisaußenkante und Textaußenkante
     # (proportional zum Radius, aber mindestens halbe Texthöhe, um Überlappung bei kleinen Radien zu vermeiden)

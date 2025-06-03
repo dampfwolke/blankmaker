@@ -13,16 +13,21 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.wg_datum_editieren.setHidden(True)
+        self.le_pfad.setDisabled(True)
+        self.de_datum.setDate(qtc.QDate.currentDate())
         # Füge Animationen für das TabWidget hinzu
         self.anim_tabs = AnimatedTabHelper(self.tw_rohteil_erstellen)
+
         # TEST Noch nicht fertig
         self.pb_rechteck.clicked.connect(self.rechteck_erstellen)
         self.le_rechteck_hoehe.editingFinished.connect(self.rechteck_erstellen)
 
     @qtc.Slot()
-    def rechteck_erstellen(self):
+    def rechteck_erstellen(self) -> None:
         self.statusBar().showMessage(f"Rechteck wurde erstellt. {zeitstempel(1)}", 5000)
         print(f"Rechteck wurde erstellt! {zeitstempel(1)}")
+
 
 
 if __name__ == "__main__":
@@ -30,7 +35,7 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
 
-    with open("UI/Styles/Perstfic.qss", "r") as stylesheet_file:
-        app.setStyleSheet(stylesheet_file.read())
+    # with open("UI/Styles/Perstfic.qss", "r") as stylesheet_file:
+    #     app.setStyleSheet(stylesheet_file.read())
 
     sys.exit(app.exec())
