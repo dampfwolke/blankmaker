@@ -15,7 +15,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.setupUi(self)
         # Füge Animationen für das TabWidget hinzu
         self.anim_tabs = AnimatedTabHelper(self.tw_rohteil_erstellen)
-        # TEST
+        # TEST Noch nicht fertig
         self.pb_rechteck.clicked.connect(self.rechteck_erstellen)
         self.le_rechteck_hoehe.editingFinished.connect(self.rechteck_erstellen)
 
