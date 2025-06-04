@@ -1,0 +1,24 @@
+{
+  "styles": "Darkeum.qss",
+  "stylesheet": "UI/Styles/{styles}",
+  "nc_base_path": "K:/Esprit/NC-Files",
+  "projekt_prefix": "AT-25",
+  "nutzername": "Hasanovic",
+  "spannmittel_basis_pfad": "C:/Users/hasanovic/Desktop/Spannmittel/",
+  "pfad_template": "{base_path}/{projekt}-KW{kw}/{nutzer}/{wochentag}",
+  "weitere_einstellungen": {
+    "platzhalter": "platzhalter"
+  }
+}
+
+
+{
+  "nutzername": "Hasanovic",
+  "nc_base_path": "K:/Esprit/NC-Files",
+  "pfad_template": "{base_path}/{projekt}-KW{kw}/{nutzer}/{wochentag}",
+  "spannmittel_basis_pfad": "C:/Users/hasanovic/Desktop/Spannmittel/",
+  "wks": "07",
+  "projekt_prefix": "AT-25",
+  "styles": "Darkeum.qss",
+  "stylesheet": "UI/Styles/{styles}",
+}

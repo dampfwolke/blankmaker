@@ -2,7 +2,7 @@ import sys
 import pathlib
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtCore as qtc
-from PySide6.QtGui import QDoubleValidator 
+from PySide6 import QtGui as qtg
 
 from utils.zeitstempel import zeitstempel
 from utils.kalenderwoche import kw_ermitteln
@@ -28,8 +28,8 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
         self.anim_tabs = AnimatedTabHelper(self.tw_rohteil_erstellen)
 
-        self.double_validator = QDoubleValidator(0.000000001, 99999.999999999, 9, self)
-        self.double_validator.setNotation(QDoubleValidator.StandardNotation)
+        self.double_validator = qtg.QDoubleValidator(0.000000001, 99999.999999999, 9, self)
+        self.double_validator.setNotation(qtg.QDoubleValidator.StandardNotation)
         german_locale = qtc.QLocale(qtc.QLocale.Language.German, qtc.QLocale.Country.Germany)
         self.double_validator.setLocale(german_locale)
 
@@ -145,7 +145,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             self.le_pfad.setText(str(pfad_template_result))
         else:
             self.le_pfad.setText("")
-            self.statusBar().showMessage("Warnung: Pfad konnte nicht aus Template generiert werden.", 5000)
+            self.statusBar().showMessage("Warnung: Pfad konnte nicht generiert werden.", 5000)
             print("[Warnung] Pfad konnte nicht aus Template generiert werden.")
 
 
