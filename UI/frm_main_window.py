@@ -11,15 +11,16 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateEdit,
     QFrame, QGroupBox, QHBoxLayout, QLabel,
-    QLineEdit, QMainWindow, QMenuBar, QPushButton,
-    QSizePolicy, QSpacerItem, QStatusBar, QTabWidget,
-    QToolButton, QVBoxLayout, QWidget)
+    QLineEdit, QMainWindow, QMenu, QMenuBar,
+    QPushButton, QSizePolicy, QSpacerItem, QStatusBar,
+    QTabWidget, QToolButton, QVBoxLayout, QWidget)
 
 class Ui_frm_main_window(object):
     def setupUi(self, frm_main_window):
@@ -27,6 +28,10 @@ class Ui_frm_main_window(object):
             frm_main_window.setObjectName(u"frm_main_window")
         frm_main_window.resize(470, 977)
         frm_main_window.setMinimumSize(QSize(470, 850))
+        self.actionEinstellungen = QAction(frm_main_window)
+        self.actionEinstellungen.setObjectName(u"actionEinstellungen")
+        self.actionBeenden = QAction(frm_main_window)
+        self.actionBeenden.setObjectName(u"actionBeenden")
         self.centralwidget = QWidget(frm_main_window)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_4 = QVBoxLayout(self.centralwidget)
@@ -480,7 +485,9 @@ class Ui_frm_main_window(object):
         frm_main_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(frm_main_window)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 470, 22))
+        self.menubar.setGeometry(QRect(0, 0, 470, 33))
+        self.menuDatei = QMenu(self.menubar)
+        self.menuDatei.setObjectName(u"menuDatei")
         frm_main_window.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(frm_main_window)
         self.statusbar.setObjectName(u"statusbar")
@@ -496,9 +503,15 @@ class Ui_frm_main_window(object):
 "}")
         frm_main_window.setStatusBar(self.statusbar)
 
+        self.menubar.addAction(self.menuDatei.menuAction())
+        self.menuDatei.addAction(self.actionEinstellungen)
+        self.menuDatei.addSeparator()
+        self.menuDatei.addAction(self.actionBeenden)
+
         self.retranslateUi(frm_main_window)
         self.tb_spannmittel_aufklappen.clicked["bool"].connect(self.wg_datum_editieren.setHidden)
         self.cb_datum_editieren.clicked["bool"].connect(self.le_pfad.setEnabled)
+        self.actionBeenden.triggered.connect(frm_main_window.close)
 
         self.tw_rohteil_erstellen.setCurrentIndex(0)
 
@@ -508,6 +521,8 @@ class Ui_frm_main_window(object):
 
     def retranslateUi(self, frm_main_window):
         frm_main_window.setWindowTitle(QCoreApplication.translate("frm_main_window", u"MainWindow", None))
+        self.actionEinstellungen.setText(QCoreApplication.translate("frm_main_window", u"Einstellungen", None))
+        self.actionBeenden.setText(QCoreApplication.translate("frm_main_window", u"Beenden", None))
         self.lb_rechteck_laenge.setText(QCoreApplication.translate("frm_main_window", u"L\u00e4nge X: ", None))
         self.le_rechteck_laenge.setText(QCoreApplication.translate("frm_main_window", u"100", None))
         self.lb_rechteck_breite.setText(QCoreApplication.translate("frm_main_window", u"Breite Y: ", None))
@@ -539,5 +554,6 @@ class Ui_frm_main_window(object):
         self.pb_spannmittel.setText(QCoreApplication.translate("frm_main_window", u"Spannmittel erstellen", None))
         self.tb_spannmittel_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
         self.cb_datum_editieren.setText(QCoreApplication.translate("frm_main_window", u"Zielpfad editieren", None))
+        self.menuDatei.setTitle(QCoreApplication.translate("frm_main_window", u"Datei", None))
     # retranslateUi
 

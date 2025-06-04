@@ -15,10 +15,13 @@ from utils.ui_helpers import populate_combobox_with_subfolders # NEU: Import der
 from UI.frm_main_window import Ui_frm_main_window
 from UI.animated_tabhelper import AnimatedTabHelper
 
+from einstellungen import Settings
+
 class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.frm_settings = Settings()
         self.settings = load_settings()
         self.wg_datum_editieren.setHidden(True)
         self.le_pfad.setDisabled(True) 
@@ -42,8 +45,8 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         # Spannmittel ComboBox füllen mit der ausgelagerten Funktion
         self.initialize_ui_elements()
 
-
         # Signale verbinden
+        self.actionEinstellungen.triggered.connect(self.execute_frm_settings)
         self.pb_rechteck.clicked.connect(self.rechteck_erstellen_clicked)
         self.le_rechteck_hoehe.editingFinished.connect(self.rechteck_erstellen_clicked) 
         self.pb_kreis.clicked.connect(self.kreis_erstellen_clicked)
@@ -62,6 +65,13 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         )
         # Hier könnten später weitere UI-Initialisierungen folgen
 
+    @qtc.Slot()
+    def execute_frm_settings(self):
+        if self.frm_settings:
+            self.frm_settings.close()
+        self.frm_settings = Settings()
+        self.statusBar().showMessage(f"Einstellungen geöffnet. ({zeitstempel(1)})", 7000)
+        self.frm_settings.show()
 
     @qtc.Slot()
     def rechteck_erstellen_clicked(self):
