@@ -957,7 +957,7 @@
    <property name="font">
     <font>
      <family>Comic Sans MS</family>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
      <bold>true</bold>
      <hintingpreference>PreferFullHinting</hintingpreference>
     </font>

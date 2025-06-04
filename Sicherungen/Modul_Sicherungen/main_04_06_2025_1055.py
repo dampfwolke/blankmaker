@@ -2,14 +2,13 @@ import sys
 import pathlib
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtCore as qtc
-from PySide6.QtGui import QDoubleValidator # Für die Eingabevalidierung der LineEdits
+from PySide6.QtWidgets import QMessageBox # Wichtig für Pop-up-Nachrichten
 
 # Deine bestehenden Imports
 from utils.zeitstempel import zeitstempel
 from utils.kalenderwoche import kw_ermitteln
 from utils.get_settings import load_settings, get_stylesheet_path, get_pfad_from_template
 from utils.rechteck import rechteck_erstellen 
-from utils.input_validators import validate_dimensions # Unser neues Validierungsmodul
 
 from UI.frm_main_window import Ui_frm_main_window
 from UI.animated_tabhelper import AnimatedTabHelper
@@ -20,21 +19,12 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.setupUi(self)
         self.settings = load_settings()
         self.wg_datum_editieren.setHidden(True)
-        self.le_pfad.setDisabled(True) 
+        self.le_pfad.setDisabled(True) # Der Pfad wird automatisch generiert
 
         self.de_datum.setDate(qtc.QDate.currentDate())
-        self.pfad_aktualisieren() 
+        self.pfad_aktualisieren() # Initialen Pfad setzen
 
         self.anim_tabs = AnimatedTabHelper(self.tw_rohteil_erstellen)
-
-        self.double_validator = QDoubleValidator(0.0000001, 99999.999999, 6, self) # Min > 0, Max, Dezimalstellen
-        self.double_validator.setNotation(QDoubleValidator.StandardNotation)
-        german_locale = qtc.QLocale(qtc.QLocale.Language.German, qtc.QLocale.Country.Germany)
-        self.double_validator.setLocale(german_locale)
-
-        self.le_rechteck_laenge.setValidator(self.double_validator)
-        self.le_rechteck_breite.setValidator(self.double_validator)
-        self.le_rechteck_hoehe.setValidator(self.double_validator)
 
         # Signale verbinden
         self.pb_rechteck.clicked.connect(self.rechteck_erstellen_clicked)
@@ -46,44 +36,52 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
     def rechteck_erstellen_clicked(self):
         """
         Liest Werte aus den LineEdits, validiert sie und ruft die 
-        rechteck_erstellen Funktion auf. Rückmeldungen über Statusleiste.
+        rechteck_erstellen Funktion auf.
         """
-        length_str = self.le_rechteck_laenge.text()
-        width_str = self.le_rechteck_breite.text()
-        height_str = self.le_rechteck_hoehe.text()
+        try:
+            # Werte aus den LineEdits holen und in float konvertieren
+            # Ersetze Komma durch Punkt für internationale Dezimaltrennzeichen
+            length_str = self.le_rechteck_laenge.text().replace(',', '.')
+            width_str = self.le_rechteck_breite.text().replace(',', '.')
+            height_str = self.le_rechteck_hoehe.text().replace(',', '.')
 
-        # Eingaben mit dem ausgelagerten Validator prüfen
-        is_valid, length, width, height, error_message = validate_dimensions(
-            length_str, width_str, height_str
-        )
+            if not all([length_str, width_str, height_str]):
+                QMessageBox.warning(self, "Eingabe fehlt", "Bitte füllen Sie alle Felder für Länge, Breite und Höhe aus.")
+                return
 
-        if not is_valid:
-            self.statusBar().showMessage(f"Fehler: {error_message} ({zeitstempel(1)})", 7000)
-            print(f"[VALIDIERUNG] Fehler: {error_message}")
+            length = float(length_str)
+            width = float(width_str)
+            height = float(height_str)
+
+            # Grundlegende Validierung
+            if length <= 0 or width <= 0 or height <= 0:
+                QMessageBox.warning(self, "Ungültige Eingabe", 
+                                    "Länge, Breite und Höhe müssen positive Zahlen sein.")
+                return
+
+        except ValueError:
+            QMessageBox.warning(self, "Ungültige Eingabe", 
+                                "Bitte geben Sie gültige Zahlen für Länge, Breite und Höhe ein.")
             return
         
         # Pfad aus dem LineEdit 'le_pfad' holen
+        # Dieser Pfad ist ein Verzeichnispfad, wir brauchen einen Dateinamen
         dir_path_str = self.le_pfad.text()
         if not dir_path_str:
-            self.statusBar().showMessage(f"Fehler: Zielpfad nicht ermittelt. Datum prüfen. ({zeitstempel(1)})", 7000)
-            print("[PFAD] Fehler: Zielpfad nicht ermittelt.")
+            QMessageBox.warning(self, "Fehlender Pfad", 
+                                "Der Zielpfad konnte nicht ermittelt werden. Bitte Datum überprüfen.")
             return
 
-        file_name = "!rohteil.dxf" # Dein gewünschter Dateiname
+        file_name = "!rohteil.dxf" 
         full_output_path = str(pathlib.Path(dir_path_str) / file_name)
-        
-        self.statusBar().showMessage(f"Erstelle DXF: {file_name}...", 3000) # Kurze Info
-        
-        # Die Funktion rechteck_erstellen gibt (success_bool, message_str) zurück
-        success, message_from_module = rechteck_erstellen(length, width, height, full_output_path)
+        success, message = rechteck_erstellen(length, width, height, full_output_path)
 
         if success:
-            # message_from_module kann nun auch Hinweise wie "lokal gespeichert" enthalten
-            self.statusBar().showMessage(f"{message_from_module} ({zeitstempel(1)})", 7000)
-            print(f"[DXF] {message_from_module}")
+            self.statusBar().showMessage(f"Rechteck wurde erstellt! {zeitstempel(1)}", 7000)
         else:
-            self.statusBar().showMessage(f"Fehler DXF: {message_from_module} ({zeitstempel(1)})", 7000)
-            print(f"[DXF] Fehler: {message_from_module}")
+            QMessageBox.critical(self, "Fehler", message)
+            self.statusBar().showMessage(f"Fehler: {message} ({zeitstempel(1)})", 7000)
+            print(f"Fehler: {message} ({zeitstempel(1)})")
 
 
     @qtc.Slot()
@@ -92,13 +90,17 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         py_date = qt_date.toPython()
         kw, wochentag = kw_ermitteln(py_date)
         
+        # get_pfad_from_template sollte sicherstellen, dass ein gültiger Pfadstring zurückkommt
+        # oder None/Fehler, falls etwas schiefgeht.
         pfad_template_result = get_pfad_from_template(self.settings, kw, wochentag)
         
         if pfad_template_result:
+            # Stelle sicher, dass pfad_template_result ein String ist.
+            # Wenn es ein pathlib.Path Objekt ist, konvertiere es.
             self.le_pfad.setText(str(pfad_template_result))
         else:
-            self.le_pfad.setText("")
-            self.statusBar().showMessage("Warnung: Pfad konnte nicht aus Template generiert werden.", 5000)
+            self.le_pfad.setText("") # Oder eine Fehlermeldung / Standardpfad
+            self.statusBar().showMessage("Konnte Pfad nicht aus Template generieren.", 5000)
             print("[Warnung] Pfad konnte nicht aus Template generiert werden.")
 
 
@@ -110,6 +112,7 @@ if __name__ == "__main__":
 
     if stylesheet_path:
         try:
+            # Stelle sicher, dass stylesheet_path ein pathlib.Path Objekt ist
             if isinstance(stylesheet_path, str):
                 stylesheet_path = pathlib.Path(stylesheet_path)
                 

@@ -415,7 +415,7 @@ class Ui_frm_main_window(object):
         self.statusbar.setObjectName(u"statusbar")
         font3 = QFont()
         font3.setFamilies([u"Comic Sans MS"])
-        font3.setPointSize(14)
+        font3.setPointSize(10)
         font3.setBold(True)
         font3.setHintingPreference(QFont.PreferFullHinting)
         self.statusbar.setFont(font3)
