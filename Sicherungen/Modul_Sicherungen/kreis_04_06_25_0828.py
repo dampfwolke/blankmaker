@@ -1,7 +1,7 @@
 import ezdxf
 from ezdxf import enums  # Für Alignment-Konstanten
 
-def kreis_erstellen(diameter, height, base_offset_factor=0.2):
+def kreis_erstellen(diameter, height, base_offset_factor=0.13):
     """
     diameter: Durchmesser des Kreises in mm
     height: Höhe in mm
@@ -12,7 +12,7 @@ def kreis_erstellen(diameter, height, base_offset_factor=0.2):
 
     radius = diameter / 2
     z_offset1 = -6  # Unterer Kreis
-    z_offset2 = height # Oberer Kreis
+    z_offset2 = height -6 # Oberer Kreis
 
     # Kreise zeichnen
     msp.add_circle((0, 0, z_offset1), radius, dxfattribs={'layer': 'Roh', 'color': 198})
@@ -33,7 +33,7 @@ def kreis_erstellen(diameter, height, base_offset_factor=0.2):
     # Geschätztes Verhältnis von durchschnittlicher Zeichenbreite zu Zeichenhöhe.
     # Für viele CAD-Schriften (SHX) ist ein Wert zwischen 0.5 und 0.7 realistischer als höhere Werte.
     # Passen Sie diesen Wert an, wenn der vertikale Abstand immer noch nicht stimmt.
-    font_char_aspect_ratio_approx = 0.55 
+    font_char_aspect_ratio_approx = 0.12
     
     rendered_length_diameter_text = len(diameter_text_str) * text_height * font_char_aspect_ratio_approx
     rendered_length_height_text = len(height_text_str) * text_height * font_char_aspect_ratio_approx
@@ -41,18 +41,18 @@ def kreis_erstellen(diameter, height, base_offset_factor=0.2):
     # Gewünschter visueller Abstand zwischen der Unterkante des oberen Textes
     # und der Oberkante des unteren Textes.
     # Passen Sie den Faktor (z.B. 0.5, 0.75, 1.0) an, um den Abstand zu justieren.
-    desired_gap_between_text_blocks = text_height * 0.75
+    desired_gap_between_text_blocks = text_height * 0.5
 
     vertical_spacing_between_text_centers = \
         (rendered_length_diameter_text / 2) + \
         (rendered_length_height_text / 2) + \
         desired_gap_between_text_blocks
 
-    y_center_diameter_text = vertical_spacing_between_text_centers / 2
-    y_center_height_text = -vertical_spacing_between_text_centers / 2
+    y_center_diameter_text = vertical_spacing_between_text_centers
+    y_center_height_text = -vertical_spacing_between_text_centers
 
     z_pos = z_offset2
-    rotation = 270
+    rotation = 310
 
     common_text_attribs = {
         'layer': 'Roh',
