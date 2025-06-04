@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'frm_main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.9.0
+## Created by: Qt User Interface Compiler version 6.7.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -161,7 +161,7 @@ class Ui_frm_main_window(object):
         self.wg_button_roh.setObjectName(u"wg_button_roh")
         self.horizontalLayout_4 = QHBoxLayout(self.wg_button_roh)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalSpacer = QSpacerItem(153, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer = QSpacerItem(151, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_4.addItem(self.horizontalSpacer)
 
@@ -233,7 +233,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_6.addWidget(self.lb_kreis_hoehe)
 
-        self.horizontalSpacer_21 = QSpacerItem(45, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_21 = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_6.addItem(self.horizontalSpacer_21)
 
@@ -409,7 +409,7 @@ class Ui_frm_main_window(object):
         frm_main_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(frm_main_window)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 470, 33))
+        self.menubar.setGeometry(QRect(0, 0, 470, 22))
         frm_main_window.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(frm_main_window)
         self.statusbar.setObjectName(u"statusbar")
