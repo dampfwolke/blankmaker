@@ -1,90 +1,109 @@
 import ezdxf
-from ezdxf import enums  # Für Alignment-Konstanten
+from ezdxf import enums
+import pathlib
+from typing import Tuple
 
-
-def kreis_erstellen(diameter, height, base_offset_factor=0.35):
+def kreis_erstellen(diameter: float, height: float, output_path_str: str, base_offset_factor=0.05) -> Tuple[bool, str]:
     """
-    diameter: Durchmesser des Kreises in mm
-    height: Höhe in mm
-    base_offset_factor: Faktor des Radius, der als Mindestabstand zwischen Kreisrand und Textrand genommen wird (z.B. 0.35 = 35%)
+    Erstellt eine DXF-Datei mit einem Zylinder (zwei Kreise) und Bemaßungstext.
+
+    Args:
+        diameter (float): Durchmesser des Kreises in mm.
+        height (float): Höhe des Zylinders in mm.
+        output_path_str (str): Der vollständige Pfad (als String) zum Speichern der DXF-Datei.
+        base_offset_factor (float): Faktor des Radius für Textabstand.
+
+    Returns:
+        tuple: (bool, str) -> (Erfolg, Nachricht)
     """
-    doc = ezdxf.new("R2010")
-    msp = doc.modelspace()
+    try:
+        doc = ezdxf.new("R2010")
+        msp = doc.modelspace()
 
-    radius = diameter / 2
-    z_offset1 = -6
-    z_offset2 = height
+        radius = diameter / 2
+        z_offset1 = -6  # Unterer Kreis
+        z_offset2 = height - 6  # Oberer Kreis
+        # Kreise zeichnen
+        msp.add_circle((0, 0, z_offset1), radius, dxfattribs={'layer': 'Roh', 'color': 198})
+        msp.add_circle((0, 0, z_offset2), radius, dxfattribs={'layer': 'Roh', 'color': 198})
+        # Dynamische Textgröße (mindestens 1.2 mm, maximal 8 mm)
+        text_height = max(1.2, min(diameter * 0.14, 8))
 
-    # Kreise zeichnen
-    msp.add_circle((0, 0, z_offset1), radius, dxfattribs={'layer': 'Roh', 'color': 198})
-    msp.add_circle((0, 0, z_offset2), radius, dxfattribs={'layer': 'Roh', 'color': 198})
+        min_gap_circle_text = text_height * 0.5
+        text_gap_from_circle_edge = max(min_gap_circle_text, radius * base_offset_factor)
+        text_block_effective_width = text_height # Vereinfachung, tatsächliche Breite hängt von Zeichen ab
+        x_center_for_texts = radius + text_gap_from_circle_edge + (text_block_effective_width / 2)
 
-    # Dynamische Textgröße (mindestens 1.45 mm, maximal 8 mm)
-    # Kleinere Mindestgröße kann bei sehr kleinen Durchmessern sinnvoll sein
-    text_height = max(1.2, min(diameter * 0.05, 8))
+        diameter_text_str = f"Ø DM = {diameter} mm"
+        height_text_str = f"Höhe = {height} mm"
 
-    # Abstand zwischen Kreisaußenkante und Textaußenkante
-    # (proportional zum Radius, aber mindestens halbe Texthöhe, um Überlappung bei kleinen Radien zu vermeiden)
-    min_gap = text_height * 0.5  # Mindestens halbe Texthöhe als Abstand
-    text_gap_from_circle = max(min_gap, radius * base_offset_factor)
+        font_char_aspect_ratio_approx = 0.4
+        
+        rendered_length_diameter_text = len(diameter_text_str) * text_height * font_char_aspect_ratio_approx
+        rendered_length_height_text = len(height_text_str) * text_height * font_char_aspect_ratio_approx
+        desired_gap_between_text_blocks = text_height * 1.0 # Größerer Abstand
 
-    # Nach 270° Rotation ist die "Breite" des Textblocks ungefähr seine ursprüngliche Höhe
-    text_block_effective_width = text_height
+        # Y-Positionen relativ zum Mittelpunkt des Kreises (0,0)
+        y_center_diameter_text = (rendered_length_height_text / 2) + (desired_gap_between_text_blocks / 2)
+        y_center_height_text = -((rendered_length_diameter_text / 2) + (desired_gap_between_text_blocks / 2))
 
-    # X-Position für die Mitte der vertikalen Textspalte
-    # Kreisrand (radius) + gewünschter Spalt + halbe Textblockbreite
-    x_center_for_texts = radius + text_gap_from_circle + (text_block_effective_width / 2)
+        z_pos = z_offset2 # Text auf Höhe des oberen Kreises
+        rotation = 310
 
-    # Y-Positionen für die Texte, damit sie übereinander gestapelt und um y=0 zentriert sind
-    # Abstand zwischen den Mittelpunkten der beiden Textzeilen
-    vertical_spacing_between_text_centers = text_height * 1.5  # Etwas mehr Platz als vorher
+        common_text_attribs = {
+            'layer': 'Roh',
+            'color': 3, # Grün
+            'height': text_height,
+            'rotation': rotation,
+            'halign': enums.TextHAlign.CENTER, # Horizontal zentriert
+            'valign': enums.TextVAlign.MIDDLE  # Vertikal zentriert zum Einfügepunkt
+        }
 
-    y_pos_diameter_text = vertical_spacing_between_text_centers / 2
-    y_pos_height_text = -vertical_spacing_between_text_centers / 2
+        # Einfügepunkte für die Texte
+        diameter_text_insert_point = (x_center_for_texts, y_center_diameter_text, z_pos)
+        msp.add_text(
+            diameter_text_str,
+            dxfattribs=common_text_attribs
+        ).set_placement(diameter_text_insert_point, align=enums.TextEntityAlignment.MIDDLE_CENTER) # Explizite Ausrichtung
 
-    z_pos = z_offset2  # Beide Texte auf der Höhe des oberen Kreises
+        height_text_insert_point = (x_center_for_texts, y_center_height_text, z_pos)
+        msp.add_text(
+            height_text_str,
+            dxfattribs=common_text_attribs
+        ).set_placement(height_text_insert_point, align=enums.TextEntityAlignment.MIDDLE_CENTER) # Explizite Ausrichtung
 
-    # Rotation 270° -> Text steht senkrecht, von oben nach unten lesbar
-    rotation = 270
+        # Verwende pathlib für den Pfad
+        file_path = pathlib.Path(output_path_str)
 
-    common_text_attribs = {
-        'layer': 'Roh',
-        'color': 3,
-        'height': text_height,
-        'rotation': rotation,
-        # WICHTIG: Textausrichtung relativ zum Einfügepunkt (insert)
-        # halign wirkt vor Rotation horizontal, valign vertikal
-        # Nach Rotation 270°:
-        # - CENTER (halign) sorgt dafür, dass der Textblock vertikal mittig zum insert-Punkt ist.
-        # - MIDDLE (valign) sorgt dafür, dass der Textblock horizontal mittig zum insert-Punkt ist.
-        'halign': enums.TextHAlign.CENTER,  # Horizontal zentrieren (wird vertikal nach Rotation)
-        'valign': enums.TextVAlign.MIDDLE  # Vertikal mittig (wird horizontal nach Rotation)
-    }
+        # Stelle sicher, dass das Elternverzeichnis existiert
+        file_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Text 1: Durchmesser
-    # Der Einfügepunkt ist jetzt die Mitte des Textes
-    diameter_text_insert_point = (x_center_for_texts, y_pos_diameter_text, z_pos)
-    msp.add_text(
-        f"Ø DM = {diameter} mm",
-        dxfattribs=common_text_attribs
-    ).set_placement(diameter_text_insert_point)  # set_placement ist flexibler
+        doc.saveas(file_path)
+        return True, f"Kreis-DXF '{file_path}' wurde erfolgreich gespeichert."
 
-    # Text 2: Höhe
-    # Der Einfügepunkt ist jetzt die Mitte des Textes
-    height_text_insert_point = (x_center_for_texts, y_pos_height_text, z_pos)
-    msp.add_text(
-        f"Höhe = {height} mm",
-        dxfattribs=common_text_attribs
-    ).set_placement(height_text_insert_point)
-
-    # DXF speichern
-    doc.saveas("!rohteil_korrigiert.dxf")
-    print("DXF '!rohteil_korrigiert.dxf' wurde gespeichert.")
-
+    except IOError as e:
+        err_msg = f"Fehler beim Speichern der Kreis-DXF-Datei unter '{file_path}': {e}\n"
+        err_msg += "Stellen Sie sicher, dass der Pfad existiert und Sie Schreibrechte haben.\n"
+        
+        local_fallback_path = pathlib.Path.cwd() / f"!rohteil_kreis_lokal_{diameter}x{height}.dxf"
+        try:
+            doc.saveas(local_fallback_path)
+            err_msg += f"Kreis-DXF wurde stattdessen lokal als '{local_fallback_path}' gespeichert."
+            return True, err_msg 
+        except Exception as e_local:
+            err_msg += f"Fehler auch beim lokalen Speichern der Kreis-DXF: {e_local}"
+            return False, err_msg
+            
+    except ValueError as e:
+        return False, f"Ungültige Eingabewerte für Kreis: {e}"
+        
+    except Exception as e:
+        return False, f"Ein unerwarteter Fehler ist beim Erstellen/Speichern des Kreises aufgetreten: {e}"
 
 if __name__ == "__main__":
-    # Test mit verschiedenen Durchmessern
-    kreis_erstellen(diameter=15, height=25)
-    # kreis_erstellen(diameter=60, height=30)
-    # kreis_erstellen(diameter=12, height=50, base_offset_factor=0.5) # Test mit kleinerem Kreis
-    # kreis_erstellen(diameter=5, height=10, base_offset_factor=0.8) # Test mit sehr kleinem Kreis
+    test_output_path = pathlib.Path.cwd() / "kreis.dxf"
+    success, message = kreis_erstellen(diameter=80, height=20, output_path_str=str(test_output_path))
+    if success:
+        print(f"Erfolg: {message}")
+    else:
+        print(f"Fehler: {message}")

@@ -15,26 +15,26 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateEdit,
-    QFrame, QGroupBox, QHBoxLayout, QLabel,
-    QLineEdit, QMainWindow, QMenuBar, QPushButton,
-    QSizePolicy, QSpacerItem, QStatusBar, QTabWidget,
-    QToolButton, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QDateEdit, QFrame,
+    QGroupBox, QHBoxLayout, QLabel, QLineEdit,
+    QMainWindow, QMenuBar, QPushButton, QSizePolicy,
+    QSpacerItem, QStatusBar, QTabWidget, QToolButton,
+    QVBoxLayout, QWidget)
 
 class Ui_frm_main_window(object):
     def setupUi(self, frm_main_window):
         if not frm_main_window.objectName():
             frm_main_window.setObjectName(u"frm_main_window")
-        frm_main_window.resize(470, 977)
-        frm_main_window.setMinimumSize(QSize(470, 850))
+        frm_main_window.resize(470, 600)
+        frm_main_window.setMinimumSize(QSize(470, 600))
         self.centralwidget = QWidget(frm_main_window)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_4 = QVBoxLayout(self.centralwidget)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.tw_rohteil_erstellen = QTabWidget(self.centralwidget)
         self.tw_rohteil_erstellen.setObjectName(u"tw_rohteil_erstellen")
-        self.tw_rohteil_erstellen.setMinimumSize(QSize(450, 180))
-        self.tw_rohteil_erstellen.setMaximumSize(QSize(16777215, 265))
+        self.tw_rohteil_erstellen.setMinimumSize(QSize(450, 225))
+        self.tw_rohteil_erstellen.setMaximumSize(QSize(16777215, 300))
         font = QFont()
         font.setFamilies([u"Comic Sans MS"])
         font.setPointSize(12)
@@ -167,7 +167,11 @@ class Ui_frm_main_window(object):
 
         self.pb_rechteck = QPushButton(self.wg_button_roh)
         self.pb_rechteck.setObjectName(u"pb_rechteck")
-        self.pb_rechteck.setFont(font)
+        font1 = QFont()
+        font1.setFamilies([u"Comic Sans MS"])
+        font1.setPointSize(12)
+        font1.setBold(True)
+        self.pb_rechteck.setFont(font1)
         self.pb_rechteck.setAutoDefault(True)
 
         self.horizontalLayout_4.addWidget(self.pb_rechteck)
@@ -264,11 +268,6 @@ class Ui_frm_main_window(object):
 
         self.pb_kreis = QPushButton(self.wg_button_kreis)
         self.pb_kreis.setObjectName(u"pb_kreis")
-        font1 = QFont()
-        font1.setFamilies([u"Comic Sans MS"])
-        font1.setPointSize(12)
-        font1.setBold(False)
-        font1.setKerning(True)
         self.pb_kreis.setFont(font1)
 
         self.horizontalLayout_5.addWidget(self.pb_kreis)
@@ -286,16 +285,14 @@ class Ui_frm_main_window(object):
 
         self.gb_spannmittel = QGroupBox(self.centralwidget)
         self.gb_spannmittel.setObjectName(u"gb_spannmittel")
-        self.gb_spannmittel.setMinimumSize(QSize(450, 250))
-        self.gb_spannmittel.setMaximumSize(QSize(16777215, 400))
+        self.gb_spannmittel.setMinimumSize(QSize(450, 120))
+        self.gb_spannmittel.setMaximumSize(QSize(16777215, 300))
         self.gb_spannmittel.setFont(font)
         self.gb_spannmittel.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
         self.verticalLayout_3 = QVBoxLayout(self.gb_spannmittel)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.wg_zielpfad = QWidget(self.gb_spannmittel)
         self.wg_zielpfad.setObjectName(u"wg_zielpfad")
-        self.wg_zielpfad.setMinimumSize(QSize(0, 50))
-        self.wg_zielpfad.setMaximumSize(QSize(16777215, 60))
         self.horizontalLayout_10 = QHBoxLayout(self.wg_zielpfad)
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
         self.lb_pfad = QLabel(self.wg_zielpfad)
@@ -314,7 +311,7 @@ class Ui_frm_main_window(object):
 
         self.le_pfad = QLineEdit(self.wg_zielpfad)
         self.le_pfad.setObjectName(u"le_pfad")
-        self.le_pfad.setMinimumSize(QSize(335, 0))
+        self.le_pfad.setMinimumSize(QSize(400, 0))
         font2 = QFont()
         font2.setFamilies([u"Comic Sans MS"])
         font2.setPointSize(10)
@@ -330,96 +327,13 @@ class Ui_frm_main_window(object):
 
         self.verticalLayout_3.addWidget(self.wg_zielpfad)
 
-        self.fr_spannmittelauswahl = QFrame(self.gb_spannmittel)
-        self.fr_spannmittelauswahl.setObjectName(u"fr_spannmittelauswahl")
-        self.fr_spannmittelauswahl.setMinimumSize(QSize(0, 50))
-        self.fr_spannmittelauswahl.setMaximumSize(QSize(16777215, 60))
-        self.fr_spannmittelauswahl.setFrameShape(QFrame.Shape.StyledPanel)
-        self.fr_spannmittelauswahl.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout_11 = QHBoxLayout(self.fr_spannmittelauswahl)
-        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
-        self.cb_spannmittel = QComboBox(self.fr_spannmittelauswahl)
-        self.cb_spannmittel.setObjectName(u"cb_spannmittel")
-        self.cb_spannmittel.setMinimumSize(QSize(240, 30))
-        self.cb_spannmittel.setFont(font2)
-
-        self.horizontalLayout_11.addWidget(self.cb_spannmittel)
-
-        self.horizontalSpacer_10 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_11.addItem(self.horizontalSpacer_10)
-
-        self.cb_bearbeitung_auswahl = QComboBox(self.fr_spannmittelauswahl)
-        self.cb_bearbeitung_auswahl.addItem("")
-        self.cb_bearbeitung_auswahl.addItem("")
-        self.cb_bearbeitung_auswahl.addItem("")
-        self.cb_bearbeitung_auswahl.addItem("")
-        self.cb_bearbeitung_auswahl.addItem("")
-        self.cb_bearbeitung_auswahl.addItem("")
-        self.cb_bearbeitung_auswahl.addItem("")
-        self.cb_bearbeitung_auswahl.setObjectName(u"cb_bearbeitung_auswahl")
-        self.cb_bearbeitung_auswahl.setMinimumSize(QSize(130, 30))
-        self.cb_bearbeitung_auswahl.setFont(font2)
-
-        self.horizontalLayout_11.addWidget(self.cb_bearbeitung_auswahl)
-
-        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_11.addItem(self.horizontalSpacer_9)
-
-
-        self.verticalLayout_3.addWidget(self.fr_spannmittelauswahl)
-
-        self.widget = QWidget(self.gb_spannmittel)
-        self.widget.setObjectName(u"widget")
-        self.widget.setMinimumSize(QSize(0, 50))
-        self.horizontalLayout_12 = QHBoxLayout(self.widget)
-        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.lb_spannmittel_wert = QLabel(self.widget)
-        self.lb_spannmittel_wert.setObjectName(u"lb_spannmittel_wert")
-        sizePolicy.setHeightForWidth(self.lb_spannmittel_wert.sizePolicy().hasHeightForWidth())
-        self.lb_spannmittel_wert.setSizePolicy(sizePolicy)
-        self.lb_spannmittel_wert.setMaximumSize(QSize(200, 50))
-        self.lb_spannmittel_wert.setFont(font)
-        self.lb_spannmittel_wert.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
-
-        self.horizontalLayout_12.addWidget(self.lb_spannmittel_wert)
-
-        self.le_spannmittel = QLineEdit(self.widget)
-        self.le_spannmittel.setObjectName(u"le_spannmittel")
-        sizePolicy.setHeightForWidth(self.le_spannmittel.sizePolicy().hasHeightForWidth())
-        self.le_spannmittel.setSizePolicy(sizePolicy)
-        self.le_spannmittel.setMinimumSize(QSize(100, 30))
-        self.le_spannmittel.setMaximumSize(QSize(150, 50))
-        self.le_spannmittel.setFont(font)
-
-        self.horizontalLayout_12.addWidget(self.le_spannmittel)
-
-
-        self.verticalLayout_3.addWidget(self.widget)
-
         self.wg_spannmittel_erstellen = QWidget(self.gb_spannmittel)
         self.wg_spannmittel_erstellen.setObjectName(u"wg_spannmittel_erstellen")
-        self.wg_spannmittel_erstellen.setMinimumSize(QSize(0, 50))
-        self.wg_spannmittel_erstellen.setMaximumSize(QSize(16777215, 60))
         self.horizontalLayout_9 = QHBoxLayout(self.wg_spannmittel_erstellen)
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.horizontalSpacer_12 = QSpacerItem(160, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_9.addItem(self.horizontalSpacer_12)
-
-        self.pb_spannmittel = QPushButton(self.wg_spannmittel_erstellen)
-        self.pb_spannmittel.setObjectName(u"pb_spannmittel")
-        self.pb_spannmittel.setMinimumSize(QSize(170, 0))
-        self.pb_spannmittel.setMaximumSize(QSize(210, 16777215))
-        self.pb_spannmittel.setFont(font)
-        self.pb_spannmittel.setAutoDefault(True)
-
-        self.horizontalLayout_9.addWidget(self.pb_spannmittel)
-
-        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_9.addItem(self.horizontalSpacer_7)
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_9)
 
         self.tb_spannmittel_aufklappen = QToolButton(self.wg_spannmittel_erstellen)
         self.tb_spannmittel_aufklappen.setObjectName(u"tb_spannmittel_aufklappen")
@@ -432,6 +346,21 @@ class Ui_frm_main_window(object):
         self.tb_spannmittel_aufklappen.setAutoRaise(True)
 
         self.horizontalLayout_9.addWidget(self.tb_spannmittel_aufklappen)
+
+        self.horizontalSpacer_6 = QSpacerItem(15, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_6)
+
+        self.pb_spannmittel = QPushButton(self.wg_spannmittel_erstellen)
+        self.pb_spannmittel.setObjectName(u"pb_spannmittel")
+        self.pb_spannmittel.setFont(font1)
+        self.pb_spannmittel.setAutoDefault(True)
+
+        self.horizontalLayout_9.addWidget(self.pb_spannmittel)
+
+        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_7)
 
 
         self.verticalLayout_3.addWidget(self.wg_spannmittel_erstellen)
@@ -486,7 +415,7 @@ class Ui_frm_main_window(object):
         self.statusbar.setObjectName(u"statusbar")
         font3 = QFont()
         font3.setFamilies([u"Comic Sans MS"])
-        font3.setPointSize(10)
+        font3.setPointSize(14)
         font3.setBold(True)
         font3.setHintingPreference(QFont.PreferFullHinting)
         self.statusbar.setFont(font3)
@@ -525,19 +454,8 @@ class Ui_frm_main_window(object):
         self.gb_spannmittel.setTitle(QCoreApplication.translate("frm_main_window", u"Spannmittel erstellen", None))
         self.lb_pfad.setText(QCoreApplication.translate("frm_main_window", u"Zielpfad:", None))
         self.le_pfad.setText(QCoreApplication.translate("frm_main_window", u"\"C:\\Users\\Ismail\\Pictures\\\"", None))
-        self.cb_spannmittel.setPlaceholderText(QCoreApplication.translate("frm_main_window", u"Spannmittel ausw\u00e4hlen...", None))
-        self.cb_bearbeitung_auswahl.setItemText(0, QCoreApplication.translate("frm_main_window", u"5 Achs 3 Achs", None))
-        self.cb_bearbeitung_auswahl.setItemText(1, QCoreApplication.translate("frm_main_window", u"5 Achs 5 Achs", None))
-        self.cb_bearbeitung_auswahl.setItemText(2, QCoreApplication.translate("frm_main_window", u"3 Achs 3 Achs", None))
-        self.cb_bearbeitung_auswahl.setItemText(3, QCoreApplication.translate("frm_main_window", u"5 Achs", None))
-        self.cb_bearbeitung_auswahl.setItemText(4, QCoreApplication.translate("frm_main_window", u"3 Achs", None))
-        self.cb_bearbeitung_auswahl.setItemText(5, QCoreApplication.translate("frm_main_window", u"Magnet", None))
-        self.cb_bearbeitung_auswahl.setItemText(6, QCoreApplication.translate("frm_main_window", u"Vorrichtung", None))
-
-        self.lb_spannmittel_wert.setText(QCoreApplication.translate("frm_main_window", u"Spannmittelbreite:", None))
-        self.le_spannmittel.setText(QCoreApplication.translate("frm_main_window", u"100", None))
-        self.pb_spannmittel.setText(QCoreApplication.translate("frm_main_window", u"Spannmittel erstellen", None))
         self.tb_spannmittel_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
+        self.pb_spannmittel.setText(QCoreApplication.translate("frm_main_window", u"Spannmittel erstellen", None))
         self.cb_datum_editieren.setText(QCoreApplication.translate("frm_main_window", u"Zielpfad editieren", None))
     # retranslateUi
 
