@@ -8,8 +8,9 @@ from utils.zeitstempel import zeitstempel
 from utils.kalenderwoche import kw_ermitteln
 from utils.get_settings import load_settings, get_stylesheet_path, get_pfad_from_template
 from utils.rechteck import rechteck_erstellen 
-from utils.kreis import kreis_erstellen # NEU: Import für Kreis-Erstellung
-from utils.input_validators import validate_dimensions, validate_circle_dimensions # NEU: validate_circle_dimensions
+from utils.kreis import kreis_erstellen 
+from utils.input_validators import validate_dimensions, validate_circle_dimensions
+from utils.ui_helpers import populate_combobox_with_subfolders # NEU: Import der ausgelagerten Funktion
 
 from UI.frm_main_window import Ui_frm_main_window
 from UI.animated_tabhelper import AnimatedTabHelper
@@ -27,35 +28,40 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
         self.anim_tabs = AnimatedTabHelper(self.tw_rohteil_erstellen)
 
-        # Universeller DoubleValidator für alle Maß-Eingaben
-        # Die Genauigkeit von 9 Nachkommastellen ist sehr hoch, üblich sind 2-3 für mm.
-        # Kannst du bei Bedarf anpassen. Z.B. auf 3: (0.001, 99999.999, 3, self)
         self.double_validator = QDoubleValidator(0.000000001, 99999.999999999, 9, self)
         self.double_validator.setNotation(QDoubleValidator.StandardNotation)
         german_locale = qtc.QLocale(qtc.QLocale.Language.German, qtc.QLocale.Country.Germany)
         self.double_validator.setLocale(german_locale)
 
-        # Validatoren für Rechteck-LineEdits
         self.le_rechteck_laenge.setValidator(self.double_validator)
         self.le_rechteck_breite.setValidator(self.double_validator)
         self.le_rechteck_hoehe.setValidator(self.double_validator)
-
-        # NEU: Validatoren für Kreis-LineEdits
-        # Annahme: LineEdits heißen self.le_durchmesser und self.le_z_kreis
         self.le_durchmesser.setValidator(self.double_validator)
         self.le_z_kreis.setValidator(self.double_validator)
+
+        # Spannmittel ComboBox füllen mit der ausgelagerten Funktion
+        self.initialize_ui_elements()
 
 
         # Signale verbinden
         self.pb_rechteck.clicked.connect(self.rechteck_erstellen_clicked)
         self.le_rechteck_hoehe.editingFinished.connect(self.rechteck_erstellen_clicked) 
-
-        # NEU: Signale für Kreis verbinden
-        # Annahme: Button heißt self.pb_kreis
         self.pb_kreis.clicked.connect(self.kreis_erstellen_clicked)
-        self.le_z_kreis.editingFinished.connect(self.kreis_erstellen_clicked) # Optional
-
+        self.le_z_kreis.editingFinished.connect(self.kreis_erstellen_clicked) 
         self.de_datum.dateChanged.connect(self.pfad_aktualisieren)
+
+    # NEU: Methode zur Initialisierung von UI-Elementen, die von Settings abhängen
+    def initialize_ui_elements(self):
+        """Initialisiert UI-Elemente, die Daten aus den Settings benötigen."""
+        # Spannmittel ComboBox
+        populate_combobox_with_subfolders(
+            combobox=self.cb_spannmittel,
+            settings=self.settings,
+            settings_key="spannmittel_basis_pfad",
+            status_bar=self.statusBar() # Übergabe der Statusleiste
+        )
+        # Hier könnten später weitere UI-Initialisierungen folgen
+
 
     @qtc.Slot()
     def rechteck_erstellen_clicked(self):
@@ -78,7 +84,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             print("[PFAD RECHTECK] Fehler: Zielpfad nicht ermittelt.")
             return
 
-        file_name = "!rohteil.dxf" # Eindeutiger Name für Rechteck
+        file_name = "!rohteil_rechteck.dxf" 
         full_output_path = str(pathlib.Path(dir_path_str) / file_name)
         
         self.statusBar().showMessage(f"Erstelle Rechteck-DXF: {file_name}...", 3000)
@@ -86,23 +92,17 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         success, message_from_module = rechteck_erstellen(length, width, height, full_output_path)
 
         if success:
-            self.statusBar().showMessage(f"Rechteck wurde erstellt! {zeitstempel(1)}", 7000)
+            self.statusBar().showMessage(f"Rechteck: {message_from_module} ({zeitstempel(1)})", 7000)
             print(f"[DXF RECHTECK] {message_from_module}")
         else:
             self.statusBar().showMessage(f"Rechteck Fehler DXF: {message_from_module} ({zeitstempel(1)})", 7000)
             print(f"[DXF RECHTECK] Fehler: {message_from_module}")
 
-    # NEU: Slot für Kreis-Erstellung
     @qtc.Slot()
     def kreis_erstellen_clicked(self):
-        """
-        Liest Werte aus den LineEdits für Kreis, validiert sie und ruft die 
-        kreis_erstellen Funktion auf. Rückmeldungen über Statusleiste.
-        """
         diameter_str = self.le_durchmesser.text()
-        height_str = self.le_z_kreis.text() # Annahme: 'le_z_kreis' ist für die Höhe
+        height_str = self.le_z_kreis.text() 
 
-        # Eingaben mit dem ausgelagerten Validator prüfen
         is_valid, diameter, height, error_message = validate_circle_dimensions(
             diameter_str, height_str
         )
@@ -112,27 +112,24 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             print(f"[VALIDIERUNG KREIS] Fehler: {error_message}")
             return
         
-        # Pfad aus dem LineEdit 'le_pfad' holen (gemeinsam für alle Rohteile)
         dir_path_str = self.le_pfad.text()
         if not dir_path_str:
             self.statusBar().showMessage(f"Kreis Fehler: Zielpfad nicht ermittelt. Datum prüfen. ({zeitstempel(1)})", 7000)
             print("[PFAD KREIS] Fehler: Zielpfad nicht ermittelt.")
             return
 
-        file_name = "!rohteil.dxf" # Eindeutiger Name für Kreis
+        file_name = "!rohteil_kreis.dxf" 
         full_output_path = str(pathlib.Path(dir_path_str) / file_name)
         
         self.statusBar().showMessage(f"Erstelle Kreis-DXF: {file_name}...", 3000)
         
-        # Die Funktion kreis_erstellen gibt (success_bool, message_str) zurück
-        # Der Parameter base_offset_factor wird mit dem Default-Wert aus der Funktion verwendet
         success, message_from_module = kreis_erstellen(diameter, height, full_output_path)
 
         if success:
-            self.statusBar().showMessage(f"Kreis wurde erstellt! {zeitstempel(1)}", 7000)
+            self.statusBar().showMessage(f"Kreis: {message_from_module} ({zeitstempel(1)})", 7000)
             print(f"[DXF KREIS] {message_from_module}")
         else:
-            self.statusBar().showMessage(f"Kreis Fehler DXF: {message_from_module} {zeitstempel(1)}", 7000)
+            self.statusBar().showMessage(f"Kreis Fehler DXF: {message_from_module} ({zeitstempel(1)})", 7000)
             print(f"[DXF KREIS] Fehler: {message_from_module}")
 
 

@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>470</width>
-    <height>600</height>
+    <height>850</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>470</width>
-    <height>600</height>
+    <height>850</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -26,13 +26,13 @@
       <property name="minimumSize">
        <size>
         <width>450</width>
-        <height>225</height>
+        <height>180</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>300</height>
+        <height>265</height>
        </size>
       </property>
       <property name="font">
@@ -379,7 +379,7 @@
               <font>
                <family>Comic Sans MS</family>
                <pointsize>12</pointsize>
-               <bold>true</bold>
+               <bold>false</bold>
               </font>
              </property>
              <property name="text">
@@ -631,7 +631,8 @@
               <font>
                <family>Comic Sans MS</family>
                <pointsize>12</pointsize>
-               <bold>true</bold>
+               <bold>false</bold>
+               <kerning>true</kerning>
               </font>
              </property>
              <property name="text">
@@ -664,13 +665,13 @@
       <property name="minimumSize">
        <size>
         <width>450</width>
-        <height>120</height>
+        <height>250</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>300</height>
+        <height>400</height>
        </size>
       </property>
       <property name="font">
@@ -689,6 +690,18 @@
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QWidget" name="wg_zielpfad" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>60</height>
+          </size>
+         </property>
          <layout class="QHBoxLayout" name="horizontalLayout_10">
           <item>
            <widget class="QLabel" name="lb_pfad">
@@ -739,7 +752,7 @@
            <widget class="QLineEdit" name="le_pfad">
             <property name="minimumSize">
              <size>
-              <width>400</width>
+              <width>335</width>
               <height>0</height>
              </size>
             </property>
@@ -772,8 +785,114 @@
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="wg_spannmittel_erstellen" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <widget class="QFrame" name="fr_spannmittelauswahl">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <item>
+           <widget class="QComboBox" name="cb_spannmittel">
+            <property name="minimumSize">
+             <size>
+              <width>240</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Comic Sans MS</family>
+              <pointsize>10</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="placeholderText">
+             <string>Spannmittel auswählen...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_10">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>10</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QComboBox" name="cb_bearbeitung_auswahl">
+            <property name="minimumSize">
+             <size>
+              <width>130</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Comic Sans MS</family>
+              <pointsize>10</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <item>
+             <property name="text">
+              <string>5 Achs 3 Achs</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5 Achs 5 Achs</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3 Achs 3 Achs</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5 Achs</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3 Achs</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Magnet</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Vorrichtung</string>
+             </property>
+            </item>
+           </widget>
+          </item>
           <item>
            <spacer name="horizontalSpacer_9">
             <property name="orientation">
@@ -782,6 +901,40 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="wg_spannmittel_erstellen" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>60</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <spacer name="horizontalSpacer_12">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>30</width>
               <height>20</height>
              </size>
             </property>
@@ -819,7 +972,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>15</width>
+              <width>86</width>
               <height>20</height>
              </size>
             </property>
@@ -827,11 +980,23 @@
           </item>
           <item>
            <widget class="QPushButton" name="pb_spannmittel">
+            <property name="minimumSize">
+             <size>
+              <width>170</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>210</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Comic Sans MS</family>
               <pointsize>12</pointsize>
-              <bold>true</bold>
+              <bold>false</bold>
              </font>
             </property>
             <property name="text">
