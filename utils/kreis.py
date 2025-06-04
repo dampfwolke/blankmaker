@@ -1,5 +1,5 @@
 import ezdxf
-from ezdxf import enums  # Für Alignment-Konstanten
+from ezdxf import enums
 
 def kreis_erstellen(diameter, height, base_offset_factor=0.13):
     """
@@ -29,18 +29,11 @@ def kreis_erstellen(diameter, height, base_offset_factor=0.13):
     diameter_text_str = f"Ø DM = {diameter} mm"
     height_text_str = f"Höhe = {height} mm"
 
-    # --- WICHTIGE ANPASSUNG HIER ---
-    # Geschätztes Verhältnis von durchschnittlicher Zeichenbreite zu Zeichenhöhe.
-    # Für viele CAD-Schriften (SHX) ist ein Wert zwischen 0.5 und 0.7 realistischer als höhere Werte.
-    # Passen Sie diesen Wert an, wenn der vertikale Abstand immer noch nicht stimmt.
     font_char_aspect_ratio_approx = 0.12
     
     rendered_length_diameter_text = len(diameter_text_str) * text_height * font_char_aspect_ratio_approx
     rendered_length_height_text = len(height_text_str) * text_height * font_char_aspect_ratio_approx
 
-    # Gewünschter visueller Abstand zwischen der Unterkante des oberen Textes
-    # und der Oberkante des unteren Textes.
-    # Passen Sie den Faktor (z.B. 0.5, 0.75, 1.0) an, um den Abstand zu justieren.
     desired_gap_between_text_blocks = text_height * 0.5
 
     vertical_spacing_between_text_centers = \
@@ -76,7 +69,6 @@ def kreis_erstellen(diameter, height, base_offset_factor=0.13):
     ).set_placement(height_text_insert_point)
 
     file_path = r"K:\Esprit\NC-Files\AT-25-KW23\Hasanovic\3.MI\!rohteil.dxf"
-    # Für lokale Tests: file_path = "!rohteil_korrigiert_final.dxf"
     try:
         doc.saveas(file_path)
         print(f"DXF '{file_path}' wurde gespeichert.")
@@ -94,6 +86,3 @@ def kreis_erstellen(diameter, height, base_offset_factor=0.13):
 
 if __name__ == "__main__":
     kreis_erstellen(diameter=80, height=20)
-    # kreis_erstellen(diameter=60, height=30)
-    # kreis_erstellen(diameter=12, height=50, base_offset_factor=0.5) 
-    # kreis_erstellen(diameter=5, height=10, base_offset_factor=0.8)

@@ -1,5 +1,3 @@
-# utils/get_settings.py
-
 import json
 from pathlib import Path
 
