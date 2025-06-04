@@ -26,7 +26,7 @@ class Ui_frm_main_window(object):
     def setupUi(self, frm_main_window):
         if not frm_main_window.objectName():
             frm_main_window.setObjectName(u"frm_main_window")
-        frm_main_window.resize(470, 977)
+        frm_main_window.resize(470, 850)
         frm_main_window.setMinimumSize(QSize(470, 850))
         self.actionEinstellungen = QAction(frm_main_window)
         self.actionEinstellungen.setObjectName(u"actionEinstellungen")
@@ -481,6 +481,10 @@ class Ui_frm_main_window(object):
 
 
         self.verticalLayout_4.addWidget(self.gb_spannmittel)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_4.addItem(self.verticalSpacer_4)
 
         frm_main_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(frm_main_window)
