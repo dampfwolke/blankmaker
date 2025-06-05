@@ -390,6 +390,10 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_12.addWidget(self.lb_spannmittel_wert)
 
+        self.horizontalSpacer_11 = QSpacerItem(16, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_12.addItem(self.horizontalSpacer_11)
+
         self.le_spannmittel = QLineEdit(self.widget)
         self.le_spannmittel.setObjectName(u"le_spannmittel")
         sizePolicy.setHeightForWidth(self.le_spannmittel.sizePolicy().hasHeightForWidth())
@@ -400,6 +404,10 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_12.addWidget(self.le_spannmittel)
 
+        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_12.addItem(self.horizontalSpacer_6)
+
 
         self.verticalLayout_3.addWidget(self.widget)
 
@@ -409,7 +417,19 @@ class Ui_frm_main_window(object):
         self.wg_spannmittel_erstellen.setMaximumSize(QSize(16777215, 60))
         self.horizontalLayout_9 = QHBoxLayout(self.wg_spannmittel_erstellen)
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.horizontalSpacer_12 = QSpacerItem(160, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.tb_spannmittel_aufklappen = QToolButton(self.wg_spannmittel_erstellen)
+        self.tb_spannmittel_aufklappen.setObjectName(u"tb_spannmittel_aufklappen")
+        self.tb_spannmittel_aufklappen.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+#if QT_CONFIG(shortcut)
+        self.tb_spannmittel_aufklappen.setShortcut(u"")
+#endif // QT_CONFIG(shortcut)
+        self.tb_spannmittel_aufklappen.setCheckable(True)
+        self.tb_spannmittel_aufklappen.setChecked(True)
+        self.tb_spannmittel_aufklappen.setAutoRaise(True)
+
+        self.horizontalLayout_9.addWidget(self.tb_spannmittel_aufklappen)
+
+        self.horizontalSpacer_12 = QSpacerItem(116, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_9.addItem(self.horizontalSpacer_12)
 
@@ -425,18 +445,6 @@ class Ui_frm_main_window(object):
         self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_9.addItem(self.horizontalSpacer_7)
-
-        self.tb_spannmittel_aufklappen = QToolButton(self.wg_spannmittel_erstellen)
-        self.tb_spannmittel_aufklappen.setObjectName(u"tb_spannmittel_aufklappen")
-        self.tb_spannmittel_aufklappen.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-#if QT_CONFIG(shortcut)
-        self.tb_spannmittel_aufklappen.setShortcut(u"")
-#endif // QT_CONFIG(shortcut)
-        self.tb_spannmittel_aufklappen.setCheckable(True)
-        self.tb_spannmittel_aufklappen.setChecked(True)
-        self.tb_spannmittel_aufklappen.setAutoRaise(True)
-
-        self.horizontalLayout_9.addWidget(self.tb_spannmittel_aufklappen)
 
 
         self.verticalLayout_3.addWidget(self.wg_spannmittel_erstellen)
@@ -489,7 +497,7 @@ class Ui_frm_main_window(object):
         frm_main_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(frm_main_window)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 470, 33))
+        self.menubar.setGeometry(QRect(0, 0, 470, 22))
         self.menuDatei = QMenu(self.menubar)
         self.menuDatei.setObjectName(u"menuDatei")
         frm_main_window.setMenuBar(self.menubar)
@@ -555,8 +563,8 @@ class Ui_frm_main_window(object):
 
         self.lb_spannmittel_wert.setText(QCoreApplication.translate("frm_main_window", u"Spannmittelbreite:", None))
         self.le_spannmittel.setText(QCoreApplication.translate("frm_main_window", u"100", None))
-        self.pb_spannmittel.setText(QCoreApplication.translate("frm_main_window", u"Spannmittel erstellen", None))
         self.tb_spannmittel_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
+        self.pb_spannmittel.setText(QCoreApplication.translate("frm_main_window", u"Spannmittel erstellen", None))
         self.cb_datum_editieren.setText(QCoreApplication.translate("frm_main_window", u"Zielpfad editieren", None))
         self.menuDatei.setTitle(QCoreApplication.translate("frm_main_window", u"Datei", None))
     # retranslateUi

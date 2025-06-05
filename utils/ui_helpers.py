@@ -65,7 +65,7 @@ def populate_combobox_with_subfolders(
             show_status(f"Info: Keine Unterordner in '{base_path}' gefunden.", 5000)
             combobox.addItem("Keine Einträge gefunden") # Platzhalter
         else:
-            show_status(f"ComboBox '{combobox.objectName()}' geladen aus '{base_path}'.", 3000)
+            show_status("Spannmittel Ordner gefunden.", 3000)
         return True
 
     except PermissionError:

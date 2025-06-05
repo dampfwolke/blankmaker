@@ -163,6 +163,7 @@ if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)
 
     settings = load_settings()
+    #stylesheet_path = get_stylesheet_path(settings)
     stylesheet_path = get_stylesheet_path(settings)
 
     if stylesheet_path:
