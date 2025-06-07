@@ -90,11 +90,11 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         
         dir_path_str = self.le_pfad.text()
         if not dir_path_str:
-            self.statusBar().showMessage(f"Rechteck Fehler: Zielpfad nicht ermittelt. Datum prüfen. ({zeitstempel(1)})", 7000)
+            self.statusBar().showMessage(f"'Fehler beim erstellen von !rohteil.dxf'. ({zeitstempel(1)})", 7000)
             print("[PFAD RECHTECK] Fehler: Zielpfad nicht ermittelt.")
             return
 
-        file_name = "!rohteil_rechteck.dxf" 
+        file_name = "!rohteil.dxf"
         full_output_path = str(pathlib.Path(dir_path_str) / file_name)
         
         self.statusBar().showMessage(f"Erstelle Rechteck-DXF: {file_name}...", 3000)
@@ -124,11 +124,11 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         
         dir_path_str = self.le_pfad.text()
         if not dir_path_str:
-            self.statusBar().showMessage(f"Kreis Fehler: Zielpfad nicht ermittelt. Datum prüfen. ({zeitstempel(1)})", 7000)
+            self.statusBar().showMessage(f"fehler beim erstellen von '!rohteil.dxf'. ({zeitstempel(1)})", 7000)
             print("[PFAD KREIS] Fehler: Zielpfad nicht ermittelt.")
             return
 
-        file_name = "!rohteil_kreis.dxf" 
+        file_name = "!rohteil.dxf"
         full_output_path = str(pathlib.Path(dir_path_str) / file_name)
         
         self.statusBar().showMessage(f"Erstelle Kreis-DXF: {file_name}...", 3000)

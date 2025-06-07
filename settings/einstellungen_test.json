@@ -1,11 +1,12 @@
 {
-  "nutzername": "Hasanovictest",
   "nc_base_path": "K:/Esprit/NC-Files",
+  "nutzername": "hasanovic",
+  "pfad_backup": "C:\\Users\\hasanovic\\Desktop\\Backup",
   "pfad_template": "{base_path}/{projekt}-KW{kw}/{nutzer}/{wochentag}",
-  "spannmittel_basis_pfad": "C:/Users/hasanovic/Desktop/Spannmittel/test",
-  "wks": "07",
+  "platzhalter_1": "platzhalter_1",
+  "platzhalter_2": "platzhalter_2",
   "projekt_prefix": "AT-25",
-  "pfad_backup": "Nonewwww",
-  "styles": "Darkeum.qss",
-  "stylesheet": "UI/Styles/{styles}"
+  "spannmittel_basis_pfad": "\"C:\\Users\\hasanovic\\Desktop\\Spannmittel\\\"",
+  "wks": "07",
+  "styles": "Cstartpage.qss"
 }

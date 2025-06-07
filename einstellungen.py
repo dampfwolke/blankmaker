@@ -12,7 +12,6 @@ class Settings(qtw.QWidget, Ui_frm_settings):
         super().__init__()
         self.setupUi(self)
         self.json_path = Path("settings/einstellungen.json")
-
         self.styles_laden()
 
         # Button-Events
