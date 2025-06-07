@@ -1,6 +1,5 @@
 import ezdxf
-from pathlib import Path  # Geändert
-
+import pathlib # Importiert für Pfad-Operationen
 
 def rechteck_erstellen(length: float, width: float, height: float, output_path_str: str):
     """
@@ -20,13 +19,13 @@ def rechteck_erstellen(length: float, width: float, height: float, output_path_s
         msp = doc.modelspace()
 
         # Rechteck mit den angegebenen Länge und Breite erstellen
-        center = (0, 0, -4)  # Z-Offset, damit die untere Fläche bei z=-4 liegt
+        center = (0, 0, -4) # Z-Offset, damit die untere Fläche bei z=-4 liegt
         points = [
             (center[0] - length / 2, center[1] - width / 2, center[2]),
             (center[0] + length / 2, center[1] - width / 2, center[2]),
             (center[0] + length / 2, center[1] + width / 2, center[2]),
             (center[0] - length / 2, center[1] + width / 2, center[2]),
-            (center[0] - length / 2, center[1] - width / 2, center[2]),  # Schließen der Polylinie
+            (center[0] - length / 2, center[1] - width / 2, center[2]), # Schließen der Polylinie
         ]
         msp.add_polyline3d(points, dxfattribs={'layer': 'Roh', 'color': 198})
 
@@ -54,13 +53,13 @@ def rechteck_erstellen(length: float, width: float, height: float, output_path_s
 
         # Textposition anpassen (z.B. links oben auf der oberen Fläche)
         text_x = -length / 2
-        text_y = (width / 2) + 4  # Etwas über der oberen Kante
-        text_z = center[2] + height  # Auf der Höhe der oberen Fläche
+        text_y = (width / 2) + 4 # Etwas über der oberen Kante
+        text_z = center[2] + height # Auf der Höhe der oberen Fläche
         text_entity.dxf.insert = (text_x, text_y, text_z)
         text_entity.dxf.rotation = 0
 
         # Verwende pathlib für den Pfad
-        file_path = Path(output_path_str)  # Geändert
+        file_path = pathlib.Path(output_path_str)
 
         # Stelle sicher, dass das Elternverzeichnis existiert
         file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -71,28 +70,28 @@ def rechteck_erstellen(length: float, width: float, height: float, output_path_s
     except IOError as e:
         err_msg = f"Fehler beim Speichern der DXF-Datei unter '{file_path}': {e}\n"
         err_msg += "Stellen Sie sicher, dass der Pfad existiert und Sie Schreibrechte haben.\n"
-
+        
         # Versuch, lokal zu speichern
-        local_fallback_path = Path.cwd() / f"!rohteil_lokal_{length}x{width}x{height}.dxf"  # Geändert
+        local_fallback_path = pathlib.Path.cwd() / f"!rohteil_lokal_{length}x{width}x{height}.dxf"
         try:
             doc.saveas(local_fallback_path)
             err_msg += f"DXF wurde stattdessen lokal als '{local_fallback_path}' gespeichert."
             # In diesem Fall ist es immer noch ein "Erfolg" mit einer Anmerkung
-            return True, err_msg
+            return True, err_msg 
         except Exception as e_local:
             err_msg += f"Fehler auch beim lokalen Speichern: {e_local}"
             return False, err_msg
-
-    except ValueError as e:  # Falls z.B. ungültige Werte für Längen übergeben werden
+            
+    except ValueError as e: # Falls z.B. ungültige Werte für Längen übergeben werden
         return False, f"Ungültige Eingabewerte: {e}"
-
+        
     except Exception as e:
         return False, f"Ein unerwarteter Fehler ist beim Erstellen/Speichern aufgetreten: {e}"
 
 
 if __name__ == "__main__":
     # Testaufruf
-    test_output_path = Path.cwd() / "test_rechteck.dxf"  # Geändert
+    test_output_path = pathlib.Path.cwd() / "test_rechteck.dxf" # Speichert im aktuellen Verzeichnis
     success, message = rechteck_erstellen(length=120, width=80, height=30, output_path_str=str(test_output_path))
     if success:
         print(f"Erfolg: {message}")
@@ -101,6 +100,6 @@ if __name__ == "__main__":
 
     # Test mit einem Pfad, der möglicherweise nicht existiert (nur zur Demonstration des Fallbacks)
     # Vorsicht: Dieser Pfad wird versucht zu erstellen, wenn er nicht existiert!
-    # non_existent_dir_path = Path("K:/NICHT_EXISTENT_FUER_TEST/test_rechteck_fail.dxf") # Geändert
+    # non_existent_dir_path = pathlib.Path("K:/NICHT_EXISTENT_FUER_TEST/test_rechteck_fail.dxf")
     # success, message = rechteck_erstellen(length=50, width=50, height=10, output_path_str=str(non_existent_dir_path))
     # print(f"Zweiter Test: {success}, Nachricht: {message}")

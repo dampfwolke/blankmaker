@@ -1,6 +1,5 @@
 import sys
-import shutil
-from pathlib import Path
+import pathlib
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtCore as qtc
 from PySide6 import QtGui as qtg
@@ -8,8 +7,8 @@ from PySide6 import QtGui as qtg
 from utils.zeitstempel import zeitstempel
 from utils.kalenderwoche import kw_ermitteln
 from utils.get_settings import load_settings, get_stylesheet_path, get_pfad_from_template
-from utils.rechteck import rechteck_erstellen
-from utils.kreis import kreis_erstellen
+from utils.rechteck import rechteck_erstellen 
+from utils.kreis import kreis_erstellen 
 from utils.input_validators import validate_dimensions, validate_circle_dimensions
 from utils.ui_helpers import populate_combobox_with_subfolders
 
@@ -18,7 +17,6 @@ from UI.animated_tabhelper import AnimatedTabHelper
 
 from einstellungen import Settings
 
-
 class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
     def __init__(self):
         super().__init__()
@@ -26,14 +24,14 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.frm_settings = Settings()
         self.settings = load_settings()
         self.wg_datum_editieren.setHidden(True)
-        self.le_pfad.setDisabled(True)
+        self.le_pfad.setDisabled(True) 
 
         self.de_datum.setDate(qtc.QDate.currentDate())
-        self.pfad_aktualisieren()
+        self.pfad_aktualisieren() 
 
         self.anim_tabs = AnimatedTabHelper(self.tw_rohteil_erstellen)
 
-        self.double_validator = qtg.QDoubleValidator(0.001, 99999.999, 3, self)
+        self.double_validator = qtg.QDoubleValidator(0.000000001, 99999.999999999, 9, self)
         self.double_validator.setNotation(qtg.QDoubleValidator.StandardNotation)
         german_locale = qtc.QLocale(qtc.QLocale.Language.German, qtc.QLocale.Country.Germany)
         self.double_validator.setLocale(german_locale)
@@ -44,27 +42,33 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.le_durchmesser.setValidator(self.double_validator)
         self.le_z_kreis.setValidator(self.double_validator)
 
-        self.le_spannmittel.setValidator(qtg.QIntValidator(1, 9999, self))
+        # Hier muss der Validator in der Datei UI/input_validators erstellt werden
+        self.le_spannmittel.setValidator(qtg.QIntValidator)
 
+        # Spannmittel ComboBox füllen mit der ausgelagerten Funktion
         self.initialize_ui_elements()
 
         # Signale verbinden
         self.actionEinstellungen.triggered.connect(self.execute_frm_settings)
         self.pb_rechteck.clicked.connect(self.rechteck_erstellen_clicked)
-        self.le_rechteck_hoehe.editingFinished.connect(self.rechteck_erstellen_clicked)
+        self.le_rechteck_hoehe.editingFinished.connect(self.rechteck_erstellen_clicked) 
         self.pb_kreis.clicked.connect(self.kreis_erstellen_clicked)
-        self.le_z_kreis.editingFinished.connect(self.kreis_erstellen_clicked)
+        self.le_z_kreis.editingFinished.connect(self.kreis_erstellen_clicked) 
         self.de_datum.dateChanged.connect(self.pfad_aktualisieren)
+
         self.pb_spannmittel.clicked.connect(self.spannmittel_erstellen)
 
+    # NEU: Methode zur Initialisierung von UI-Elementen, die von Settings abhängen
     def initialize_ui_elements(self):
         """Initialisiert UI-Elemente, die Daten aus den Settings benötigen."""
+        # Spannmittel ComboBox
         populate_combobox_with_subfolders(
             combobox=self.cb_spannmittel,
             settings=self.settings,
             settings_key="spannmittel_basis_pfad",
-            status_bar=self.statusBar()
+            status_bar=self.statusBar() # Übergabe der Statusleiste
         )
+        # Hier könnten später weitere UI-Initialisierungen folgen
 
     @qtc.Slot()
     def execute_frm_settings(self):
@@ -74,149 +78,118 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.statusBar().showMessage(f"Einstellungen geöffnet. ({zeitstempel(1)})", 7000)
         self.frm_settings.show()
 
+    # Diese Funktion muss noch erledigt werden
     @qtc.Slot()
     def spannmittel_erstellen(self):
-        """Kopiert eine ausgewählte Spannmittel-Datei in den Zielordner."""
-        spannmittel_typ = self.cb_spannmittel.currentText()
-        if not spannmittel_typ or "Fehler" in spannmittel_typ or "Keine" in spannmittel_typ:
-            self.statusBar().showMessage("Fehler: Bitte gültiges Spannmittel aus der Liste wählen.", 7000)
-            return
-
-        spannmittel_groesse = self.le_spannmittel.text()
-        if not spannmittel_groesse:
-            self.statusBar().showMessage("Fehler: Bitte eine Spannmittel-Größe (z.B. 50) angeben.", 7000)
-            return
-
-        ziel_ordner_str = self.le_pfad.text()
-        if not ziel_ordner_str:
-            self.statusBar().showMessage("Fehler: Zielpfad konnte nicht ermittelt werden.", 7000)
-            return
-
-        spannmittel_basis_pfad_str = self.settings.get("spannmittel_basis_pfad")
-        if not spannmittel_basis_pfad_str:
-            self.statusBar().showMessage("Fehler: 'spannmittel_basis_pfad' nicht in Einstellungen gefunden.", 7000)
-            return
-
-        quell_ordner = Path(spannmittel_basis_pfad_str) / spannmittel_typ
-        quell_datei = quell_ordner / f"{spannmittel_groesse}.step"
-
-        ziel_ordner = Path(ziel_ordner_str)
-        ziel_datei = ziel_ordner / f"!schraubstock{quell_datei.suffix}"
-
-        try:
-            if not quell_datei.exists():
-                self.statusBar().showMessage(f"Fehler: Quelldatei nicht gefunden: {quell_datei.name}", 7000)
-                print(f"[FEHLER] Quelldatei nicht gefunden: {quell_datei}")
-                return
-
-            ziel_ordner.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(quell_datei, ziel_datei)
-
-            self.statusBar().showMessage(f"Spannmittel '{ziel_datei.name}' erfolgreich erstellt. ({zeitstempel(1)})",
-                                         7000)
-            print(f"[INFO] Spannmittel kopiert: '{quell_datei}' -> '{ziel_datei}'")
-
-        except PermissionError:
-            self.statusBar().showMessage("Fehler: Keine Berechtigung zum Schreiben im Zielordner.", 7000)
-            print(f"[FEHLER] Keine Berechtigung für Pfad: {ziel_ordner}")
-        except Exception as e:
-            self.statusBar().showMessage(f"Ein unerwarteter Fehler ist aufgetreten: {e}", 7000)
-            print(f"[FEHLER] Beim Kopieren des Spannmittels: {e}")
+        source_file = pathlib.Path(self.cb_spannmittel)
+        destination_path = pathlib.Path(self.le_pfad)
+        if source_file.exists():
+            source_file.copy
 
     @qtc.Slot()
     def rechteck_erstellen_clicked(self):
         length_str = self.le_rechteck_laenge.text()
         width_str = self.le_rechteck_breite.text()
         height_str = self.le_rechteck_hoehe.text()
-        is_valid, length, width, height, error_message = validate_dimensions(length_str, width_str, height_str)
+
+        is_valid, length, width, height, error_message = validate_dimensions(
+            length_str, width_str, height_str
+        )
+
         if not is_valid:
             self.statusBar().showMessage(f"Rechteck Fehler: {error_message} ({zeitstempel(1)})", 7000)
+            print(f"[VALIDIERUNG RECHTECK] Fehler: {error_message}")
             return
-
+        
         dir_path_str = self.le_pfad.text()
         if not dir_path_str:
-            self.statusBar().showMessage(f"'Fehler beim Erstellen von !rohteil.dxf'. ({zeitstempel(1)})", 7000)
+            self.statusBar().showMessage(f"'Fehler beim erstellen von !rohteil.dxf'. ({zeitstempel(1)})", 7000)
+            print("[PFAD RECHTECK] Fehler: Zielpfad nicht ermittelt.")
             return
 
         file_name = "!rohteil.dxf"
-        full_output_path = str(Path(dir_path_str) / file_name)
-
+        full_output_path = str(pathlib.Path(dir_path_str) / file_name)
+        
         self.statusBar().showMessage(f"Erstelle Rechteck-DXF: {file_name}...", 3000)
+        
         success, message_from_module = rechteck_erstellen(length, width, height, full_output_path)
 
         if success:
             self.statusBar().showMessage(f"Rechteck erstellt ({zeitstempel(1)})", 7000)
+            print(f"[DXF RECHTECK] {message_from_module}")
         else:
             self.statusBar().showMessage(f"Rechteck Fehler DXF: {message_from_module} ({zeitstempel(1)})", 7000)
+            print(f"[DXF RECHTECK] Fehler: {message_from_module}")
 
     @qtc.Slot()
     def kreis_erstellen_clicked(self):
         diameter_str = self.le_durchmesser.text()
-        height_str = self.le_z_kreis.text()
-        is_valid, diameter, height, error_message = validate_circle_dimensions(diameter_str, height_str)
+        height_str = self.le_z_kreis.text() 
+
+        is_valid, diameter, height, error_message = validate_circle_dimensions(
+            diameter_str, height_str
+        )
+
         if not is_valid:
             self.statusBar().showMessage(f"Kreis Fehler: {error_message} ({zeitstempel(1)})", 7000)
+            print(f"[VALIDIERUNG KREIS] Fehler: {error_message}")
             return
-
+        
         dir_path_str = self.le_pfad.text()
         if not dir_path_str:
-            self.statusBar().showMessage(f"Fehler beim Erstellen von '!rohteil.dxf'. ({zeitstempel(1)})", 7000)
+            self.statusBar().showMessage(f"fehler beim erstellen von '!rohteil.dxf'. ({zeitstempel(1)})", 7000)
+            print("[PFAD KREIS] Fehler: Zielpfad nicht ermittelt.")
             return
 
         file_name = "!rohteil.dxf"
-        full_output_path = str(Path(dir_path_str) / file_name)
-
+        full_output_path = str(pathlib.Path(dir_path_str) / file_name)
+        
         self.statusBar().showMessage(f"Erstelle Kreis-DXF: {file_name}...", 3000)
+        
         success, message_from_module = kreis_erstellen(diameter, height, full_output_path)
 
         if success:
             self.statusBar().showMessage(f"Kreis erstellt ({zeitstempel(1)})", 7000)
+            print(f"[DXF KREIS] {message_from_module}")
         else:
             self.statusBar().showMessage(f"Kreis Fehler DXF: {message_from_module} ({zeitstempel(1)})", 7000)
+            print(f"[DXF KREIS] Fehler: {message_from_module}")
+
 
     @qtc.Slot()
     def pfad_aktualisieren(self):
         qt_date = self.de_datum.date()
         py_date = qt_date.toPython()
         kw, wochentag = kw_ermitteln(py_date)
+        
         pfad_template_result = get_pfad_from_template(self.settings, kw, wochentag)
+        
         if pfad_template_result:
             self.le_pfad.setText(str(pfad_template_result))
         else:
             self.le_pfad.setText("")
             self.statusBar().showMessage("Warnung: Pfad konnte nicht generiert werden.", 5000)
+            print("[Warnung] Pfad konnte nicht aus Template generiert werden.")
 
 
 if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)
+    # Hier muss noch der Pfad angepasst werden da die Stylesheets nicht korrekt geladen werden. Die styles befinden sich im UI/Styles Ordner
     settings = load_settings()
+    stylesheet_path = get_stylesheet_path(settings)
 
-    # --- KORRIGIERTER STYLESHEET-LADEBLOCK ---
-
-    # 1. Hole nur den Dateinamen des Styles aus den Einstellungen
-    style_filename = settings.get("styles")
-
-    if style_filename:
-        # 2. Definiere den festen Ordner, in dem die Stylesheets liegen
-        #    relativ zum Hauptskript.
-        script_dir = Path(__file__).resolve().parent
-        styles_folder = script_dir / "UI" / "Styles"
-
-        # 3. Setze den vollständigen Pfad zusammen
-        full_stylesheet_path = styles_folder / style_filename
-
-        # 4. Prüfe, ob die Datei existiert und lade sie
-        if full_stylesheet_path.is_file():
-            try:
-                with full_stylesheet_path.open("r", encoding="utf-8") as f:
-                    app.setStyleSheet(f.read())
-                print(f"[Info] Stylesheet geladen: {full_stylesheet_path}")
-            except Exception as e:
-                print(f"[Warnung] Stylesheet konnte nicht geladen werden: {full_stylesheet_path} - {e}")
-        else:
-            print(f"[Warnung] Stylesheet-Datei nicht gefunden unter: {full_stylesheet_path}")
+    if stylesheet_path:
+        try:
+            if isinstance(stylesheet_path, str):
+                stylesheet_path = pathlib.Path(stylesheet_path)
+                
+            with stylesheet_path.open("r", encoding="utf-8") as f:
+                app.setStyleSheet(f.read())
+            print(f"[Info] Stylesheet geladen: {stylesheet_path}")
+        except Exception as e:
+            print(f"[Warnung] Stylesheet konnte nicht geladen werden: {stylesheet_path} - {e}")
     else:
-        print("[Info] Kein Stylesheet in den Einstellungen ('styles') angegeben.")
+        print("[Info] Kein Stylesheet verwendet.")
 
     window = MainWindow()
     window.show()
