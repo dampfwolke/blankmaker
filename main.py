@@ -1,5 +1,6 @@
 import sys
 import shutil
+import math  # Hinzugefügt für die Rundungsfunktion
 from pathlib import Path
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtCore as qtc
@@ -30,21 +31,18 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
         self.de_datum.setDate(qtc.QDate.currentDate())
         self.pfad_aktualisieren()
-
         self.anim_tabs = AnimatedTabHelper(self.tw_rohteil_erstellen)
 
         self.double_validator = qtg.QDoubleValidator(0.001, 99999.999, 3, self)
         self.double_validator.setNotation(qtg.QDoubleValidator.StandardNotation)
         german_locale = qtc.QLocale(qtc.QLocale.Language.German, qtc.QLocale.Country.Germany)
         self.double_validator.setLocale(german_locale)
-
         self.le_rechteck_laenge.setValidator(self.double_validator)
         self.le_rechteck_breite.setValidator(self.double_validator)
         self.le_rechteck_hoehe.setValidator(self.double_validator)
         self.le_durchmesser.setValidator(self.double_validator)
         self.le_z_kreis.setValidator(self.double_validator)
-
-        self.le_spannmittel.setValidator(qtg.QIntValidator(1, 9999, self))
+        self.le_spannmittel.setValidator(qtg.QIntValidator(1, 999, self))
 
         self.initialize_ui_elements()
 
@@ -56,6 +54,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.le_z_kreis.editingFinished.connect(self.kreis_erstellen_clicked)
         self.de_datum.dateChanged.connect(self.pfad_aktualisieren)
         self.pb_spannmittel.clicked.connect(self.spannmittel_erstellen)
+        self.le_rechteck_breite.textChanged.connect(self.update_spannmittel_from_breite)
 
     def initialize_ui_elements(self):
         """Initialisiert UI-Elemente, die Daten aus den Settings benötigen."""
@@ -65,6 +64,36 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             settings_key="spannmittel_basis_pfad",
             status_bar=self.statusBar()
         )
+        if self.cb_spannmittel.count() > 0:
+            self.cb_spannmittel.setCurrentIndex(0)
+
+    @qtc.Slot(str)
+    def update_spannmittel_from_breite(self, text: str):
+        """
+        Aktualisiert das le_spannmittel basierend auf dem Wert in le_rechteck_breite.
+        Rundet den Wert auf den nächsten 5er-Schritt auf.
+        """
+        # Ersetze Komma durch Punkt für die Konvertierung
+        text = text.replace(',', '.')
+
+        if not text:
+            self.le_spannmittel.clear()
+            return
+
+        try:
+            breite_val = float(text)
+            if breite_val > 0:
+                # Auf den nächsten 5er-Schritt aufrunden
+                # math.ceil(x) rundet x auf die nächste ganze Zahl auf.
+                # z.B. 143.78 / 5 = 28.756 -> ceil -> 29. Dann 29 * 5 = 145.
+                gerundeter_wert = math.ceil(breite_val / 5.0) * 5
+                self.le_spannmittel.setText(str(gerundeter_wert))
+            else:
+                self.le_spannmittel.clear()
+        except ValueError:
+            # Wenn der Text keine gültige Zahl ist (z.B. während der Eingabe),
+            # passiert nichts oder das Feld wird geleert.
+            self.le_spannmittel.clear()
 
     @qtc.Slot()
     def execute_frm_settings(self):
@@ -146,6 +175,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
         if success:
             self.statusBar().showMessage(f"Rechteck erstellt ({zeitstempel(1)})", 7000)
+            self.spannmittel_erstellen()
         else:
             self.statusBar().showMessage(f"Rechteck Fehler DXF: {message_from_module} ({zeitstempel(1)})", 7000)
 
@@ -191,21 +221,13 @@ if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)
     settings = load_settings()
 
-    # --- KORRIGIERTER STYLESHEET-LADEBLOCK ---
-
-    # 1. Hole nur den Dateinamen des Styles aus den Einstellungen
     style_filename = settings.get("styles")
 
     if style_filename:
-        # 2. Definiere den festen Ordner, in dem die Stylesheets liegen
-        #    relativ zum Hauptskript.
         script_dir = Path(__file__).resolve().parent
         styles_folder = script_dir / "UI" / "Styles"
-
-        # 3. Setze den vollständigen Pfad zusammen
         full_stylesheet_path = styles_folder / style_filename
 
-        # 4. Prüfe, ob die Datei existiert und lade sie
         if full_stylesheet_path.is_file():
             try:
                 with full_stylesheet_path.open("r", encoding="utf-8") as f:

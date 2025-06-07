@@ -497,7 +497,7 @@ class Ui_frm_main_window(object):
         frm_main_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(frm_main_window)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 470, 22))
+        self.menubar.setGeometry(QRect(0, 0, 470, 33))
         self.menuDatei = QMenu(self.menubar)
         self.menuDatei.setObjectName(u"menuDatei")
         frm_main_window.setMenuBar(self.menubar)
