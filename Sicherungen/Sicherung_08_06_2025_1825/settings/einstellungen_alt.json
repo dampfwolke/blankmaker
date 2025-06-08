@@ -1,0 +1,11 @@
+{
+  "nutzername": "Hasanovic",
+  "nc_base_path": "K:/Esprit/NC-Files",
+  "pfad_template": "{base_path}/{projekt}-KW{kw}/{nutzer}/{wochentag}",
+  "spannmittel_basis_pfad": "C:/Users/hasanovic/Desktop/Spannmittel/",
+  "wks": "07",
+  "projekt_prefix": "AT-25",
+  "pfad_backup": "None",
+  "styles": "Darkeum.qss",
+  "stylesheet": "UI/Styles/{styles}"
+}
