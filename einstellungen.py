@@ -13,6 +13,8 @@ class Settings(qtw.QWidget, Ui_frm_settings):
         self.setupUi(self)
         self.json_path = Path("settings/einstellungen.json")
         self.styles_laden()
+        self.lb_pfad_template.setHidden(True)
+        self.le_pfad_template.setHidden(True)
 
         # Button-Events
         self.pb_laden.clicked.connect(self.einstellungen_laden_dialog)

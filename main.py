@@ -1,6 +1,6 @@
 import sys
 import shutil
-import math  # Hinzugefügt für die Rundungsfunktion
+import math
 from pathlib import Path
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtCore as qtc
@@ -8,7 +8,7 @@ from PySide6 import QtGui as qtg
 
 from utils.zeitstempel import zeitstempel
 from utils.kalenderwoche import kw_ermitteln
-from utils.get_settings import load_settings, get_stylesheet_path, get_pfad_from_template
+from utils.get_settings import load_settings, get_pfad_from_template
 from utils.rechteck import rechteck_erstellen
 from utils.kreis import kreis_erstellen
 from utils.input_validators import validate_dimensions, validate_circle_dimensions
