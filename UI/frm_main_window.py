@@ -17,50 +17,74 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateEdit,
-    QFrame, QGroupBox, QHBoxLayout, QLabel,
-    QLineEdit, QMainWindow, QMenu, QMenuBar,
-    QPushButton, QSizePolicy, QSpacerItem, QStatusBar,
-    QTabWidget, QToolButton, QVBoxLayout, QWidget)
+    QFormLayout, QFrame, QGridLayout, QGroupBox,
+    QHBoxLayout, QLCDNumber, QLabel, QLineEdit,
+    QMainWindow, QMenu, QMenuBar, QPushButton,
+    QSizePolicy, QSpacerItem, QStatusBar, QTabWidget,
+    QToolButton, QVBoxLayout, QWidget)
 
 class Ui_frm_main_window(object):
     def setupUi(self, frm_main_window):
         if not frm_main_window.objectName():
             frm_main_window.setObjectName(u"frm_main_window")
-        frm_main_window.resize(470, 850)
-        frm_main_window.setMinimumSize(QSize(470, 850))
+        frm_main_window.resize(600, 1287)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(frm_main_window.sizePolicy().hasHeightForWidth())
+        frm_main_window.setSizePolicy(sizePolicy)
+        frm_main_window.setMinimumSize(QSize(470, 1000))
+        frm_main_window.setMaximumSize(QSize(600, 16777215))
         self.actionEinstellungen = QAction(frm_main_window)
         self.actionEinstellungen.setObjectName(u"actionEinstellungen")
         self.actionBeenden = QAction(frm_main_window)
         self.actionBeenden.setObjectName(u"actionBeenden")
         self.centralwidget = QWidget(frm_main_window)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout_4 = QVBoxLayout(self.centralwidget)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.centralwidget.setMinimumSize(QSize(0, 950))
+        self.centralwidget.setMaximumSize(QSize(16777215, 1080))
+        self.verticalLayout_8 = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.tw_rohteil_erstellen = QTabWidget(self.centralwidget)
         self.tw_rohteil_erstellen.setObjectName(u"tw_rohteil_erstellen")
-        self.tw_rohteil_erstellen.setMinimumSize(QSize(450, 180))
-        self.tw_rohteil_erstellen.setMaximumSize(QSize(16777215, 265))
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.tw_rohteil_erstellen.sizePolicy().hasHeightForWidth())
+        self.tw_rohteil_erstellen.setSizePolicy(sizePolicy1)
+        self.tw_rohteil_erstellen.setMinimumSize(QSize(450, 200))
+        self.tw_rohteil_erstellen.setMaximumSize(QSize(16777215, 230))
         font = QFont()
         font.setFamilies([u"Comic Sans MS"])
         font.setPointSize(12)
         font.setBold(False)
         self.tw_rohteil_erstellen.setFont(font)
         self.tw_rohteil_erstellen.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.tw_rohteil_erstellen.setTabPosition(QTabWidget.TabPosition.North)
         self.tab_rechteck = QWidget()
         self.tab_rechteck.setObjectName(u"tab_rechteck")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.tab_rechteck.sizePolicy().hasHeightForWidth())
+        self.tab_rechteck.setSizePolicy(sizePolicy2)
+        self.tab_rechteck.setMinimumSize(QSize(0, 160))
+        self.tab_rechteck.setMaximumSize(QSize(16777215, 220))
         self.verticalLayout = QVBoxLayout(self.tab_rechteck)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.wg_x_roh = QWidget(self.tab_rechteck)
         self.wg_x_roh.setObjectName(u"wg_x_roh")
+        self.wg_x_roh.setMinimumSize(QSize(0, 32))
+        self.wg_x_roh.setMaximumSize(QSize(16777215, 35))
         self.horizontalLayout = QHBoxLayout(self.wg_x_roh)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.lb_rechteck_laenge = QLabel(self.wg_x_roh)
         self.lb_rechteck_laenge.setObjectName(u"lb_rechteck_laenge")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lb_rechteck_laenge.sizePolicy().hasHeightForWidth())
-        self.lb_rechteck_laenge.setSizePolicy(sizePolicy)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.lb_rechteck_laenge.sizePolicy().hasHeightForWidth())
+        self.lb_rechteck_laenge.setSizePolicy(sizePolicy3)
         self.lb_rechteck_laenge.setMaximumSize(QSize(200, 50))
         self.lb_rechteck_laenge.setFont(font)
         self.lb_rechteck_laenge.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
@@ -73,10 +97,10 @@ class Ui_frm_main_window(object):
 
         self.le_rechteck_laenge = QLineEdit(self.wg_x_roh)
         self.le_rechteck_laenge.setObjectName(u"le_rechteck_laenge")
-        sizePolicy.setHeightForWidth(self.le_rechteck_laenge.sizePolicy().hasHeightForWidth())
-        self.le_rechteck_laenge.setSizePolicy(sizePolicy)
-        self.le_rechteck_laenge.setMinimumSize(QSize(100, 30))
-        self.le_rechteck_laenge.setMaximumSize(QSize(150, 50))
+        sizePolicy3.setHeightForWidth(self.le_rechteck_laenge.sizePolicy().hasHeightForWidth())
+        self.le_rechteck_laenge.setSizePolicy(sizePolicy3)
+        self.le_rechteck_laenge.setMinimumSize(QSize(100, 20))
+        self.le_rechteck_laenge.setMaximumSize(QSize(150, 25))
         self.le_rechteck_laenge.setFont(font)
 
         self.horizontalLayout.addWidget(self.le_rechteck_laenge)
@@ -90,12 +114,14 @@ class Ui_frm_main_window(object):
 
         self.wg_y_roh = QWidget(self.tab_rechteck)
         self.wg_y_roh.setObjectName(u"wg_y_roh")
+        self.wg_y_roh.setMinimumSize(QSize(0, 32))
+        self.wg_y_roh.setMaximumSize(QSize(16777215, 35))
         self.horizontalLayout_2 = QHBoxLayout(self.wg_y_roh)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.lb_rechteck_breite = QLabel(self.wg_y_roh)
         self.lb_rechteck_breite.setObjectName(u"lb_rechteck_breite")
-        sizePolicy.setHeightForWidth(self.lb_rechteck_breite.sizePolicy().hasHeightForWidth())
-        self.lb_rechteck_breite.setSizePolicy(sizePolicy)
+        sizePolicy3.setHeightForWidth(self.lb_rechteck_breite.sizePolicy().hasHeightForWidth())
+        self.lb_rechteck_breite.setSizePolicy(sizePolicy3)
         self.lb_rechteck_breite.setMaximumSize(QSize(200, 50))
         self.lb_rechteck_breite.setFont(font)
         self.lb_rechteck_breite.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
@@ -108,10 +134,10 @@ class Ui_frm_main_window(object):
 
         self.le_rechteck_breite = QLineEdit(self.wg_y_roh)
         self.le_rechteck_breite.setObjectName(u"le_rechteck_breite")
-        sizePolicy.setHeightForWidth(self.le_rechteck_breite.sizePolicy().hasHeightForWidth())
-        self.le_rechteck_breite.setSizePolicy(sizePolicy)
-        self.le_rechteck_breite.setMinimumSize(QSize(100, 30))
-        self.le_rechteck_breite.setMaximumSize(QSize(150, 50))
+        sizePolicy3.setHeightForWidth(self.le_rechteck_breite.sizePolicy().hasHeightForWidth())
+        self.le_rechteck_breite.setSizePolicy(sizePolicy3)
+        self.le_rechteck_breite.setMinimumSize(QSize(100, 20))
+        self.le_rechteck_breite.setMaximumSize(QSize(150, 25))
         self.le_rechteck_breite.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.le_rechteck_breite)
@@ -125,12 +151,14 @@ class Ui_frm_main_window(object):
 
         self.wg_z_roh = QWidget(self.tab_rechteck)
         self.wg_z_roh.setObjectName(u"wg_z_roh")
+        self.wg_z_roh.setMinimumSize(QSize(0, 32))
+        self.wg_z_roh.setMaximumSize(QSize(16777215, 35))
         self.horizontalLayout_3 = QHBoxLayout(self.wg_z_roh)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.lb_rechteck_hoehe = QLabel(self.wg_z_roh)
         self.lb_rechteck_hoehe.setObjectName(u"lb_rechteck_hoehe")
-        sizePolicy.setHeightForWidth(self.lb_rechteck_hoehe.sizePolicy().hasHeightForWidth())
-        self.lb_rechteck_hoehe.setSizePolicy(sizePolicy)
+        sizePolicy3.setHeightForWidth(self.lb_rechteck_hoehe.sizePolicy().hasHeightForWidth())
+        self.lb_rechteck_hoehe.setSizePolicy(sizePolicy3)
         self.lb_rechteck_hoehe.setMaximumSize(QSize(200, 50))
         self.lb_rechteck_hoehe.setFont(font)
         self.lb_rechteck_hoehe.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
@@ -143,10 +171,10 @@ class Ui_frm_main_window(object):
 
         self.le_rechteck_hoehe = QLineEdit(self.wg_z_roh)
         self.le_rechteck_hoehe.setObjectName(u"le_rechteck_hoehe")
-        sizePolicy.setHeightForWidth(self.le_rechteck_hoehe.sizePolicy().hasHeightForWidth())
-        self.le_rechteck_hoehe.setSizePolicy(sizePolicy)
-        self.le_rechteck_hoehe.setMinimumSize(QSize(100, 30))
-        self.le_rechteck_hoehe.setMaximumSize(QSize(150, 50))
+        sizePolicy3.setHeightForWidth(self.le_rechteck_hoehe.sizePolicy().hasHeightForWidth())
+        self.le_rechteck_hoehe.setSizePolicy(sizePolicy3)
+        self.le_rechteck_hoehe.setMinimumSize(QSize(100, 20))
+        self.le_rechteck_hoehe.setMaximumSize(QSize(150, 25))
         self.le_rechteck_hoehe.setFont(font)
 
         self.horizontalLayout_3.addWidget(self.le_rechteck_hoehe)
@@ -158,20 +186,19 @@ class Ui_frm_main_window(object):
 
         self.verticalLayout.addWidget(self.wg_z_roh)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout.addItem(self.verticalSpacer_2)
-
         self.wg_button_roh = QWidget(self.tab_rechteck)
         self.wg_button_roh.setObjectName(u"wg_button_roh")
+        self.wg_button_roh.setMinimumSize(QSize(0, 40))
+        self.wg_button_roh.setMaximumSize(QSize(16777215, 50))
         self.horizontalLayout_4 = QHBoxLayout(self.wg_button_roh)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalSpacer = QSpacerItem(151, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer = QSpacerItem(156, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_4.addItem(self.horizontalSpacer)
 
         self.pb_rechteck = QPushButton(self.wg_button_roh)
         self.pb_rechteck.setObjectName(u"pb_rechteck")
+        self.pb_rechteck.setMinimumSize(QSize(0, 30))
         self.pb_rechteck.setFont(font)
         self.pb_rechteck.setAutoDefault(True)
 
@@ -187,10 +214,16 @@ class Ui_frm_main_window(object):
         self.tw_rohteil_erstellen.addTab(self.tab_rechteck, "")
         self.tab_kreis = QWidget()
         self.tab_kreis.setObjectName(u"tab_kreis")
+        sizePolicy2.setHeightForWidth(self.tab_kreis.sizePolicy().hasHeightForWidth())
+        self.tab_kreis.setSizePolicy(sizePolicy2)
+        self.tab_kreis.setMinimumSize(QSize(0, 160))
+        self.tab_kreis.setMaximumSize(QSize(16777215, 220))
         self.verticalLayout_2 = QVBoxLayout(self.tab_kreis)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.wg_durchmesser = QWidget(self.tab_kreis)
         self.wg_durchmesser.setObjectName(u"wg_durchmesser")
+        self.wg_durchmesser.setMinimumSize(QSize(0, 32))
+        self.wg_durchmesser.setMaximumSize(QSize(16777215, 35))
         self.horizontalLayout_7 = QHBoxLayout(self.wg_durchmesser)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.lb_durchmesser = QLabel(self.wg_durchmesser)
@@ -201,16 +234,16 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_7.addWidget(self.lb_durchmesser)
 
-        self.horizontalSpacer_20 = QSpacerItem(48, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_20 = QSpacerItem(43, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_7.addItem(self.horizontalSpacer_20)
 
         self.le_durchmesser = QLineEdit(self.wg_durchmesser)
         self.le_durchmesser.setObjectName(u"le_durchmesser")
-        sizePolicy.setHeightForWidth(self.le_durchmesser.sizePolicy().hasHeightForWidth())
-        self.le_durchmesser.setSizePolicy(sizePolicy)
-        self.le_durchmesser.setMinimumSize(QSize(100, 30))
-        self.le_durchmesser.setMaximumSize(QSize(150, 50))
+        sizePolicy3.setHeightForWidth(self.le_durchmesser.sizePolicy().hasHeightForWidth())
+        self.le_durchmesser.setSizePolicy(sizePolicy3)
+        self.le_durchmesser.setMinimumSize(QSize(100, 20))
+        self.le_durchmesser.setMaximumSize(QSize(150, 25))
         self.le_durchmesser.setFont(font)
 
         self.horizontalLayout_7.addWidget(self.le_durchmesser)
@@ -224,6 +257,8 @@ class Ui_frm_main_window(object):
 
         self.wg_z_kreis = QWidget(self.tab_kreis)
         self.wg_z_kreis.setObjectName(u"wg_z_kreis")
+        self.wg_z_kreis.setMinimumSize(QSize(0, 30))
+        self.wg_z_kreis.setMaximumSize(QSize(16777215, 35))
         self.horizontalLayout_6 = QHBoxLayout(self.wg_z_kreis)
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.lb_kreis_hoehe = QLabel(self.wg_z_kreis)
@@ -240,10 +275,10 @@ class Ui_frm_main_window(object):
 
         self.le_z_kreis = QLineEdit(self.wg_z_kreis)
         self.le_z_kreis.setObjectName(u"le_z_kreis")
-        sizePolicy.setHeightForWidth(self.le_z_kreis.sizePolicy().hasHeightForWidth())
-        self.le_z_kreis.setSizePolicy(sizePolicy)
-        self.le_z_kreis.setMinimumSize(QSize(100, 30))
-        self.le_z_kreis.setMaximumSize(QSize(150, 50))
+        sizePolicy3.setHeightForWidth(self.le_z_kreis.sizePolicy().hasHeightForWidth())
+        self.le_z_kreis.setSizePolicy(sizePolicy3)
+        self.le_z_kreis.setMinimumSize(QSize(100, 20))
+        self.le_z_kreis.setMaximumSize(QSize(150, 25))
         self.le_z_kreis.setFont(font)
 
         self.horizontalLayout_6.addWidget(self.le_z_kreis)
@@ -261,14 +296,17 @@ class Ui_frm_main_window(object):
 
         self.wg_button_kreis = QWidget(self.tab_kreis)
         self.wg_button_kreis.setObjectName(u"wg_button_kreis")
+        self.wg_button_kreis.setMinimumSize(QSize(0, 32))
+        self.wg_button_kreis.setMaximumSize(QSize(16777215, 60))
         self.horizontalLayout_5 = QHBoxLayout(self.wg_button_kreis)
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.horizontalSpacer_4 = QSpacerItem(158, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_4 = QSpacerItem(153, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_5.addItem(self.horizontalSpacer_4)
 
         self.pb_kreis = QPushButton(self.wg_button_kreis)
         self.pb_kreis.setObjectName(u"pb_kreis")
+        self.pb_kreis.setMinimumSize(QSize(0, 30))
         font1 = QFont()
         font1.setFamilies([u"Comic Sans MS"])
         font1.setPointSize(12)
@@ -287,10 +325,12 @@ class Ui_frm_main_window(object):
 
         self.tw_rohteil_erstellen.addTab(self.tab_kreis, "")
 
-        self.verticalLayout_4.addWidget(self.tw_rohteil_erstellen)
+        self.verticalLayout_8.addWidget(self.tw_rohteil_erstellen)
 
         self.gb_spannmittel = QGroupBox(self.centralwidget)
         self.gb_spannmittel.setObjectName(u"gb_spannmittel")
+        sizePolicy2.setHeightForWidth(self.gb_spannmittel.sizePolicy().hasHeightForWidth())
+        self.gb_spannmittel.setSizePolicy(sizePolicy2)
         self.gb_spannmittel.setMinimumSize(QSize(450, 250))
         self.gb_spannmittel.setMaximumSize(QSize(16777215, 400))
         self.gb_spannmittel.setFont(font)
@@ -299,14 +339,14 @@ class Ui_frm_main_window(object):
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.wg_zielpfad = QWidget(self.gb_spannmittel)
         self.wg_zielpfad.setObjectName(u"wg_zielpfad")
-        self.wg_zielpfad.setMinimumSize(QSize(0, 50))
-        self.wg_zielpfad.setMaximumSize(QSize(16777215, 60))
+        self.wg_zielpfad.setMinimumSize(QSize(0, 40))
+        self.wg_zielpfad.setMaximumSize(QSize(16777215, 50))
         self.horizontalLayout_10 = QHBoxLayout(self.wg_zielpfad)
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
         self.lb_pfad = QLabel(self.wg_zielpfad)
         self.lb_pfad.setObjectName(u"lb_pfad")
-        sizePolicy.setHeightForWidth(self.lb_pfad.sizePolicy().hasHeightForWidth())
-        self.lb_pfad.setSizePolicy(sizePolicy)
+        sizePolicy3.setHeightForWidth(self.lb_pfad.sizePolicy().hasHeightForWidth())
+        self.lb_pfad.setSizePolicy(sizePolicy3)
         self.lb_pfad.setMaximumSize(QSize(200, 200))
         self.lb_pfad.setFont(font)
         self.lb_pfad.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -319,7 +359,12 @@ class Ui_frm_main_window(object):
 
         self.le_pfad = QLineEdit(self.wg_zielpfad)
         self.le_pfad.setObjectName(u"le_pfad")
-        self.le_pfad.setMinimumSize(QSize(335, 0))
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.le_pfad.sizePolicy().hasHeightForWidth())
+        self.le_pfad.setSizePolicy(sizePolicy4)
+        self.le_pfad.setMinimumSize(QSize(335, 25))
         font2 = QFont()
         font2.setFamilies([u"Comic Sans MS"])
         font2.setPointSize(10)
@@ -328,29 +373,26 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_10.addWidget(self.le_pfad)
 
-        self.horizontalSpacer_24 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_10.addItem(self.horizontalSpacer_24)
-
 
         self.verticalLayout_3.addWidget(self.wg_zielpfad)
 
         self.fr_spannmittelauswahl = QFrame(self.gb_spannmittel)
         self.fr_spannmittelauswahl.setObjectName(u"fr_spannmittelauswahl")
-        self.fr_spannmittelauswahl.setMinimumSize(QSize(0, 50))
-        self.fr_spannmittelauswahl.setMaximumSize(QSize(16777215, 60))
+        self.fr_spannmittelauswahl.setMinimumSize(QSize(0, 35))
+        self.fr_spannmittelauswahl.setMaximumSize(QSize(430, 40))
         self.fr_spannmittelauswahl.setFrameShape(QFrame.Shape.StyledPanel)
         self.fr_spannmittelauswahl.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout_11 = QHBoxLayout(self.fr_spannmittelauswahl)
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.horizontalLayout_11.setContentsMargins(-1, 0, -1, 0)
         self.cb_spannmittel = QComboBox(self.fr_spannmittelauswahl)
         self.cb_spannmittel.setObjectName(u"cb_spannmittel")
-        self.cb_spannmittel.setMinimumSize(QSize(240, 30))
+        self.cb_spannmittel.setMinimumSize(QSize(240, 35))
         self.cb_spannmittel.setFont(font2)
 
         self.horizontalLayout_11.addWidget(self.cb_spannmittel)
 
-        self.horizontalSpacer_10 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_10 = QSpacerItem(10, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_11.addItem(self.horizontalSpacer_10)
 
@@ -363,43 +405,44 @@ class Ui_frm_main_window(object):
         self.cb_bearbeitung_auswahl.addItem("")
         self.cb_bearbeitung_auswahl.addItem("")
         self.cb_bearbeitung_auswahl.setObjectName(u"cb_bearbeitung_auswahl")
-        self.cb_bearbeitung_auswahl.setMinimumSize(QSize(130, 30))
+        self.cb_bearbeitung_auswahl.setMinimumSize(QSize(130, 35))
         self.cb_bearbeitung_auswahl.setFont(font2)
 
         self.horizontalLayout_11.addWidget(self.cb_bearbeitung_auswahl)
 
-        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_9 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_11.addItem(self.horizontalSpacer_9)
 
 
         self.verticalLayout_3.addWidget(self.fr_spannmittelauswahl)
 
-        self.widget = QWidget(self.gb_spannmittel)
-        self.widget.setObjectName(u"widget")
-        self.widget.setMinimumSize(QSize(0, 50))
-        self.horizontalLayout_12 = QHBoxLayout(self.widget)
+        self.wg_spannmittel_breite = QWidget(self.gb_spannmittel)
+        self.wg_spannmittel_breite.setObjectName(u"wg_spannmittel_breite")
+        self.wg_spannmittel_breite.setMinimumSize(QSize(0, 50))
+        self.wg_spannmittel_breite.setMaximumSize(QSize(16777215, 60))
+        self.horizontalLayout_12 = QHBoxLayout(self.wg_spannmittel_breite)
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.lb_spannmittel_wert = QLabel(self.widget)
+        self.lb_spannmittel_wert = QLabel(self.wg_spannmittel_breite)
         self.lb_spannmittel_wert.setObjectName(u"lb_spannmittel_wert")
-        sizePolicy.setHeightForWidth(self.lb_spannmittel_wert.sizePolicy().hasHeightForWidth())
-        self.lb_spannmittel_wert.setSizePolicy(sizePolicy)
-        self.lb_spannmittel_wert.setMaximumSize(QSize(200, 50))
+        sizePolicy3.setHeightForWidth(self.lb_spannmittel_wert.sizePolicy().hasHeightForWidth())
+        self.lb_spannmittel_wert.setSizePolicy(sizePolicy3)
+        self.lb_spannmittel_wert.setMaximumSize(QSize(200, 40))
         self.lb_spannmittel_wert.setFont(font)
         self.lb_spannmittel_wert.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_12.addWidget(self.lb_spannmittel_wert)
 
-        self.horizontalSpacer_11 = QSpacerItem(16, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_11 = QSpacerItem(12, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_12.addItem(self.horizontalSpacer_11)
 
-        self.le_spannmittel = QLineEdit(self.widget)
+        self.le_spannmittel = QLineEdit(self.wg_spannmittel_breite)
         self.le_spannmittel.setObjectName(u"le_spannmittel")
-        sizePolicy.setHeightForWidth(self.le_spannmittel.sizePolicy().hasHeightForWidth())
-        self.le_spannmittel.setSizePolicy(sizePolicy)
-        self.le_spannmittel.setMinimumSize(QSize(100, 30))
-        self.le_spannmittel.setMaximumSize(QSize(150, 50))
+        sizePolicy3.setHeightForWidth(self.le_spannmittel.sizePolicy().hasHeightForWidth())
+        self.le_spannmittel.setSizePolicy(sizePolicy3)
+        self.le_spannmittel.setMinimumSize(QSize(100, 20))
+        self.le_spannmittel.setMaximumSize(QSize(150, 25))
         self.le_spannmittel.setFont(font)
 
         self.horizontalLayout_12.addWidget(self.le_spannmittel)
@@ -409,7 +452,7 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_12.addItem(self.horizontalSpacer_6)
 
 
-        self.verticalLayout_3.addWidget(self.widget)
+        self.verticalLayout_3.addWidget(self.wg_spannmittel_breite)
 
         self.wg_spannmittel_erstellen = QWidget(self.gb_spannmittel)
         self.wg_spannmittel_erstellen.setObjectName(u"wg_spannmittel_erstellen")
@@ -429,7 +472,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_9.addWidget(self.tb_spannmittel_aufklappen)
 
-        self.horizontalSpacer_12 = QSpacerItem(116, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_12 = QSpacerItem(126, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_9.addItem(self.horizontalSpacer_12)
 
@@ -449,19 +492,11 @@ class Ui_frm_main_window(object):
 
         self.verticalLayout_3.addWidget(self.wg_spannmittel_erstellen)
 
-        self.line = QFrame(self.gb_spannmittel)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.Shape.HLine)
-        self.line.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.verticalLayout_3.addWidget(self.line)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_3.addItem(self.verticalSpacer_3)
-
         self.wg_datum_editieren = QWidget(self.gb_spannmittel)
         self.wg_datum_editieren.setObjectName(u"wg_datum_editieren")
+        sizePolicy.setHeightForWidth(self.wg_datum_editieren.sizePolicy().hasHeightForWidth())
+        self.wg_datum_editieren.setSizePolicy(sizePolicy)
+        self.wg_datum_editieren.setMinimumSize(QSize(0, 0))
         self.horizontalLayout_8 = QHBoxLayout(self.wg_datum_editieren)
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
         self.cb_datum_editieren = QCheckBox(self.wg_datum_editieren)
@@ -488,27 +523,451 @@ class Ui_frm_main_window(object):
         self.verticalLayout_3.addWidget(self.wg_datum_editieren)
 
 
-        self.verticalLayout_4.addWidget(self.gb_spannmittel)
+        self.verticalLayout_8.addWidget(self.gb_spannmittel)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.gb_automatisierung = QGroupBox(self.centralwidget)
+        self.gb_automatisierung.setObjectName(u"gb_automatisierung")
+        self.gb_automatisierung.setMinimumSize(QSize(450, 250))
+        self.gb_automatisierung.setMaximumSize(QSize(16777215, 350))
+        self.gb_automatisierung.setFont(font)
+        self.gb_automatisierung.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+        self.verticalLayout_4 = QVBoxLayout(self.gb_automatisierung)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.wg_zeichnungsnr = QWidget(self.gb_automatisierung)
+        self.wg_zeichnungsnr.setObjectName(u"wg_zeichnungsnr")
+        self.wg_zeichnungsnr.setMinimumSize(QSize(0, 40))
+        self.wg_zeichnungsnr.setMaximumSize(QSize(16777215, 60))
+        self.horizontalLayout_13 = QHBoxLayout(self.wg_zeichnungsnr)
+        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+        self.lb_zeichnungsnr = QLabel(self.wg_zeichnungsnr)
+        self.lb_zeichnungsnr.setObjectName(u"lb_zeichnungsnr")
+        sizePolicy3.setHeightForWidth(self.lb_zeichnungsnr.sizePolicy().hasHeightForWidth())
+        self.lb_zeichnungsnr.setSizePolicy(sizePolicy3)
+        self.lb_zeichnungsnr.setMaximumSize(QSize(200, 200))
+        self.lb_zeichnungsnr.setFont(font)
+        self.lb_zeichnungsnr.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_4.addItem(self.verticalSpacer_4)
+        self.horizontalLayout_13.addWidget(self.lb_zeichnungsnr)
+
+        self.horizontalSpacer_13 = QSpacerItem(5, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_13.addItem(self.horizontalSpacer_13)
+
+        self.le_zeichnungsnr = QLineEdit(self.wg_zeichnungsnr)
+        self.le_zeichnungsnr.setObjectName(u"le_zeichnungsnr")
+        self.le_zeichnungsnr.setMinimumSize(QSize(335, 25))
+        self.le_zeichnungsnr.setFont(font2)
+
+        self.horizontalLayout_13.addWidget(self.le_zeichnungsnr)
+
+
+        self.verticalLayout_4.addWidget(self.wg_zeichnungsnr)
+
+        self.wg_fertigtielmasse = QWidget(self.gb_automatisierung)
+        self.wg_fertigtielmasse.setObjectName(u"wg_fertigtielmasse")
+        self.formLayout = QFormLayout(self.wg_fertigtielmasse)
+        self.formLayout.setObjectName(u"formLayout")
+        self.wg_x_fertig = QWidget(self.wg_fertigtielmasse)
+        self.wg_x_fertig.setObjectName(u"wg_x_fertig")
+        self.wg_x_fertig.setMinimumSize(QSize(0, 30))
+        self.wg_x_fertig.setMaximumSize(QSize(16777215, 35))
+        self.horizontalLayout_15 = QHBoxLayout(self.wg_x_fertig)
+        self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
+        self.lb_x_fertig = QLabel(self.wg_x_fertig)
+        self.lb_x_fertig.setObjectName(u"lb_x_fertig")
+        sizePolicy3.setHeightForWidth(self.lb_x_fertig.sizePolicy().hasHeightForWidth())
+        self.lb_x_fertig.setSizePolicy(sizePolicy3)
+        self.lb_x_fertig.setMaximumSize(QSize(200, 50))
+        self.lb_x_fertig.setFont(font)
+        self.lb_x_fertig.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_15.addWidget(self.lb_x_fertig)
+
+        self.horizontalSpacer_28 = QSpacerItem(43, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_15.addItem(self.horizontalSpacer_28)
+
+        self.le_x_fertig = QLineEdit(self.wg_x_fertig)
+        self.le_x_fertig.setObjectName(u"le_x_fertig")
+        sizePolicy3.setHeightForWidth(self.le_x_fertig.sizePolicy().hasHeightForWidth())
+        self.le_x_fertig.setSizePolicy(sizePolicy3)
+        self.le_x_fertig.setMinimumSize(QSize(100, 20))
+        self.le_x_fertig.setMaximumSize(QSize(150, 25))
+        self.le_x_fertig.setFont(font)
+
+        self.horizontalLayout_15.addWidget(self.le_x_fertig)
+
+        self.horizontalSpacer_32 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_15.addItem(self.horizontalSpacer_32)
+
+
+        self.formLayout.setWidget(0, QFormLayout.SpanningRole, self.wg_x_fertig)
+
+        self.wg_y_fertig = QWidget(self.wg_fertigtielmasse)
+        self.wg_y_fertig.setObjectName(u"wg_y_fertig")
+        self.wg_y_fertig.setMinimumSize(QSize(0, 30))
+        self.wg_y_fertig.setMaximumSize(QSize(16777215, 35))
+        self.horizontalLayout_16 = QHBoxLayout(self.wg_y_fertig)
+        self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
+        self.lb_y_fertig = QLabel(self.wg_y_fertig)
+        self.lb_y_fertig.setObjectName(u"lb_y_fertig")
+        sizePolicy3.setHeightForWidth(self.lb_y_fertig.sizePolicy().hasHeightForWidth())
+        self.lb_y_fertig.setSizePolicy(sizePolicy3)
+        self.lb_y_fertig.setMaximumSize(QSize(200, 50))
+        self.lb_y_fertig.setFont(font)
+        self.lb_y_fertig.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_16.addWidget(self.lb_y_fertig)
+
+        self.horizontalSpacer_29 = QSpacerItem(43, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_16.addItem(self.horizontalSpacer_29)
+
+        self.le_y_fertig = QLineEdit(self.wg_y_fertig)
+        self.le_y_fertig.setObjectName(u"le_y_fertig")
+        sizePolicy3.setHeightForWidth(self.le_y_fertig.sizePolicy().hasHeightForWidth())
+        self.le_y_fertig.setSizePolicy(sizePolicy3)
+        self.le_y_fertig.setMinimumSize(QSize(100, 20))
+        self.le_y_fertig.setMaximumSize(QSize(150, 25))
+        self.le_y_fertig.setFont(font)
+
+        self.horizontalLayout_16.addWidget(self.le_y_fertig)
+
+        self.horizontalSpacer_33 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_16.addItem(self.horizontalSpacer_33)
+
+
+        self.formLayout.setWidget(1, QFormLayout.SpanningRole, self.wg_y_fertig)
+
+        self.wg_z_fertig = QWidget(self.wg_fertigtielmasse)
+        self.wg_z_fertig.setObjectName(u"wg_z_fertig")
+        self.wg_z_fertig.setMinimumSize(QSize(0, 30))
+        self.wg_z_fertig.setMaximumSize(QSize(16777215, 35))
+        self.horizontalLayout_14 = QHBoxLayout(self.wg_z_fertig)
+        self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
+        self.lb_z_fertig = QLabel(self.wg_z_fertig)
+        self.lb_z_fertig.setObjectName(u"lb_z_fertig")
+        sizePolicy3.setHeightForWidth(self.lb_z_fertig.sizePolicy().hasHeightForWidth())
+        self.lb_z_fertig.setSizePolicy(sizePolicy3)
+        self.lb_z_fertig.setMaximumSize(QSize(200, 50))
+        self.lb_z_fertig.setFont(font)
+        self.lb_z_fertig.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_14.addWidget(self.lb_z_fertig)
+
+        self.horizontalSpacer_30 = QSpacerItem(43, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_14.addItem(self.horizontalSpacer_30)
+
+        self.le_z_fertig = QLineEdit(self.wg_z_fertig)
+        self.le_z_fertig.setObjectName(u"le_z_fertig")
+        sizePolicy3.setHeightForWidth(self.le_z_fertig.sizePolicy().hasHeightForWidth())
+        self.le_z_fertig.setSizePolicy(sizePolicy3)
+        self.le_z_fertig.setMinimumSize(QSize(100, 20))
+        self.le_z_fertig.setMaximumSize(QSize(150, 25))
+        self.le_z_fertig.setFont(font)
+
+        self.horizontalLayout_14.addWidget(self.le_z_fertig)
+
+        self.horizontalSpacer_34 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_14.addItem(self.horizontalSpacer_34)
+
+
+        self.formLayout.setWidget(2, QFormLayout.SpanningRole, self.wg_z_fertig)
+
+        self.wg_spanntiefe_b = QWidget(self.wg_fertigtielmasse)
+        self.wg_spanntiefe_b.setObjectName(u"wg_spanntiefe_b")
+        self.wg_spanntiefe_b.setMinimumSize(QSize(0, 30))
+        self.wg_spanntiefe_b.setMaximumSize(QSize(16777215, 35))
+        self.horizontalLayout_17 = QHBoxLayout(self.wg_spanntiefe_b)
+        self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
+        self.lb_spanntiefe_b = QLabel(self.wg_spanntiefe_b)
+        self.lb_spanntiefe_b.setObjectName(u"lb_spanntiefe_b")
+        sizePolicy3.setHeightForWidth(self.lb_spanntiefe_b.sizePolicy().hasHeightForWidth())
+        self.lb_spanntiefe_b.setSizePolicy(sizePolicy3)
+        self.lb_spanntiefe_b.setMaximumSize(QSize(200, 50))
+        self.lb_spanntiefe_b.setFont(font)
+        self.lb_spanntiefe_b.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_17.addWidget(self.lb_spanntiefe_b)
+
+        self.horizontalSpacer_31 = QSpacerItem(51, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_17.addItem(self.horizontalSpacer_31)
+
+        self.le_spanntiefe_b = QLineEdit(self.wg_spanntiefe_b)
+        self.le_spanntiefe_b.setObjectName(u"le_spanntiefe_b")
+        sizePolicy3.setHeightForWidth(self.le_spanntiefe_b.sizePolicy().hasHeightForWidth())
+        self.le_spanntiefe_b.setSizePolicy(sizePolicy3)
+        self.le_spanntiefe_b.setMinimumSize(QSize(100, 20))
+        self.le_spanntiefe_b.setMaximumSize(QSize(150, 25))
+        self.le_spanntiefe_b.setFont(font)
+
+        self.horizontalLayout_17.addWidget(self.le_spanntiefe_b)
+
+        self.horizontalSpacer_35 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_17.addItem(self.horizontalSpacer_35)
+
+
+        self.formLayout.setWidget(3, QFormLayout.SpanningRole, self.wg_spanntiefe_b)
+
+
+        self.verticalLayout_4.addWidget(self.wg_fertigtielmasse)
+
+
+        self.verticalLayout_8.addWidget(self.gb_automatisierung)
+
+        self.gb_python_commander = QGroupBox(self.centralwidget)
+        self.gb_python_commander.setObjectName(u"gb_python_commander")
+        self.gb_python_commander.setMinimumSize(QSize(450, 180))
+        self.gb_python_commander.setMaximumSize(QSize(16777215, 350))
+        self.gb_python_commander.setFont(font)
+        self.gb_python_commander.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+        self.verticalLayout_5 = QVBoxLayout(self.gb_python_commander)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.wg_projekt_name = QWidget(self.gb_python_commander)
+        self.wg_projekt_name.setObjectName(u"wg_projekt_name")
+        self.verticalLayout_7 = QVBoxLayout(self.wg_projekt_name)
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.wg_at_nummer = QWidget(self.wg_projekt_name)
+        self.wg_at_nummer.setObjectName(u"wg_at_nummer")
+        self.wg_at_nummer.setMinimumSize(QSize(0, 30))
+        self.wg_at_nummer.setMaximumSize(QSize(16777215, 35))
+        self.horizontalLayout_19 = QHBoxLayout(self.wg_at_nummer)
+        self.horizontalLayout_19.setObjectName(u"horizontalLayout_19")
+        self.lb_at_nr = QLabel(self.wg_at_nummer)
+        self.lb_at_nr.setObjectName(u"lb_at_nr")
+        sizePolicy3.setHeightForWidth(self.lb_at_nr.sizePolicy().hasHeightForWidth())
+        self.lb_at_nr.setSizePolicy(sizePolicy3)
+        self.lb_at_nr.setMaximumSize(QSize(200, 50))
+        self.lb_at_nr.setFont(font)
+        self.lb_at_nr.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_19.addWidget(self.lb_at_nr)
+
+        self.horizontalSpacer_24 = QSpacerItem(98, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_19.addItem(self.horizontalSpacer_24)
+
+        self.le_at_nr = QLineEdit(self.wg_at_nummer)
+        self.le_at_nr.setObjectName(u"le_at_nr")
+        sizePolicy3.setHeightForWidth(self.le_at_nr.sizePolicy().hasHeightForWidth())
+        self.le_at_nr.setSizePolicy(sizePolicy3)
+        self.le_at_nr.setMinimumSize(QSize(100, 20))
+        self.le_at_nr.setMaximumSize(QSize(150, 25))
+        self.le_at_nr.setFont(font)
+
+        self.horizontalLayout_19.addWidget(self.le_at_nr)
+
+        self.horizontalSpacer_36 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_19.addItem(self.horizontalSpacer_36)
+
+
+        self.verticalLayout_7.addWidget(self.wg_at_nummer)
+
+        self.wg_auftrags_nr = QWidget(self.wg_projekt_name)
+        self.wg_auftrags_nr.setObjectName(u"wg_auftrags_nr")
+        self.wg_auftrags_nr.setMinimumSize(QSize(0, 30))
+        self.wg_auftrags_nr.setMaximumSize(QSize(16777215, 40))
+        self.horizontalLayout_20 = QHBoxLayout(self.wg_auftrags_nr)
+        self.horizontalLayout_20.setObjectName(u"horizontalLayout_20")
+        self.lb_auftrags_nr = QLabel(self.wg_auftrags_nr)
+        self.lb_auftrags_nr.setObjectName(u"lb_auftrags_nr")
+        sizePolicy3.setHeightForWidth(self.lb_auftrags_nr.sizePolicy().hasHeightForWidth())
+        self.lb_auftrags_nr.setSizePolicy(sizePolicy3)
+        self.lb_auftrags_nr.setMaximumSize(QSize(200, 50))
+        self.lb_auftrags_nr.setFont(font)
+        self.lb_auftrags_nr.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_20.addWidget(self.lb_auftrags_nr)
+
+        self.horizontalSpacer_25 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_20.addItem(self.horizontalSpacer_25)
+
+        self.le_auftrags_nr = QLineEdit(self.wg_auftrags_nr)
+        self.le_auftrags_nr.setObjectName(u"le_auftrags_nr")
+        sizePolicy3.setHeightForWidth(self.le_auftrags_nr.sizePolicy().hasHeightForWidth())
+        self.le_auftrags_nr.setSizePolicy(sizePolicy3)
+        self.le_auftrags_nr.setMinimumSize(QSize(100, 20))
+        self.le_auftrags_nr.setMaximumSize(QSize(150, 25))
+        self.le_auftrags_nr.setFont(font)
+
+        self.horizontalLayout_20.addWidget(self.le_auftrags_nr)
+
+        self.horizontalSpacer_37 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_20.addItem(self.horizontalSpacer_37)
+
+
+        self.verticalLayout_7.addWidget(self.wg_auftrags_nr)
+
+
+        self.verticalLayout_5.addWidget(self.wg_projekt_name)
+
+        self.wg_programme_gefunden = QWidget(self.gb_python_commander)
+        self.wg_programme_gefunden.setObjectName(u"wg_programme_gefunden")
+        self.horizontalLayout_21 = QHBoxLayout(self.wg_programme_gefunden)
+        self.horizontalLayout_21.setObjectName(u"horizontalLayout_21")
+        self.horizontalSpacer_26 = QSpacerItem(158, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_21.addItem(self.horizontalSpacer_26)
+
+        self.pb_rausspielen = QPushButton(self.wg_programme_gefunden)
+        self.pb_rausspielen.setObjectName(u"pb_rausspielen")
+        self.pb_rausspielen.setMinimumSize(QSize(130, 30))
+        self.pb_rausspielen.setMaximumSize(QSize(210, 16777215))
+        self.pb_rausspielen.setFont(font)
+        self.pb_rausspielen.setAutoDefault(True)
+
+        self.horizontalLayout_21.addWidget(self.pb_rausspielen)
+
+        self.horizontalSpacer_27 = QSpacerItem(50, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_21.addItem(self.horizontalSpacer_27)
+
+        self.lb_programme_gefunden = QLabel(self.wg_programme_gefunden)
+        self.lb_programme_gefunden.setObjectName(u"lb_programme_gefunden")
+        sizePolicy3.setHeightForWidth(self.lb_programme_gefunden.sizePolicy().hasHeightForWidth())
+        self.lb_programme_gefunden.setSizePolicy(sizePolicy3)
+        self.lb_programme_gefunden.setMaximumSize(QSize(200, 40))
+        self.lb_programme_gefunden.setFont(font)
+        self.lb_programme_gefunden.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_21.addWidget(self.lb_programme_gefunden)
+
+        self.lcdn_programme_gefunden = QLCDNumber(self.wg_programme_gefunden)
+        self.lcdn_programme_gefunden.setObjectName(u"lcdn_programme_gefunden")
+        self.lcdn_programme_gefunden.setDigitCount(2)
+        self.lcdn_programme_gefunden.setSegmentStyle(QLCDNumber.SegmentStyle.Flat)
+
+        self.horizontalLayout_21.addWidget(self.lcdn_programme_gefunden)
+
+
+        self.verticalLayout_5.addWidget(self.wg_programme_gefunden)
+
+
+        self.verticalLayout_8.addWidget(self.gb_python_commander)
+
+        self.fr_scripts_aufklappen = QFrame(self.centralwidget)
+        self.fr_scripts_aufklappen.setObjectName(u"fr_scripts_aufklappen")
+        sizePolicy.setHeightForWidth(self.fr_scripts_aufklappen.sizePolicy().hasHeightForWidth())
+        self.fr_scripts_aufklappen.setSizePolicy(sizePolicy)
+        self.fr_scripts_aufklappen.setMaximumSize(QSize(16777215, 200))
+        font3 = QFont()
+        font3.setFamilies([u"Comic Sans MS"])
+        font3.setPointSize(12)
+        self.fr_scripts_aufklappen.setFont(font3)
+        self.fr_scripts_aufklappen.setFrameShape(QFrame.Shape.StyledPanel)
+        self.fr_scripts_aufklappen.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_6 = QVBoxLayout(self.fr_scripts_aufklappen)
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.wg_scripts_aufklappen = QWidget(self.fr_scripts_aufklappen)
+        self.wg_scripts_aufklappen.setObjectName(u"wg_scripts_aufklappen")
+        self.horizontalLayout_18 = QHBoxLayout(self.wg_scripts_aufklappen)
+        self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
+        self.tb_scripts_aufklappen = QToolButton(self.wg_scripts_aufklappen)
+        self.tb_scripts_aufklappen.setObjectName(u"tb_scripts_aufklappen")
+        self.tb_scripts_aufklappen.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+#if QT_CONFIG(shortcut)
+        self.tb_scripts_aufklappen.setShortcut(u"")
+#endif // QT_CONFIG(shortcut)
+        self.tb_scripts_aufklappen.setCheckable(True)
+        self.tb_scripts_aufklappen.setChecked(True)
+        self.tb_scripts_aufklappen.setAutoRaise(True)
+
+        self.horizontalLayout_18.addWidget(self.tb_scripts_aufklappen)
+
+        self.lb_scripts = QLabel(self.wg_scripts_aufklappen)
+        self.lb_scripts.setObjectName(u"lb_scripts")
+        self.lb_scripts.setFont(font3)
+
+        self.horizontalLayout_18.addWidget(self.lb_scripts)
+
+
+        self.verticalLayout_6.addWidget(self.wg_scripts_aufklappen)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_6.addItem(self.verticalSpacer_2)
+
+        self.fr_scripts = QFrame(self.fr_scripts_aufklappen)
+        self.fr_scripts.setObjectName(u"fr_scripts")
+        self.fr_scripts.setFrameShape(QFrame.Shape.StyledPanel)
+        self.fr_scripts.setFrameShadow(QFrame.Shadow.Raised)
+        self.gridLayout = QGridLayout(self.fr_scripts)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.pb_auto_speichern = QPushButton(self.fr_scripts)
+        self.pb_auto_speichern.setObjectName(u"pb_auto_speichern")
+        self.pb_auto_speichern.setMinimumSize(QSize(170, 0))
+        self.pb_auto_speichern.setMaximumSize(QSize(210, 16777215))
+        self.pb_auto_speichern.setFont(font)
+        self.pb_auto_speichern.setAutoDefault(True)
+
+        self.gridLayout.addWidget(self.pb_auto_speichern, 0, 2, 1, 1)
+
+        self.pb_flet_prozess = QPushButton(self.fr_scripts)
+        self.pb_flet_prozess.setObjectName(u"pb_flet_prozess")
+        self.pb_flet_prozess.setMinimumSize(QSize(170, 0))
+        self.pb_flet_prozess.setMaximumSize(QSize(210, 16777215))
+        self.pb_flet_prozess.setFont(font)
+        self.pb_flet_prozess.setAutoDefault(True)
+
+        self.gridLayout.addWidget(self.pb_flet_prozess, 1, 1, 1, 1)
+
+        self.pb_fehlermeldung_destroyer = QPushButton(self.fr_scripts)
+        self.pb_fehlermeldung_destroyer.setObjectName(u"pb_fehlermeldung_destroyer")
+        self.pb_fehlermeldung_destroyer.setMinimumSize(QSize(170, 0))
+        self.pb_fehlermeldung_destroyer.setMaximumSize(QSize(210, 16777215))
+        self.pb_fehlermeldung_destroyer.setFont(font)
+        self.pb_fehlermeldung_destroyer.setAutoDefault(True)
+
+        self.gridLayout.addWidget(self.pb_fehlermeldung_destroyer, 0, 1, 1, 1)
+
+        self.pb_prozess_oeffnen = QPushButton(self.fr_scripts)
+        self.pb_prozess_oeffnen.setObjectName(u"pb_prozess_oeffnen")
+        self.pb_prozess_oeffnen.setMinimumSize(QSize(170, 0))
+        self.pb_prozess_oeffnen.setMaximumSize(QSize(210, 16777215))
+        self.pb_prozess_oeffnen.setFont(font)
+        self.pb_prozess_oeffnen.setAutoDefault(True)
+
+        self.gridLayout.addWidget(self.pb_prozess_oeffnen, 0, 0, 1, 1)
+
+        self.pb_esprit_start_makro = QPushButton(self.fr_scripts)
+        self.pb_esprit_start_makro.setObjectName(u"pb_esprit_start_makro")
+        self.pb_esprit_start_makro.setMinimumSize(QSize(170, 0))
+        self.pb_esprit_start_makro.setMaximumSize(QSize(210, 16777215))
+        self.pb_esprit_start_makro.setFont(font)
+        self.pb_esprit_start_makro.setAutoDefault(True)
+
+        self.gridLayout.addWidget(self.pb_esprit_start_makro, 1, 0, 1, 1)
+
+
+        self.verticalLayout_6.addWidget(self.fr_scripts)
+
+
+        self.verticalLayout_8.addWidget(self.fr_scripts_aufklappen)
 
         frm_main_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(frm_main_window)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 470, 33))
+        self.menubar.setGeometry(QRect(0, 0, 600, 33))
         self.menuDatei = QMenu(self.menubar)
         self.menuDatei.setObjectName(u"menuDatei")
         frm_main_window.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(frm_main_window)
         self.statusbar.setObjectName(u"statusbar")
-        font3 = QFont()
-        font3.setFamilies([u"Comic Sans MS"])
-        font3.setPointSize(10)
-        font3.setBold(True)
-        font3.setHintingPreference(QFont.PreferFullHinting)
-        self.statusbar.setFont(font3)
+        font4 = QFont()
+        font4.setFamilies([u"Comic Sans MS"])
+        font4.setPointSize(10)
+        font4.setBold(True)
+        font4.setHintingPreference(QFont.PreferFullHinting)
+        self.statusbar.setFont(font4)
         self.statusbar.setStyleSheet(u"QStatusBar {\n"
 "    color: green;             /* Textfarbe */\n"
 "    font-weight: bold;\n"
@@ -524,8 +983,9 @@ class Ui_frm_main_window(object):
         self.tb_spannmittel_aufklappen.clicked["bool"].connect(self.wg_datum_editieren.setHidden)
         self.cb_datum_editieren.clicked["bool"].connect(self.le_pfad.setEnabled)
         self.actionBeenden.triggered.connect(frm_main_window.close)
+        self.tb_scripts_aufklappen.clicked["bool"].connect(self.fr_scripts.setHidden)
 
-        self.tw_rohteil_erstellen.setCurrentIndex(0)
+        self.tw_rohteil_erstellen.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(frm_main_window)
@@ -566,6 +1026,31 @@ class Ui_frm_main_window(object):
         self.tb_spannmittel_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
         self.pb_spannmittel.setText(QCoreApplication.translate("frm_main_window", u"Spannmittel erstellen", None))
         self.cb_datum_editieren.setText(QCoreApplication.translate("frm_main_window", u"Zielpfad editieren", None))
+        self.gb_automatisierung.setTitle(QCoreApplication.translate("frm_main_window", u"Automatisierung", None))
+        self.lb_zeichnungsnr.setText(QCoreApplication.translate("frm_main_window", u"Zeichnungsnummer:", None))
+        self.le_zeichnungsnr.setText(QCoreApplication.translate("frm_main_window", u"Zeichnungsnummer hier einf\u00fcgen...", None))
+        self.lb_x_fertig.setText(QCoreApplication.translate("frm_main_window", u"Fertigma\u00df X:", None))
+        self.le_x_fertig.setText(QCoreApplication.translate("frm_main_window", u"100", None))
+        self.lb_y_fertig.setText(QCoreApplication.translate("frm_main_window", u"Fertigma\u00df Y:", None))
+        self.le_y_fertig.setText(QCoreApplication.translate("frm_main_window", u"100", None))
+        self.lb_z_fertig.setText(QCoreApplication.translate("frm_main_window", u"Fertigma\u00df Z:", None))
+        self.le_z_fertig.setText(QCoreApplication.translate("frm_main_window", u"100", None))
+        self.lb_spanntiefe_b.setText(QCoreApplication.translate("frm_main_window", u"Spanntiefe:", None))
+        self.le_spanntiefe_b.setText(QCoreApplication.translate("frm_main_window", u"2", None))
+        self.gb_python_commander.setTitle(QCoreApplication.translate("frm_main_window", u"Python Commander", None))
+        self.lb_at_nr.setText(QCoreApplication.translate("frm_main_window", u"AT-...", None))
+        self.le_at_nr.setText(QCoreApplication.translate("frm_main_window", u"25", None))
+        self.lb_auftrags_nr.setText(QCoreApplication.translate("frm_main_window", u"Auftragsnummer:", None))
+        self.le_auftrags_nr.setText(QCoreApplication.translate("frm_main_window", u"0815", None))
+        self.pb_rausspielen.setText(QCoreApplication.translate("frm_main_window", u"Starten", None))
+        self.lb_programme_gefunden.setText(QCoreApplication.translate("frm_main_window", u" Pgm gefunden: ", None))
+        self.tb_scripts_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
+        self.lb_scripts.setText(QCoreApplication.translate("frm_main_window", u"Externe Programme", None))
+        self.pb_auto_speichern.setText(QCoreApplication.translate("frm_main_window", u"Auto Speichern", None))
+        self.pb_flet_prozess.setText(QCoreApplication.translate("frm_main_window", u"Flet Prozess", None))
+        self.pb_fehlermeldung_destroyer.setText(QCoreApplication.translate("frm_main_window", u"Fehlermeldung", None))
+        self.pb_prozess_oeffnen.setText(QCoreApplication.translate("frm_main_window", u"Prozess \u00f6ffnen", None))
+        self.pb_esprit_start_makro.setText(QCoreApplication.translate("frm_main_window", u"Esprit Start", None))
         self.menuDatei.setTitle(QCoreApplication.translate("frm_main_window", u"Datei", None))
     # retranslateUi
 

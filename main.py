@@ -28,6 +28,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.settings = load_settings()
         self.wg_datum_editieren.setHidden(True)
         self.le_pfad.setDisabled(True)
+        self.fr_scripts.setHidden(True)
 
         self.de_datum.setDate(qtc.QDate.currentDate())
         self.pfad_aktualisieren()

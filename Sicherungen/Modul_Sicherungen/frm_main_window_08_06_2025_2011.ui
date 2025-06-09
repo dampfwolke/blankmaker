@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>1287</height>
+    <height>1298</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,7 +19,7 @@
   <property name="minimumSize">
    <size>
     <width>470</width>
-    <height>1000</height>
+    <height>850</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -32,31 +32,13 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <property name="minimumSize">
-    <size>
-     <width>0</width>
-     <height>950</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>16777215</width>
-     <height>1080</height>
-    </size>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_8">
+   <layout class="QVBoxLayout" name="verticalLayout_6">
     <item>
      <widget class="QTabWidget" name="tw_rohteil_erstellen">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
       <property name="minimumSize">
        <size>
         <width>450</width>
-        <height>200</height>
+        <height>230</height>
        </size>
       </property>
       <property name="maximumSize">
@@ -75,19 +57,10 @@
       <property name="focusPolicy">
        <enum>Qt::FocusPolicy::NoFocus</enum>
       </property>
-      <property name="tabPosition">
-       <enum>QTabWidget::TabPosition::North</enum>
-      </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_rechteck">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -109,7 +82,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>32</height>
+            <height>30</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -217,7 +190,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>32</height>
+            <height>30</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -325,7 +298,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>32</height>
+            <height>30</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -430,16 +403,10 @@
         </item>
         <item>
          <widget class="QWidget" name="wg_button_roh" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>50</height>
+            <height>60</height>
            </size>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -453,7 +420,7 @@
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>156</width>
+               <width>151</width>
                <height>20</height>
               </size>
              </property>
@@ -461,12 +428,6 @@
            </item>
            <item>
             <widget class="QPushButton" name="pb_rechteck">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>30</height>
-              </size>
-             </property>
              <property name="font">
               <font>
                <family>Comic Sans MS</family>
@@ -501,12 +462,6 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tab_kreis">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -528,7 +483,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>32</height>
+            <height>30</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -742,12 +697,6 @@
         </item>
         <item>
          <widget class="QWidget" name="wg_button_kreis" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>32</height>
-           </size>
-          </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -765,7 +714,7 @@
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>153</width>
+               <width>158</width>
                <height>20</height>
               </size>
              </property>
@@ -773,12 +722,6 @@
            </item>
            <item>
             <widget class="QPushButton" name="pb_kreis">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>30</height>
-              </size>
-             </property>
              <property name="font">
               <font>
                <family>Comic Sans MS</family>
@@ -814,12 +757,6 @@
     </item>
     <item>
      <widget class="QGroupBox" name="gb_spannmittel">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
       <property name="minimumSize">
        <size>
         <width>450</width>
@@ -829,7 +766,7 @@
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>400</height>
+        <height>350</height>
        </size>
       </property>
       <property name="font">
@@ -857,7 +794,7 @@
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>50</height>
+           <height>60</height>
           </size>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -940,13 +877,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>35</height>
+           <height>40</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>430</width>
-           <height>40</height>
+           <width>16777215</width>
+           <height>50</height>
           </size>
          </property>
          <property name="frameShape">
@@ -956,18 +893,12 @@
           <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_11">
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
           <item>
            <widget class="QComboBox" name="cb_spannmittel">
             <property name="minimumSize">
              <size>
               <width>240</width>
-              <height>35</height>
+              <height>30</height>
              </size>
             </property>
             <property name="font">
@@ -988,7 +919,7 @@
              <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Policy::Expanding</enum>
+             <enum>QSizePolicy::Policy::Fixed</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1003,7 +934,7 @@
             <property name="minimumSize">
              <size>
               <width>130</width>
-              <height>35</height>
+              <height>30</height>
              </size>
             </property>
             <property name="font">
@@ -1055,12 +986,9 @@
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Policy::Fixed</enum>
-            </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>10</width>
+              <width>40</width>
               <height>20</height>
              </size>
             </property>
@@ -1070,17 +998,17 @@
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="wg_spannmittel_breite" native="true">
+        <widget class="QWidget" name="widget" native="true">
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>50</height>
+           <height>35</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>60</height>
+           <height>40</height>
           </size>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_12">
@@ -1224,7 +1152,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>126</width>
+              <width>116</width>
               <height>20</height>
              </size>
             </property>
@@ -1276,19 +1204,27 @@
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="wg_datum_editieren" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
-         <property name="minimumSize">
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
           <size>
-           <width>0</width>
-           <height>0</height>
+           <width>20</width>
+           <height>40</height>
           </size>
          </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QWidget" name="wg_datum_editieren" native="true">
          <layout class="QHBoxLayout" name="horizontalLayout_8">
           <item>
            <widget class="QCheckBox" name="cb_datum_editieren">
@@ -1464,7 +1400,7 @@
        <item>
         <widget class="QWidget" name="wg_fertigtielmasse" native="true">
          <layout class="QFormLayout" name="formLayout">
-          <item row="0" column="0" colspan="2">
+          <item row="0" column="0">
            <widget class="QWidget" name="wg_x_fertig" native="true">
             <property name="minimumSize">
              <size>
@@ -1509,22 +1445,6 @@
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_28">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Policy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>43</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
               <widget class="QLineEdit" name="le_x_fertig">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1556,23 +1476,10 @@
                </property>
               </widget>
              </item>
-             <item>
-              <spacer name="horizontalSpacer_32">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
             </layout>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2">
+          <item row="1" column="0">
            <widget class="QWidget" name="wg_y_fertig" native="true">
             <property name="minimumSize">
              <size>
@@ -1617,22 +1524,6 @@
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_29">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Policy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>43</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
               <widget class="QLineEdit" name="le_y_fertig">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1664,23 +1555,10 @@
                </property>
               </widget>
              </item>
-             <item>
-              <spacer name="horizontalSpacer_33">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
             </layout>
            </widget>
           </item>
-          <item row="2" column="0" colspan="2">
+          <item row="2" column="0">
            <widget class="QWidget" name="wg_z_fertig" native="true">
             <property name="minimumSize">
              <size>
@@ -1725,22 +1603,6 @@
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_30">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Policy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>43</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
               <widget class="QLineEdit" name="le_z_fertig">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1772,23 +1634,10 @@
                </property>
               </widget>
              </item>
-             <item>
-              <spacer name="horizontalSpacer_34">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
             </layout>
            </widget>
           </item>
-          <item row="3" column="0" colspan="2">
+          <item row="3" column="0">
            <widget class="QWidget" name="wg_spanntiefe_b" native="true">
             <property name="minimumSize">
              <size>
@@ -1833,22 +1682,6 @@
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_31">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Policy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>51</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
               <widget class="QLineEdit" name="le_spanntiefe_b">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1876,22 +1709,9 @@
                 </font>
                </property>
                <property name="text">
-                <string>2</string>
+                <string>100</string>
                </property>
               </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_35">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
              </item>
             </layout>
            </widget>
@@ -1907,7 +1727,7 @@
       <property name="minimumSize">
        <size>
         <width>450</width>
-        <height>180</height>
+        <height>250</height>
        </size>
       </property>
       <property name="maximumSize">
@@ -1932,8 +1752,8 @@
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <widget class="QWidget" name="wg_projekt_name" native="true">
-         <layout class="QVBoxLayout" name="verticalLayout_7">
-          <item>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="0" column="0">
            <widget class="QWidget" name="wg_at_nummer" native="true">
             <property name="minimumSize">
              <size>
@@ -1978,22 +1798,6 @@
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_24">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Policy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>98</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
               <widget class="QLineEdit" name="le_at_nr">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2021,27 +1825,14 @@
                 </font>
                </property>
                <property name="text">
-                <string>25</string>
+                <string>100</string>
                </property>
               </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_36">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
              </item>
             </layout>
            </widget>
           </item>
-          <item>
+          <item row="1" column="0">
            <widget class="QWidget" name="wg_auftrags_nr" native="true">
             <property name="minimumSize">
              <size>
@@ -2052,7 +1843,7 @@
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>40</height>
+              <height>35</height>
              </size>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_20">
@@ -2086,22 +1877,6 @@
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_25">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Policy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>10</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
               <widget class="QLineEdit" name="le_auftrags_nr">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2129,54 +1904,53 @@
                 </font>
                </property>
                <property name="text">
-                <string>0815</string>
+                <string>100</string>
                </property>
               </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_37">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
              </item>
             </layout>
            </widget>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="wg_programme_gefunden" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_21">
-          <item>
-           <spacer name="horizontalSpacer_26">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Policy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
+          <item row="3" column="0">
+           <widget class="QWidget" name="wg_z_fertig_2" native="true">
+            <property name="minimumSize">
              <size>
-              <width>158</width>
-              <height>20</height>
+              <width>0</width>
+              <height>30</height>
              </size>
             </property>
-           </spacer>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>35</height>
+             </size>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_21"/>
+           </widget>
           </item>
-          <item>
+          <item row="4" column="0">
+           <widget class="QWidget" name="wg_spanntiefe_b_2" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>35</height>
+             </size>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_22"/>
+           </widget>
+          </item>
+          <item row="2" column="0">
            <widget class="QPushButton" name="pb_rausspielen">
             <property name="minimumSize">
              <size>
-              <width>130</width>
-              <height>30</height>
+              <width>170</width>
+              <height>0</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -2194,302 +1968,6 @@
             </property>
             <property name="text">
              <string>Starten</string>
-            </property>
-            <property name="autoDefault">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_27">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Policy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>50</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="lb_programme_gefunden">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Comic Sans MS</family>
-              <pointsize>12</pointsize>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string> Pgm gefunden: </string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLCDNumber" name="lcdn_programme_gefunden">
-            <property name="digitCount">
-             <number>2</number>
-            </property>
-            <property name="segmentStyle">
-             <enum>QLCDNumber::SegmentStyle::Flat</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QFrame" name="fr_scripts_aufklappen">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>200</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Comic Sans MS</family>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_6">
-       <item>
-        <widget class="QWidget" name="wg_scripts_aufklappen" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_18">
-          <item>
-           <widget class="QToolButton" name="tb_scripts_aufklappen">
-            <property name="focusPolicy">
-             <enum>Qt::FocusPolicy::NoFocus</enum>
-            </property>
-            <property name="text">
-             <string>...</string>
-            </property>
-            <property name="shortcut">
-             <string notr="true"/>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <property name="autoRaise">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="lb_scripts">
-            <property name="font">
-             <font>
-              <family>Comic Sans MS</family>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Externe Programme</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QFrame" name="fr_scripts">
-         <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
-         </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="2">
-           <widget class="QPushButton" name="pb_auto_speichern">
-            <property name="minimumSize">
-             <size>
-              <width>170</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>210</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Comic Sans MS</family>
-              <pointsize>12</pointsize>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Auto Speichern</string>
-            </property>
-            <property name="autoDefault">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="pb_flet_prozess">
-            <property name="minimumSize">
-             <size>
-              <width>170</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>210</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Comic Sans MS</family>
-              <pointsize>12</pointsize>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Flet Prozess</string>
-            </property>
-            <property name="autoDefault">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="pb_fehlermeldung_destroyer">
-            <property name="minimumSize">
-             <size>
-              <width>170</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>210</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Comic Sans MS</family>
-              <pointsize>12</pointsize>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Fehlermeldung</string>
-            </property>
-            <property name="autoDefault">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pb_prozess_oeffnen">
-            <property name="minimumSize">
-             <size>
-              <width>170</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>210</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Comic Sans MS</family>
-              <pointsize>12</pointsize>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Prozess öffnen</string>
-            </property>
-            <property name="autoDefault">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="pb_esprit_start_makro">
-            <property name="minimumSize">
-             <size>
-              <width>170</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>210</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Comic Sans MS</family>
-              <pointsize>12</pointsize>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Esprit Makro</string>
             </property>
             <property name="autoDefault">
              <bool>true</bool>
@@ -2597,22 +2075,6 @@
     <hint type="destinationlabel">
      <x>234</x>
      <y>488</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tb_scripts_aufklappen</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>fr_scripts</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>42</x>
-     <y>1177</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>298</x>
-     <y>1274</y>
     </hint>
    </hints>
   </connection>
