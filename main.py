@@ -4,6 +4,7 @@ import math
 import subprocess
 from functools import partial
 from pathlib import Path
+
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtCore as qtc
 from PySide6 import QtGui as qtg
@@ -48,14 +49,12 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.double_validator.setNotation(qtg.QDoubleValidator.StandardNotation)
         german_locale = qtc.QLocale(qtc.QLocale.Language.German, qtc.QLocale.Country.Germany)
         self.double_validator.setLocale(german_locale)
-
         # Rohteil-Maße
         self.le_rechteck_laenge.setValidator(self.double_validator)
         self.le_rechteck_breite.setValidator(self.double_validator)
         self.le_rechteck_hoehe.setValidator(self.double_validator)
         self.le_durchmesser.setValidator(self.double_validator)
         self.le_z_kreis.setValidator(self.double_validator)
-
         # Fertigteil-Maße
         self.le_x_fertig.setValidator(self.double_validator)
         self.le_y_fertig.setValidator(self.double_validator)
@@ -63,7 +62,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
         # Integer-Validatoren
         self.le_spannmittel.setValidator(qtg.QIntValidator(1, 999, self))
-        self.le_spanntiefe_b.setValidator(qtg.QIntValidator(2, 9999, self))
+        self.le_spanntiefe_b.setValidator(qtg.QIntValidator(2, 99, self))
 
         self.initialize_ui_elements()
 
