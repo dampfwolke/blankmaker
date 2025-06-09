@@ -2865,7 +2865,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="1">
-           <widget class="QPushButton" name="pb_fehlermeldung_destroyer">
+           <widget class="QPushButton" name="pb_error_closer">
             <property name="minimumSize">
              <size>
               <width>170</width>
