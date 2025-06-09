@@ -20,21 +20,21 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateEdit,
     QFormLayout, QFrame, QGridLayout, QGroupBox,
     QHBoxLayout, QLCDNumber, QLabel, QLineEdit,
     QMainWindow, QMenu, QMenuBar, QPushButton,
-    QSizePolicy, QSpacerItem, QStatusBar, QTabWidget,
-    QToolButton, QVBoxLayout, QWidget)
+    QSizePolicy, QSlider, QSpacerItem, QStatusBar,
+    QTabWidget, QToolButton, QVBoxLayout, QWidget)
 
 class Ui_frm_main_window(object):
     def setupUi(self, frm_main_window):
         if not frm_main_window.objectName():
             frm_main_window.setObjectName(u"frm_main_window")
-        frm_main_window.resize(600, 1144)
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
+        frm_main_window.resize(600, 1300)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(frm_main_window.sizePolicy().hasHeightForWidth())
         frm_main_window.setSizePolicy(sizePolicy)
-        frm_main_window.setMinimumSize(QSize(470, 800))
-        frm_main_window.setMaximumSize(QSize(600, 1400))
+        frm_main_window.setMinimumSize(QSize(470, 900))
+        frm_main_window.setMaximumSize(QSize(600, 1300))
         self.actionEinstellungen = QAction(frm_main_window)
         self.actionEinstellungen.setObjectName(u"actionEinstellungen")
         self.actionBeenden = QAction(frm_main_window)
@@ -42,7 +42,7 @@ class Ui_frm_main_window(object):
         self.centralwidget = QWidget(frm_main_window)
         self.centralwidget.setObjectName(u"centralwidget")
         self.centralwidget.setMinimumSize(QSize(0, 950))
-        self.centralwidget.setMaximumSize(QSize(16777215, 1300))
+        self.centralwidget.setMaximumSize(QSize(16777215, 1400))
         self.verticalLayout_8 = QVBoxLayout(self.centralwidget)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.tw_rohteil_erstellen = QTabWidget(self.centralwidget)
@@ -498,11 +498,8 @@ class Ui_frm_main_window(object):
 
         self.wg_datum_editieren = QWidget(self.gb_spannmittel)
         self.wg_datum_editieren.setObjectName(u"wg_datum_editieren")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.wg_datum_editieren.sizePolicy().hasHeightForWidth())
-        self.wg_datum_editieren.setSizePolicy(sizePolicy5)
+        sizePolicy.setHeightForWidth(self.wg_datum_editieren.sizePolicy().hasHeightForWidth())
+        self.wg_datum_editieren.setSizePolicy(sizePolicy)
         self.wg_datum_editieren.setMinimumSize(QSize(0, 0))
         self.horizontalLayout_8 = QHBoxLayout(self.wg_datum_editieren)
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
@@ -539,18 +536,21 @@ class Ui_frm_main_window(object):
 
         self.gb_automatisierung = QGroupBox(self.centralwidget)
         self.gb_automatisierung.setObjectName(u"gb_automatisierung")
-        sizePolicy.setHeightForWidth(self.gb_automatisierung.sizePolicy().hasHeightForWidth())
-        self.gb_automatisierung.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.gb_automatisierung.sizePolicy().hasHeightForWidth())
+        self.gb_automatisierung.setSizePolicy(sizePolicy2)
         self.gb_automatisierung.setMinimumSize(QSize(450, 130))
-        self.gb_automatisierung.setMaximumSize(QSize(16777215, 335))
+        self.gb_automatisierung.setMaximumSize(QSize(16777215, 390))
         self.gb_automatisierung.setFont(font)
         self.gb_automatisierung.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
         self.verticalLayout_4 = QVBoxLayout(self.gb_automatisierung)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.wg_zeichnungsnr = QWidget(self.gb_automatisierung)
         self.wg_zeichnungsnr.setObjectName(u"wg_zeichnungsnr")
-        sizePolicy.setHeightForWidth(self.wg_zeichnungsnr.sizePolicy().hasHeightForWidth())
-        self.wg_zeichnungsnr.setSizePolicy(sizePolicy)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(self.wg_zeichnungsnr.sizePolicy().hasHeightForWidth())
+        self.wg_zeichnungsnr.setSizePolicy(sizePolicy5)
         self.wg_zeichnungsnr.setMinimumSize(QSize(0, 40))
         self.wg_zeichnungsnr.setMaximumSize(QSize(16777215, 60))
         self.horizontalLayout_13 = QHBoxLayout(self.wg_zeichnungsnr)
@@ -581,13 +581,26 @@ class Ui_frm_main_window(object):
 
         self.wg_wizard_a_buttons = QWidget(self.gb_automatisierung)
         self.wg_wizard_a_buttons.setObjectName(u"wg_wizard_a_buttons")
-        sizePolicy.setHeightForWidth(self.wg_wizard_a_buttons.sizePolicy().hasHeightForWidth())
-        self.wg_wizard_a_buttons.setSizePolicy(sizePolicy)
+        sizePolicy5.setHeightForWidth(self.wg_wizard_a_buttons.sizePolicy().hasHeightForWidth())
+        self.wg_wizard_a_buttons.setSizePolicy(sizePolicy5)
         self.wg_wizard_a_buttons.setMinimumSize(QSize(0, 40))
         self.wg_wizard_a_buttons.setMaximumSize(QSize(16777215, 50))
         self.horizontalLayout_22 = QHBoxLayout(self.wg_wizard_a_buttons)
         self.horizontalLayout_22.setObjectName(u"horizontalLayout_22")
-        self.horizontalSpacer_41 = QSpacerItem(144, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.tb_wizard_a_aufklappen = QToolButton(self.wg_wizard_a_buttons)
+        self.tb_wizard_a_aufklappen.setObjectName(u"tb_wizard_a_aufklappen")
+        self.tb_wizard_a_aufklappen.setFont(font)
+        self.tb_wizard_a_aufklappen.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+#if QT_CONFIG(shortcut)
+        self.tb_wizard_a_aufklappen.setShortcut(u"")
+#endif // QT_CONFIG(shortcut)
+        self.tb_wizard_a_aufklappen.setCheckable(True)
+        self.tb_wizard_a_aufklappen.setChecked(True)
+        self.tb_wizard_a_aufklappen.setAutoRaise(True)
+
+        self.horizontalLayout_22.addWidget(self.tb_wizard_a_aufklappen)
+
+        self.horizontalSpacer_41 = QSpacerItem(112, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_22.addItem(self.horizontalSpacer_41)
 
@@ -616,10 +629,36 @@ class Ui_frm_main_window(object):
 
         self.verticalLayout_4.addWidget(self.wg_wizard_a_buttons)
 
+        self.wg_sleep_timer = QWidget(self.gb_automatisierung)
+        self.wg_sleep_timer.setObjectName(u"wg_sleep_timer")
+        self.horizontalLayout_24 = QHBoxLayout(self.wg_sleep_timer)
+        self.horizontalLayout_24.setObjectName(u"horizontalLayout_24")
+        self.lb_sleep_timer = QLabel(self.wg_sleep_timer)
+        self.lb_sleep_timer.setObjectName(u"lb_sleep_timer")
+
+        self.horizontalLayout_24.addWidget(self.lb_sleep_timer)
+
+        self.hsl_sleep_timer = QSlider(self.wg_sleep_timer)
+        self.hsl_sleep_timer.setObjectName(u"hsl_sleep_timer")
+        self.hsl_sleep_timer.setMinimum(1)
+        self.hsl_sleep_timer.setMaximum(10)
+        self.hsl_sleep_timer.setPageStep(2)
+        self.hsl_sleep_timer.setSliderPosition(1)
+        self.hsl_sleep_timer.setOrientation(Qt.Orientation.Horizontal)
+
+        self.horizontalLayout_24.addWidget(self.hsl_sleep_timer)
+
+        self.horizontalSpacer_47 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_24.addItem(self.horizontalSpacer_47)
+
+
+        self.verticalLayout_4.addWidget(self.wg_sleep_timer)
+
         self.wg_wizard_b_buttons = QWidget(self.gb_automatisierung)
         self.wg_wizard_b_buttons.setObjectName(u"wg_wizard_b_buttons")
-        sizePolicy.setHeightForWidth(self.wg_wizard_b_buttons.sizePolicy().hasHeightForWidth())
-        self.wg_wizard_b_buttons.setSizePolicy(sizePolicy)
+        sizePolicy5.setHeightForWidth(self.wg_wizard_b_buttons.sizePolicy().hasHeightForWidth())
+        self.wg_wizard_b_buttons.setSizePolicy(sizePolicy5)
         self.wg_wizard_b_buttons.setMinimumSize(QSize(0, 40))
         self.wg_wizard_b_buttons.setMaximumSize(QSize(16777215, 50))
         self.horizontalLayout_23 = QHBoxLayout(self.wg_wizard_b_buttons)
@@ -666,19 +705,12 @@ class Ui_frm_main_window(object):
 
         self.verticalLayout_4.addWidget(self.wg_wizard_b_buttons)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_4.addItem(self.verticalSpacer_3)
-
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_4.addItem(self.verticalSpacer_4)
-
         self.wg_fertigtielmasse = QWidget(self.gb_automatisierung)
         self.wg_fertigtielmasse.setObjectName(u"wg_fertigtielmasse")
-        sizePolicy.setHeightForWidth(self.wg_fertigtielmasse.sizePolicy().hasHeightForWidth())
-        self.wg_fertigtielmasse.setSizePolicy(sizePolicy)
+        sizePolicy5.setHeightForWidth(self.wg_fertigtielmasse.sizePolicy().hasHeightForWidth())
+        self.wg_fertigtielmasse.setSizePolicy(sizePolicy5)
         self.wg_fertigtielmasse.setMinimumSize(QSize(0, 160))
+        self.wg_fertigtielmasse.setMaximumSize(QSize(16777215, 160))
         self.formLayout = QFormLayout(self.wg_fertigtielmasse)
         self.formLayout.setObjectName(u"formLayout")
         self.wg_x_fertig = QWidget(self.wg_fertigtielmasse)
@@ -692,16 +724,12 @@ class Ui_frm_main_window(object):
         sizePolicy3.setHeightForWidth(self.lb_x_fertig.sizePolicy().hasHeightForWidth())
         self.lb_x_fertig.setSizePolicy(sizePolicy3)
         self.lb_x_fertig.setMaximumSize(QSize(200, 50))
-        font2 = QFont()
-        font2.setFamilies([u"Comic Sans MS"])
-        font2.setPointSize(12)
-        font2.setBold(False)
-        self.lb_x_fertig.setFont(font2)
+        self.lb_x_fertig.setFont(font)
         self.lb_x_fertig.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_15.addWidget(self.lb_x_fertig)
 
-        self.horizontalSpacer_28 = QSpacerItem(34, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_28 = QSpacerItem(52, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_15.addItem(self.horizontalSpacer_28)
 
@@ -711,6 +739,10 @@ class Ui_frm_main_window(object):
         self.le_x_fertig.setSizePolicy(sizePolicy3)
         self.le_x_fertig.setMinimumSize(QSize(100, 20))
         self.le_x_fertig.setMaximumSize(QSize(150, 25))
+        font2 = QFont()
+        font2.setFamilies([u"Comic Sans MS"])
+        font2.setPointSize(12)
+        font2.setBold(False)
         self.le_x_fertig.setFont(font2)
 
         self.horizontalLayout_15.addWidget(self.le_x_fertig)
@@ -733,12 +765,12 @@ class Ui_frm_main_window(object):
         sizePolicy3.setHeightForWidth(self.lb_y_fertig.sizePolicy().hasHeightForWidth())
         self.lb_y_fertig.setSizePolicy(sizePolicy3)
         self.lb_y_fertig.setMaximumSize(QSize(200, 50))
-        self.lb_y_fertig.setFont(font2)
+        self.lb_y_fertig.setFont(font)
         self.lb_y_fertig.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_16.addWidget(self.lb_y_fertig)
 
-        self.horizontalSpacer_29 = QSpacerItem(34, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_29 = QSpacerItem(52, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_16.addItem(self.horizontalSpacer_29)
 
@@ -770,12 +802,12 @@ class Ui_frm_main_window(object):
         sizePolicy3.setHeightForWidth(self.lb_z_fertig.sizePolicy().hasHeightForWidth())
         self.lb_z_fertig.setSizePolicy(sizePolicy3)
         self.lb_z_fertig.setMaximumSize(QSize(200, 50))
-        self.lb_z_fertig.setFont(font2)
+        self.lb_z_fertig.setFont(font)
         self.lb_z_fertig.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_14.addWidget(self.lb_z_fertig)
 
-        self.horizontalSpacer_30 = QSpacerItem(34, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_30 = QSpacerItem(52, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_14.addItem(self.horizontalSpacer_30)
 
@@ -807,12 +839,12 @@ class Ui_frm_main_window(object):
         sizePolicy3.setHeightForWidth(self.lb_spanntiefe_b.sizePolicy().hasHeightForWidth())
         self.lb_spanntiefe_b.setSizePolicy(sizePolicy3)
         self.lb_spanntiefe_b.setMaximumSize(QSize(200, 50))
-        self.lb_spanntiefe_b.setFont(font2)
+        self.lb_spanntiefe_b.setFont(font)
         self.lb_spanntiefe_b.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_17.addWidget(self.lb_spanntiefe_b)
 
-        self.horizontalSpacer_31 = QSpacerItem(44, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_31 = QSpacerItem(59, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_17.addItem(self.horizontalSpacer_31)
 
@@ -837,8 +869,16 @@ class Ui_frm_main_window(object):
 
         self.verticalLayout_4.addWidget(self.wg_fertigtielmasse)
 
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_4.addItem(self.verticalSpacer_2)
+
 
         self.verticalLayout_8.addWidget(self.gb_automatisierung)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 5, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.verticalLayout_8.addItem(self.verticalSpacer_3)
 
         self.gb_python_commander = QGroupBox(self.centralwidget)
         self.gb_python_commander.setObjectName(u"gb_python_commander")
@@ -991,8 +1031,8 @@ class Ui_frm_main_window(object):
 
         self.fr_scripts_aufklappen = QFrame(self.centralwidget)
         self.fr_scripts_aufklappen.setObjectName(u"fr_scripts_aufklappen")
-        sizePolicy5.setHeightForWidth(self.fr_scripts_aufklappen.sizePolicy().hasHeightForWidth())
-        self.fr_scripts_aufklappen.setSizePolicy(sizePolicy5)
+        sizePolicy.setHeightForWidth(self.fr_scripts_aufklappen.sizePolicy().hasHeightForWidth())
+        self.fr_scripts_aufklappen.setSizePolicy(sizePolicy)
         self.fr_scripts_aufklappen.setMaximumSize(QSize(16777215, 200))
         font3 = QFont()
         font3.setFamilies([u"Comic Sans MS"])
@@ -1036,41 +1076,12 @@ class Ui_frm_main_window(object):
 
         self.verticalLayout_6.addWidget(self.wg_scripts_aufklappen)
 
-        self.line = QFrame(self.fr_scripts_aufklappen)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.Shape.HLine)
-        self.line.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.verticalLayout_6.addWidget(self.line)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_6.addItem(self.verticalSpacer_2)
-
         self.fr_scripts = QFrame(self.fr_scripts_aufklappen)
         self.fr_scripts.setObjectName(u"fr_scripts")
         self.fr_scripts.setFrameShape(QFrame.Shape.StyledPanel)
         self.fr_scripts.setFrameShadow(QFrame.Shadow.Raised)
         self.gridLayout = QGridLayout(self.fr_scripts)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.pb_auto_speichern = QPushButton(self.fr_scripts)
-        self.pb_auto_speichern.setObjectName(u"pb_auto_speichern")
-        self.pb_auto_speichern.setMinimumSize(QSize(170, 30))
-        self.pb_auto_speichern.setMaximumSize(QSize(210, 35))
-        self.pb_auto_speichern.setFont(font)
-        self.pb_auto_speichern.setAutoDefault(True)
-
-        self.gridLayout.addWidget(self.pb_auto_speichern, 0, 2, 1, 1)
-
-        self.pb_flet_prozess = QPushButton(self.fr_scripts)
-        self.pb_flet_prozess.setObjectName(u"pb_flet_prozess")
-        self.pb_flet_prozess.setMinimumSize(QSize(170, 30))
-        self.pb_flet_prozess.setMaximumSize(QSize(210, 35))
-        self.pb_flet_prozess.setFont(font)
-        self.pb_flet_prozess.setAutoDefault(True)
-
-        self.gridLayout.addWidget(self.pb_flet_prozess, 1, 1, 1, 1)
-
         self.pb_fehlermeldung_destroyer = QPushButton(self.fr_scripts)
         self.pb_fehlermeldung_destroyer.setObjectName(u"pb_fehlermeldung_destroyer")
         self.pb_fehlermeldung_destroyer.setMinimumSize(QSize(170, 30))
@@ -1089,6 +1100,24 @@ class Ui_frm_main_window(object):
 
         self.gridLayout.addWidget(self.pb_prozess_oeffnen, 0, 0, 1, 1)
 
+        self.pb_auto_speichern = QPushButton(self.fr_scripts)
+        self.pb_auto_speichern.setObjectName(u"pb_auto_speichern")
+        self.pb_auto_speichern.setMinimumSize(QSize(170, 30))
+        self.pb_auto_speichern.setMaximumSize(QSize(210, 35))
+        self.pb_auto_speichern.setFont(font)
+        self.pb_auto_speichern.setAutoDefault(True)
+
+        self.gridLayout.addWidget(self.pb_auto_speichern, 0, 2, 1, 1)
+
+        self.pb_flet_prozess = QPushButton(self.fr_scripts)
+        self.pb_flet_prozess.setObjectName(u"pb_flet_prozess")
+        self.pb_flet_prozess.setMinimumSize(QSize(170, 30))
+        self.pb_flet_prozess.setMaximumSize(QSize(210, 35))
+        self.pb_flet_prozess.setFont(font)
+        self.pb_flet_prozess.setAutoDefault(True)
+
+        self.gridLayout.addWidget(self.pb_flet_prozess, 1, 1, 1, 1)
+
         self.pb_esprit_start_makro = QPushButton(self.fr_scripts)
         self.pb_esprit_start_makro.setObjectName(u"pb_esprit_start_makro")
         self.pb_esprit_start_makro.setMinimumSize(QSize(170, 30))
@@ -1103,6 +1132,10 @@ class Ui_frm_main_window(object):
 
 
         self.verticalLayout_8.addWidget(self.fr_scripts_aufklappen)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_8.addItem(self.verticalSpacer_4)
 
         frm_main_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(frm_main_window)
@@ -1137,6 +1170,7 @@ class Ui_frm_main_window(object):
         self.tb_scripts_aufklappen.clicked["bool"].connect(self.fr_scripts.setHidden)
         self.cbx_at_nr_editieren.clicked["bool"].connect(self.le_at_nr.setEnabled)
         self.tb_wizard_b_aufklappen.clicked["bool"].connect(self.wg_fertigtielmasse.setHidden)
+        self.tb_wizard_a_aufklappen.clicked["bool"].connect(self.wg_sleep_timer.setHidden)
 
         self.tw_rohteil_erstellen.setCurrentIndex(0)
 
@@ -1182,10 +1216,12 @@ class Ui_frm_main_window(object):
         self.gb_automatisierung.setTitle(QCoreApplication.translate("frm_main_window", u"Automatisierung", None))
         self.lb_zeichnungsnr.setText(QCoreApplication.translate("frm_main_window", u"Zeichnungsnummer:", None))
         self.le_zeichnungsnr.setText(QCoreApplication.translate("frm_main_window", u"Zeichnungsnummer hier einf\u00fcgen...", None))
+        self.tb_wizard_a_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
         self.pb_wizard_a.setText(QCoreApplication.translate("frm_main_window", u"Wizard_A", None))
         self.cb_auto_option_a.setItemText(0, QCoreApplication.translate("frm_main_window", u"Gandalf", None))
         self.cb_auto_option_a.setItemText(1, QCoreApplication.translate("frm_main_window", u"Ausf\u00fcllhilfe", None))
 
+        self.lb_sleep_timer.setText(QCoreApplication.translate("frm_main_window", u"Sleep Timer", None))
         self.tb_wizard_b_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
         self.pb_wizard_b.setText(QCoreApplication.translate("frm_main_window", u"Wizard_B", None))
         self.cb_auto_option_b.setItemText(0, QCoreApplication.translate("frm_main_window", u"Saruman", None))
@@ -1209,10 +1245,10 @@ class Ui_frm_main_window(object):
         self.lb_programme_gefunden.setText(QCoreApplication.translate("frm_main_window", u" Pgm gefunden: ", None))
         self.tb_scripts_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
         self.lb_scripts.setText(QCoreApplication.translate("frm_main_window", u"Externe Programme", None))
-        self.pb_auto_speichern.setText(QCoreApplication.translate("frm_main_window", u"Auto Speichern", None))
-        self.pb_flet_prozess.setText(QCoreApplication.translate("frm_main_window", u"Flet Prozess", None))
         self.pb_fehlermeldung_destroyer.setText(QCoreApplication.translate("frm_main_window", u"Fehler Eliminator", None))
         self.pb_prozess_oeffnen.setText(QCoreApplication.translate("frm_main_window", u"Prozess \u00f6ffnen", None))
+        self.pb_auto_speichern.setText(QCoreApplication.translate("frm_main_window", u"Auto Speichern", None))
+        self.pb_flet_prozess.setText(QCoreApplication.translate("frm_main_window", u"Flet Prozess", None))
         self.pb_esprit_start_makro.setText(QCoreApplication.translate("frm_main_window", u"Esprit Start Makro", None))
         self.menuDatei.setTitle(QCoreApplication.translate("frm_main_window", u"Datei", None))
     # retranslateUi

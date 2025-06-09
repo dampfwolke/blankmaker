@@ -31,6 +31,9 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.fr_scripts.setHidden(True)
         self.le_at_nr.setDisabled(True)
         self.wg_fertigtielmasse.setHidden(True)
+        self.wg_sleep_timer.setHidden(True)
+        # Anpassung Fenstergröße
+        self.gb_automatisierung.setMinimumHeight(140)
 
         self.de_datum.setDate(qtc.QDate.currentDate())
         self.pfad_aktualisieren()

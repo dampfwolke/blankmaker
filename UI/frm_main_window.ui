@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>1144</height>
+    <height>1300</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>470</width>
-    <height>800</height>
+    <height>900</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>600</width>
-    <height>1400</height>
+    <height>1300</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -41,7 +41,7 @@
    <property name="maximumSize">
     <size>
      <width>16777215</width>
-     <height>1300</height>
+     <height>1400</height>
     </size>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1420,7 +1420,7 @@
     <item>
      <widget class="QGroupBox" name="gb_automatisierung">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -1434,7 +1434,7 @@
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>335</height>
+        <height>390</height>
        </size>
       </property>
       <property name="font">
@@ -1562,6 +1562,35 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_22">
           <item>
+           <widget class="QToolButton" name="tb_wizard_a_aufklappen">
+            <property name="font">
+             <font>
+              <family>Comic Sans MS</family>
+              <pointsize>10</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::FocusPolicy::NoFocus</enum>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="shortcut">
+             <string notr="true"/>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoRaise">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer_41">
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>
@@ -1571,7 +1600,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>144</width>
+              <width>112</width>
               <height>20</height>
              </size>
             </property>
@@ -1634,6 +1663,51 @@
           </item>
           <item>
            <spacer name="horizontalSpacer_43">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="wg_sleep_timer" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_24">
+          <item>
+           <widget class="QLabel" name="lb_sleep_timer">
+            <property name="text">
+             <string>Sleep Timer</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="hsl_sleep_timer">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>10</number>
+            </property>
+            <property name="pageStep">
+             <number>2</number>
+            </property>
+            <property name="sliderPosition">
+             <number>1</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_47">
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>
             </property>
@@ -1786,32 +1860,6 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QWidget" name="wg_fertigtielmasse" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
@@ -1822,6 +1870,12 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
+           <height>160</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
            <height>160</height>
           </size>
          </property>
@@ -1858,7 +1912,7 @@
                <property name="font">
                 <font>
                  <family>Comic Sans MS</family>
-                 <pointsize>12</pointsize>
+                 <pointsize>10</pointsize>
                  <bold>false</bold>
                 </font>
                </property>
@@ -1880,7 +1934,7 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>34</width>
+                 <width>52</width>
                  <height>20</height>
                 </size>
                </property>
@@ -1966,7 +2020,7 @@
                <property name="font">
                 <font>
                  <family>Comic Sans MS</family>
-                 <pointsize>12</pointsize>
+                 <pointsize>10</pointsize>
                  <bold>false</bold>
                 </font>
                </property>
@@ -1988,7 +2042,7 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>34</width>
+                 <width>52</width>
                  <height>20</height>
                 </size>
                </property>
@@ -2074,7 +2128,7 @@
                <property name="font">
                 <font>
                  <family>Comic Sans MS</family>
-                 <pointsize>12</pointsize>
+                 <pointsize>10</pointsize>
                  <bold>false</bold>
                 </font>
                </property>
@@ -2096,7 +2150,7 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>34</width>
+                 <width>52</width>
                  <height>20</height>
                 </size>
                </property>
@@ -2182,7 +2236,7 @@
                <property name="font">
                 <font>
                  <family>Comic Sans MS</family>
-                 <pointsize>12</pointsize>
+                 <pointsize>10</pointsize>
                  <bold>false</bold>
                 </font>
                </property>
@@ -2204,7 +2258,7 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>44</width>
+                 <width>59</width>
                  <height>20</height>
                 </size>
                </property>
@@ -2264,8 +2318,37 @@
          </layout>
         </widget>
        </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Policy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>5</height>
+       </size>
+      </property>
+     </spacer>
     </item>
     <item>
      <widget class="QGroupBox" name="gb_python_commander">
@@ -2773,26 +2856,6 @@
         </widget>
        </item>
        <item>
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QFrame" name="fr_scripts">
          <property name="frameShape">
           <enum>QFrame::Shape::StyledPanel</enum>
@@ -2801,64 +2864,6 @@
           <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="2">
-           <widget class="QPushButton" name="pb_auto_speichern">
-            <property name="minimumSize">
-             <size>
-              <width>170</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>210</width>
-              <height>35</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Comic Sans MS</family>
-              <pointsize>10</pointsize>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Auto Speichern</string>
-            </property>
-            <property name="autoDefault">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="pb_flet_prozess">
-            <property name="minimumSize">
-             <size>
-              <width>170</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>210</width>
-              <height>35</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Comic Sans MS</family>
-              <pointsize>10</pointsize>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Flet Prozess</string>
-            </property>
-            <property name="autoDefault">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
            <widget class="QPushButton" name="pb_fehlermeldung_destroyer">
             <property name="minimumSize">
@@ -2917,6 +2922,64 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="2">
+           <widget class="QPushButton" name="pb_auto_speichern">
+            <property name="minimumSize">
+             <size>
+              <width>170</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>210</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Comic Sans MS</family>
+              <pointsize>10</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Auto Speichern</string>
+            </property>
+            <property name="autoDefault">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="pb_flet_prozess">
+            <property name="minimumSize">
+             <size>
+              <width>170</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>210</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Comic Sans MS</family>
+              <pointsize>10</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Flet Prozess</string>
+            </property>
+            <property name="autoDefault">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="0">
            <widget class="QPushButton" name="pb_esprit_start_makro">
             <property name="minimumSize">
@@ -2951,6 +3014,19 @@
        </item>
       </layout>
      </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_4">
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>
@@ -3095,6 +3171,22 @@
     <hint type="destinationlabel">
      <x>299</x>
      <y>804</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tb_wizard_a_aufklappen</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>wg_sleep_timer</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>40</x>
+     <y>511</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>293</x>
+     <y>566</y>
     </hint>
    </hints>
   </connection>
