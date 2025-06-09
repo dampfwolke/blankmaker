@@ -13,7 +13,7 @@ from utils.kalenderwoche import kw_ermitteln
 from utils.get_settings import load_settings, get_pfad_from_template
 from utils.rechteck import rechteck_erstellen
 from utils.kreis import kreis_erstellen
-from utils.input_validators import validate_dimensions, validate_circle_dimensions
+from utils.input_validators import validate_dimensions, validate_circle_dimensions, calculate_spanntiefe
 from utils.ui_helpers import populate_combobox_with_subfolders
 
 from UI.frm_main_window import Ui_frm_main_window
@@ -33,28 +33,37 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.process_check_timer = qtc.QTimer(self)
         self.process_check_timer.timeout.connect(self.check_running_processes)
         self.process_check_timer.start(1000)
-
         self.wg_datum_editieren.setHidden(True)
         self.le_pfad.setDisabled(True)
         self.fr_scripts.setHidden(True)
         self.le_at_nr.setDisabled(True)
         self.wg_fertigtielmasse.setHidden(True)
         self.wg_sleep_timer.setHidden(True)
-
         self.de_datum.setDate(qtc.QDate.currentDate())
         self.pfad_aktualisieren()
         self.anim_tabs = AnimatedTabHelper(self.tw_rohteil_erstellen)
 
+        # --- Einrichten der Validatoren ---
         self.double_validator = qtg.QDoubleValidator(0.001, 99999.999, 3, self)
         self.double_validator.setNotation(qtg.QDoubleValidator.StandardNotation)
         german_locale = qtc.QLocale(qtc.QLocale.Language.German, qtc.QLocale.Country.Germany)
         self.double_validator.setLocale(german_locale)
+
+        # Rohteil-Maße
         self.le_rechteck_laenge.setValidator(self.double_validator)
         self.le_rechteck_breite.setValidator(self.double_validator)
         self.le_rechteck_hoehe.setValidator(self.double_validator)
         self.le_durchmesser.setValidator(self.double_validator)
         self.le_z_kreis.setValidator(self.double_validator)
+
+        # Fertigteil-Maße
+        self.le_x_fertig.setValidator(self.double_validator)
+        self.le_y_fertig.setValidator(self.double_validator)
+        self.le_z_fertig.setValidator(self.double_validator)
+
+        # Integer-Validatoren
         self.le_spannmittel.setValidator(qtg.QIntValidator(1, 999, self))
+        self.le_spanntiefe_b.setValidator(qtg.QIntValidator(2, 9999, self))
 
         self.initialize_ui_elements()
 
@@ -67,20 +76,29 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.de_datum.dateChanged.connect(self.pfad_aktualisieren)
         self.pb_spannmittel.clicked.connect(self.spannmittel_erstellen)
         self.le_rechteck_breite.textChanged.connect(self.update_spannmittel_from_breite)
+        self.le_z_fertig.textChanged.connect(self.update_spanntiefe_from_z_fertig)
 
         self.setup_script_buttons()
-
-        # NEU: Signal für das Makro-Skript
         self.pb_esprit_start_makro.clicked.connect(self.on_esprit_makro_clicked)
 
+    @qtc.Slot(str)
+    def update_spanntiefe_from_z_fertig(self, text: str):
+        """
+        Aktualisiert le_spanntiefe_b basierend auf le_z_fertig.
+        """
+        is_valid, spanntiefe_value = calculate_spanntiefe(text)
+
+        if is_valid:
+            self.le_spanntiefe_b.setText(str(spanntiefe_value))
+        else:
+            self.le_spanntiefe_b.clear()
+
     def setup_script_buttons(self):
-        """Konfiguriert die Buttons für die langlebigen Skripte."""
         scripts_to_manage = {
             self.pb_prozess_oeffnen: ("scripts/prozess_oeffnen.py", self.get_args_for_hotkey_script),
             self.pb_error_closer: ("scripts/error_closer.py", self.get_args_for_error_closer_script),
             self.pb_auto_speichern: ("scripts/backup.py", self.get_args_for_backup_script),
         }
-
         for button, (script_path_str, arg_func) in scripts_to_manage.items():
             script_path = Path(script_path_str)
             button.clicked.connect(
@@ -88,25 +106,28 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             )
             self.update_button_style(button, is_running=False)
 
-    @qtc.Slot()  # NEU: Slot für das einmalige Starten des Makro-Skripts
+    @qtc.Slot()
     def on_esprit_makro_clicked(self):
-        """Startet das Esprit-Start-Makro als einmaligen Prozess."""
         script_path = Path("scripts/esprit_start_makro.py")
-
         if not script_path.is_file():
             self.statusBar().showMessage(f"Fehler: Makro-Skript nicht gefunden: {script_path}", 7000)
             return
-
         try:
-            # Popen startet das Skript und die GUI läuft sofort weiter (nicht-blockierend)
+            self.showMinimized()
+            qtc.QTimer.singleShot(200, lambda: self.start_makro_process(script_path))
+        except Exception as e:
+            self.statusBar().showMessage(f"Fehler bei der Vorbereitung des Makros: {e}", 7000)
+
+    def start_makro_process(self, script_path: Path):
+        try:
             command = [sys.executable, str(script_path)]
             subprocess.Popen(command)
             self.statusBar().showMessage("Esprit-Start-Makro wurde ausgeführt.", 5000)
         except Exception as e:
             self.statusBar().showMessage(f"Fehler beim Starten des Makros: {e}", 7000)
             print(f"[FEHLER] Makro-Start fehlgeschlagen: {e}")
+            self.showNormal()
 
-    # ... (der Rest deines Codes bleibt unverändert) ...
     def toggle_script_process(self, button: qtw.QPushButton, script_path: Path, arg_func):
         if button in self.running_processes:
             process = self.running_processes[button]

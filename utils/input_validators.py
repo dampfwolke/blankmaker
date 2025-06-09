@@ -1,6 +1,42 @@
 # utils/input_validators.py
 from typing import Tuple, Optional
 
+
+def calculate_spanntiefe(z_fertig_str: str) -> Tuple[bool, Optional[int]]:
+    """
+    Berechnet die Spanntiefe basierend auf dem Z-Fertigmaß.
+    Die Logik ist: z_fertig - 2, aber mindestens 2, und als ganze Zahl.
+
+    Args:
+        z_fertig_str: Der Text aus dem LineEdit le_z_fertig.
+
+    Returns:
+        Ein Tupel (Erfolg, Ergebnis).
+        Bei Erfolg: (True, berechnete_spanntiefe_als_int)
+        Bei Fehler/ungültiger Eingabe: (False, None)
+    """
+    # Ersetze Komma durch Punkt für die Konvertierung
+    processed_str = z_fertig_str.replace(',', '.')
+
+    if not processed_str:
+        return False, None
+
+    try:
+        z_fertig_val = float(processed_str)
+
+        # Berechne den Wert: z_fertig - 2
+        calculated_value = z_fertig_val - 2
+
+        # Stelle sicher, dass der Wert mindestens 2 ist
+        final_value = max(2.0, calculated_value)
+
+        # Konvertiere in eine ganze Zahl (Integer)
+        return True, int(final_value)
+
+    except ValueError:
+        # Wenn die Eingabe keine gültige Zahl ist
+        return False, None
+
 def validate_dimensions(
     length_str: str, 
     width_str: str, 
