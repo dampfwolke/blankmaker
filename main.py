@@ -16,12 +16,12 @@ from utils.rechteck import rechteck_erstellen
 from utils.kreis import kreis_erstellen
 from utils.input_validators import validate_dimensions, validate_circle_dimensions, calculate_spanntiefe
 from utils.ui_helpers import populate_combobox_with_subfolders
+from utils.autoesprit_a import EspritA  # NEU: Import der Wizard-Klasse
 
 from UI.frm_main_window import Ui_frm_main_window
 from UI.animated_tabhelper import AnimatedTabHelper
 
 from einstellungen import Settings
-
 
 class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
     def __init__(self):
@@ -79,6 +79,10 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
         self.setup_script_buttons()
         self.pb_esprit_start_makro.clicked.connect(self.on_esprit_makro_clicked)
+
+        # NEU: Signal für den Wizard A Button verbinden
+        # Annahme: Der Button heißt 'pb_wizard_a' in deinem UI-File
+        self.pb_wizard_a.clicked.connect(self.on_wizard_a_clicked)
 
     @qtc.Slot(str)
     def update_spanntiefe_from_z_fertig(self, text: str):
@@ -230,6 +234,59 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.frm_settings = Settings()
         self.statusBar().showMessage(f"Einstellungen geöffnet. ({zeitstempel(1)})", 7000)
         self.frm_settings.show()
+
+    # NEU: Slot, der beim Klick auf den Wizard A Button ausgeführt wird
+    @qtc.Slot()
+    def on_wizard_a_clicked(self):
+        """Sammelt Daten und startet den EspritA Wizard."""
+        # 1. Daten aus der GUI sammeln
+        x_roh = self.le_rechteck_laenge.text()
+        y_roh = self.le_rechteck_breite.text()
+        z_roh = self.le_rechteck_hoehe.text()
+        pfad_str = self.le_pfad.text()
+        bearbeitung = self.cb_bearbeitung_auswahl.currentText()
+        typ = self.cb_auto_option_a.currentText()
+        sleep_timer = self.hsl_sleep_timer.value()
+
+        # 2. Grundlegende Validierung in der GUI
+        if not all([x_roh, y_roh, z_roh, pfad_str]):
+            self.statusBar().showMessage("Fehler: Bitte Rohteilmaße und Pfad sicherstellen.", 7000)
+            return
+
+        # 3. EspritA-Instanz erstellen
+        self.wizard_a = EspritA(
+            x_roh=x_roh,
+            y_roh=y_roh,
+            z_roh=z_roh,
+            pfad=Path(pfad_str),
+            bearbeitung_auswahl=bearbeitung,
+            typ=typ,
+            sleep_timer=sleep_timer
+        )
+
+        # 4. Signale der Instanz mit Slots der MainWindow verbinden
+        self.wizard_a.status_update.connect(self.statusBar().showMessage)
+        self.wizard_a.show_info_dialog.connect(self.show_information_dialog)
+        self.wizard_a.finished.connect(self.on_wizard_a_finished)
+
+        # 5. Die Hauptmethode des Wizards ausführen
+        self.wizard_a.run()
+
+    # NEU: Slot, der auf das 'finished'-Signal des Wizards reagiert
+    @qtc.Slot(bool, str)
+    def on_wizard_a_finished(self, success: bool, message: str):
+        """Wird aufgerufen, wenn der Wizard A seine Arbeit beendet hat."""
+        print(f"Wizard A beendet. Erfolg: {success}. Nachricht: {message}")
+        if success:
+            self.statusBar().showMessage(f"Erfolg: {message} ({zeitstempel(1)})", 7000)
+        else:
+            self.statusBar().showMessage(f"Fehler: {message} ({zeitstempel(1)})", 10000)
+
+    # NEU: Generischer Slot, um eine Informations-MessageBox anzuzeigen
+    @qtc.Slot(str, str)
+    def show_information_dialog(self, title: str, text: str):
+        """Zeigt einen Informationsdialog an."""
+        qtw.QMessageBox.information(self, title, text)
 
     @qtc.Slot()
     def spannmittel_erstellen(self):
