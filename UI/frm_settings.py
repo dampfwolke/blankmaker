@@ -24,7 +24,7 @@ class Ui_frm_settings(object):
         if not frm_settings.objectName():
             frm_settings.setObjectName(u"frm_settings")
         frm_settings.setWindowModality(Qt.WindowModality.ApplicationModal)
-        frm_settings.resize(650, 692)
+        frm_settings.resize(650, 803)
         frm_settings.setMinimumSize(QSize(650, 680))
         frm_settings.setMaximumSize(QSize(650, 1200))
         icon = QIcon()
@@ -75,8 +75,8 @@ class Ui_frm_settings(object):
         font1 = QFont()
         font1.setPointSize(10)
         self.wg_formular.setFont(font1)
-        self.formLayout_2 = QFormLayout(self.wg_formular)
-        self.formLayout_2.setObjectName(u"formLayout_2")
+        self.formLayout = QFormLayout(self.wg_formular)
+        self.formLayout.setObjectName(u"formLayout")
         self.lb_nc_base_path = QLabel(self.wg_formular)
         self.lb_nc_base_path.setObjectName(u"lb_nc_base_path")
         self.lb_nc_base_path.setMinimumSize(QSize(130, 35))
@@ -88,7 +88,7 @@ class Ui_frm_settings(object):
         self.lb_nc_base_path.setFont(font2)
         self.lb_nc_base_path.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
-        self.formLayout_2.setWidget(0, QFormLayout.LabelRole, self.lb_nc_base_path)
+        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.lb_nc_base_path)
 
         self.le_nc_base_path = QLineEdit(self.wg_formular)
         self.le_nc_base_path.setObjectName(u"le_nc_base_path")
@@ -104,7 +104,7 @@ class Ui_frm_settings(object):
         font3.setPointSize(12)
         self.le_nc_base_path.setFont(font3)
 
-        self.formLayout_2.setWidget(0, QFormLayout.FieldRole, self.le_nc_base_path)
+        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.le_nc_base_path)
 
         self.lb_spannmittel_basis_pfad = QLabel(self.wg_formular)
         self.lb_spannmittel_basis_pfad.setObjectName(u"lb_spannmittel_basis_pfad")
@@ -113,7 +113,7 @@ class Ui_frm_settings(object):
         self.lb_spannmittel_basis_pfad.setFont(font2)
         self.lb_spannmittel_basis_pfad.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
-        self.formLayout_2.setWidget(2, QFormLayout.LabelRole, self.lb_spannmittel_basis_pfad)
+        self.formLayout.setWidget(2, QFormLayout.LabelRole, self.lb_spannmittel_basis_pfad)
 
         self.le_spannmittel_basis_pfad = QLineEdit(self.wg_formular)
         self.le_spannmittel_basis_pfad.setObjectName(u"le_spannmittel_basis_pfad")
@@ -123,7 +123,7 @@ class Ui_frm_settings(object):
         self.le_spannmittel_basis_pfad.setMaximumSize(QSize(900, 50))
         self.le_spannmittel_basis_pfad.setFont(font3)
 
-        self.formLayout_2.setWidget(2, QFormLayout.FieldRole, self.le_spannmittel_basis_pfad)
+        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.le_spannmittel_basis_pfad)
 
         self.lb_wks = QLabel(self.wg_formular)
         self.lb_wks.setObjectName(u"lb_wks")
@@ -132,7 +132,7 @@ class Ui_frm_settings(object):
         self.lb_wks.setFont(font2)
         self.lb_wks.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
-        self.formLayout_2.setWidget(3, QFormLayout.LabelRole, self.lb_wks)
+        self.formLayout.setWidget(3, QFormLayout.LabelRole, self.lb_wks)
 
         self.le_wks = QLineEdit(self.wg_formular)
         self.le_wks.setObjectName(u"le_wks")
@@ -142,7 +142,7 @@ class Ui_frm_settings(object):
         self.le_wks.setMaximumSize(QSize(900, 50))
         self.le_wks.setFont(font3)
 
-        self.formLayout_2.setWidget(3, QFormLayout.FieldRole, self.le_wks)
+        self.formLayout.setWidget(3, QFormLayout.FieldRole, self.le_wks)
 
         self.lb_projekt_prefix = QLabel(self.wg_formular)
         self.lb_projekt_prefix.setObjectName(u"lb_projekt_prefix")
@@ -151,7 +151,7 @@ class Ui_frm_settings(object):
         self.lb_projekt_prefix.setFont(font2)
         self.lb_projekt_prefix.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
-        self.formLayout_2.setWidget(4, QFormLayout.LabelRole, self.lb_projekt_prefix)
+        self.formLayout.setWidget(4, QFormLayout.LabelRole, self.lb_projekt_prefix)
 
         self.le_projekt_prefix = QLineEdit(self.wg_formular)
         self.le_projekt_prefix.setObjectName(u"le_projekt_prefix")
@@ -161,7 +161,7 @@ class Ui_frm_settings(object):
         self.le_projekt_prefix.setMaximumSize(QSize(900, 50))
         self.le_projekt_prefix.setFont(font3)
 
-        self.formLayout_2.setWidget(4, QFormLayout.FieldRole, self.le_projekt_prefix)
+        self.formLayout.setWidget(4, QFormLayout.FieldRole, self.le_projekt_prefix)
 
         self.lb_pfad_backup = QLabel(self.wg_formular)
         self.lb_pfad_backup.setObjectName(u"lb_pfad_backup")
@@ -170,7 +170,7 @@ class Ui_frm_settings(object):
         self.lb_pfad_backup.setFont(font2)
         self.lb_pfad_backup.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
-        self.formLayout_2.setWidget(5, QFormLayout.LabelRole, self.lb_pfad_backup)
+        self.formLayout.setWidget(5, QFormLayout.LabelRole, self.lb_pfad_backup)
 
         self.le_pfad_backup = QLineEdit(self.wg_formular)
         self.le_pfad_backup.setObjectName(u"le_pfad_backup")
@@ -180,7 +180,7 @@ class Ui_frm_settings(object):
         self.le_pfad_backup.setMaximumSize(QSize(900, 50))
         self.le_pfad_backup.setFont(font3)
 
-        self.formLayout_2.setWidget(5, QFormLayout.FieldRole, self.le_pfad_backup)
+        self.formLayout.setWidget(5, QFormLayout.FieldRole, self.le_pfad_backup)
 
         self.lb_pfad_template = QLabel(self.wg_formular)
         self.lb_pfad_template.setObjectName(u"lb_pfad_template")
@@ -189,7 +189,7 @@ class Ui_frm_settings(object):
         self.lb_pfad_template.setFont(font2)
         self.lb_pfad_template.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
-        self.formLayout_2.setWidget(6, QFormLayout.LabelRole, self.lb_pfad_template)
+        self.formLayout.setWidget(6, QFormLayout.LabelRole, self.lb_pfad_template)
 
         self.le_pfad_template = QLineEdit(self.wg_formular)
         self.le_pfad_template.setObjectName(u"le_pfad_template")
@@ -199,7 +199,7 @@ class Ui_frm_settings(object):
         self.le_pfad_template.setMaximumSize(QSize(900, 50))
         self.le_pfad_template.setFont(font3)
 
-        self.formLayout_2.setWidget(6, QFormLayout.FieldRole, self.le_pfad_template)
+        self.formLayout.setWidget(6, QFormLayout.FieldRole, self.le_pfad_template)
 
         self.lb_platzhalter_1 = QLabel(self.wg_formular)
         self.lb_platzhalter_1.setObjectName(u"lb_platzhalter_1")
@@ -208,7 +208,7 @@ class Ui_frm_settings(object):
         self.lb_platzhalter_1.setFont(font2)
         self.lb_platzhalter_1.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
-        self.formLayout_2.setWidget(7, QFormLayout.LabelRole, self.lb_platzhalter_1)
+        self.formLayout.setWidget(7, QFormLayout.LabelRole, self.lb_platzhalter_1)
 
         self.le_platzhalter_1 = QLineEdit(self.wg_formular)
         self.le_platzhalter_1.setObjectName(u"le_platzhalter_1")
@@ -216,14 +216,31 @@ class Ui_frm_settings(object):
         self.le_platzhalter_1.setMaximumSize(QSize(900, 50))
         self.le_platzhalter_1.setFont(font3)
 
-        self.formLayout_2.setWidget(7, QFormLayout.FieldRole, self.le_platzhalter_1)
+        self.formLayout.setWidget(7, QFormLayout.FieldRole, self.le_platzhalter_1)
+
+        self.lb_nutzername = QLabel(self.wg_formular)
+        self.lb_nutzername.setObjectName(u"lb_nutzername")
+        self.lb_nutzername.setMinimumSize(QSize(130, 35))
+        self.lb_nutzername.setMaximumSize(QSize(250, 50))
+        self.lb_nutzername.setFont(font2)
+        self.lb_nutzername.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.lb_nutzername)
+
+        self.le_nutzername = QLineEdit(self.wg_formular)
+        self.le_nutzername.setObjectName(u"le_nutzername")
+        sizePolicy2.setHeightForWidth(self.le_nutzername.sizePolicy().hasHeightForWidth())
+        self.le_nutzername.setSizePolicy(sizePolicy2)
+        self.le_nutzername.setMinimumSize(QSize(330, 35))
+        self.le_nutzername.setMaximumSize(QSize(900, 50))
+        self.le_nutzername.setFont(font3)
+        self.le_nutzername.setStyleSheet(u"background-color: rgb(0, 85, 0)\n"
+"")
+
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.le_nutzername)
 
 
         self.verticalLayout.addWidget(self.wg_formular)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout.addItem(self.verticalSpacer_2)
 
         self.wg_styles = QWidget(frm_settings)
         self.wg_styles.setObjectName(u"wg_styles")
@@ -334,6 +351,7 @@ class Ui_frm_settings(object):
         self.lb_pfad_template.setText(QCoreApplication.translate("frm_settings", u"Pfad KW:", None))
         self.lb_platzhalter_1.setText(QCoreApplication.translate("frm_settings", u"platzhalter_1", None))
         self.le_platzhalter_1.setText(QCoreApplication.translate("frm_settings", u"platzhalter_1", None))
+        self.lb_nutzername.setText(QCoreApplication.translate("frm_settings", u"Name:", None))
         self.lb_styles.setText(QCoreApplication.translate("frm_settings", u"Theme:", None))
         self.lb_ausgabe.setText("")
         self.pb_abbrechen.setText(QCoreApplication.translate("frm_settings", u"Beenden", None))

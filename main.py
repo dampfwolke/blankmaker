@@ -16,7 +16,7 @@ from utils.rechteck import rechteck_erstellen
 from utils.kreis import kreis_erstellen
 from utils.input_validators import validate_dimensions, validate_circle_dimensions, calculate_spanntiefe
 from utils.ui_helpers import populate_combobox_with_subfolders
-from utils.autoesprit_a import EspritA  # NEU: Import der Wizard-Klasse
+from utils.autoesprit_a import EspritA
 
 from UI.frm_main_window import Ui_frm_main_window
 from UI.animated_tabhelper import AnimatedTabHelper
@@ -29,6 +29,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.setupUi(self)
         self.frm_settings = Settings()
         self.settings = load_settings()
+        self.gb_python_commander.setHidden(True)
 
         self.running_processes = {}
         self.process_check_timer = qtc.QTimer(self)
@@ -49,18 +50,14 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.double_validator.setNotation(qtg.QDoubleValidator.StandardNotation)
         german_locale = qtc.QLocale(qtc.QLocale.Language.German, qtc.QLocale.Country.Germany)
         self.double_validator.setLocale(german_locale)
-        # Rohteil-Maße
         self.le_rechteck_laenge.setValidator(self.double_validator)
         self.le_rechteck_breite.setValidator(self.double_validator)
         self.le_rechteck_hoehe.setValidator(self.double_validator)
         self.le_durchmesser.setValidator(self.double_validator)
         self.le_z_kreis.setValidator(self.double_validator)
-        # Fertigteil-Maße
         self.le_x_fertig.setValidator(self.double_validator)
         self.le_y_fertig.setValidator(self.double_validator)
         self.le_z_fertig.setValidator(self.double_validator)
-
-        # Integer-Validatoren
         self.le_spannmittel.setValidator(qtg.QIntValidator(1, 999, self))
         self.le_spanntiefe_b.setValidator(qtg.QIntValidator(2, 99, self))
 
@@ -76,21 +73,31 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.pb_spannmittel.clicked.connect(self.spannmittel_erstellen)
         self.le_rechteck_breite.textChanged.connect(self.update_spannmittel_from_breite)
         self.le_z_fertig.textChanged.connect(self.update_spanntiefe_from_z_fertig)
-
         self.setup_script_buttons()
         self.pb_esprit_start_makro.clicked.connect(self.on_esprit_makro_clicked)
-
-        # NEU: Signal für den Wizard A Button verbinden
-        # Annahme: Der Button heißt 'pb_wizard_a' in deinem UI-File
         self.pb_wizard_a.clicked.connect(self.on_wizard_a_clicked)
+
+    # --- NEUE HILFSMETHODE zur Prüfung des Zielordners ---
+    def _get_and_validate_target_dir(self) -> Path | None:
+        """
+        Holt den Pfad aus le_pfad und prüft, ob er als Ordner existiert.
+        Gibt ein Path-Objekt bei Erfolg oder None bei einem Fehler zurück.
+        """
+        dir_path_str = self.le_pfad.text()
+        if not dir_path_str:
+            self.statusBar().showMessage("Fehler: Zielpfad ist nicht angegeben.", 7000)
+            return None
+        
+        target_dir = Path(dir_path_str)
+        if not target_dir.is_dir():
+            self.statusBar().showMessage(f"Fehler: Zielordner existiert nicht: {target_dir}", 7000)
+            return None
+        
+        return target_dir
 
     @qtc.Slot(str)
     def update_spanntiefe_from_z_fertig(self, text: str):
-        """
-        Aktualisiert le_spanntiefe_b basierend auf le_z_fertig.
-        """
         is_valid, spanntiefe_value = calculate_spanntiefe(text)
-
         if is_valid:
             self.le_spanntiefe_b.setText(str(spanntiefe_value))
         else:
@@ -166,15 +173,16 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         return []
 
     def get_args_for_backup_script(self):
-        source_folder = self.le_pfad.text()
+        # GEÄNDERT: Verwendet die neue Hilfsmethode
+        source_folder = self._get_and_validate_target_dir()
         if not source_folder:
-            self.statusBar().showMessage("Backup-Fehler: Quell-Pfad (le_pfad) ist leer.", 7000)
+            self.statusBar().showMessage("Backup-Fehler: Quell-Pfad ungültig oder nicht vorhanden.", 7000)
             return None
         backup_folder = self.settings.get("pfad_backup")
         if not backup_folder:
             self.statusBar().showMessage("Backup-Fehler: 'pfad_backup' nicht in Einstellungen gefunden.", 7000)
             return None
-        return ["--source-folder", source_folder, "--backup-folder", backup_folder]
+        return ["--source-folder", str(source_folder), "--backup-folder", backup_folder]
 
     def initialize_ui_elements(self):
         populate_combobox_with_subfolders(
@@ -235,141 +243,148 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.statusBar().showMessage(f"Einstellungen geöffnet. ({zeitstempel(1)})", 7000)
         self.frm_settings.show()
 
-    # NEU: Slot, der beim Klick auf den Wizard A Button ausgeführt wird
     @qtc.Slot()
     def on_wizard_a_clicked(self):
-        """Sammelt Daten und startet den EspritA Wizard."""
-        # 1. Daten aus der GUI sammeln
         x_roh = self.le_rechteck_laenge.text()
         y_roh = self.le_rechteck_breite.text()
         z_roh = self.le_rechteck_hoehe.text()
-        pfad_str = self.le_pfad.text()
+        # GEÄNDERT: Verwendet die neue Hilfsmethode
+        pfad = self._get_and_validate_target_dir()
+        if not pfad: return
         bearbeitung = self.cb_bearbeitung_auswahl.currentText()
         typ = self.cb_auto_option_a.currentText()
         sleep_timer = self.hsl_sleep_timer.value()
 
-        # 2. Grundlegende Validierung in der GUI
-        if not all([x_roh, y_roh, z_roh, pfad_str]):
-            self.statusBar().showMessage("Fehler: Bitte Rohteilmaße und Pfad sicherstellen.", 7000)
+        if not all([x_roh, y_roh, z_roh]):
+            self.statusBar().showMessage("Fehler: Bitte Rohteilmaße sicherstellen.", 7000)
             return
 
-        # 3. EspritA-Instanz erstellen
         self.wizard_a = EspritA(
-            x_roh=x_roh,
-            y_roh=y_roh,
-            z_roh=z_roh,
-            pfad=Path(pfad_str),
-            bearbeitung_auswahl=bearbeitung,
-            typ=typ,
-            sleep_timer=sleep_timer
+            x_roh=x_roh, y_roh=y_roh, z_roh=z_roh, pfad=pfad,
+            bearbeitung_auswahl=bearbeitung, typ=typ, sleep_timer=sleep_timer
         )
-
-        # 4. Signale der Instanz mit Slots der MainWindow verbinden
         self.wizard_a.status_update.connect(self.statusBar().showMessage)
         self.wizard_a.show_info_dialog.connect(self.show_information_dialog)
         self.wizard_a.finished.connect(self.on_wizard_a_finished)
-
-        # 5. Die Hauptmethode des Wizards ausführen
         self.wizard_a.run()
 
-    # NEU: Slot, der auf das 'finished'-Signal des Wizards reagiert
     @qtc.Slot(bool, str)
     def on_wizard_a_finished(self, success: bool, message: str):
-        """Wird aufgerufen, wenn der Wizard A seine Arbeit beendet hat."""
         print(f"Wizard A beendet. Erfolg: {success}. Nachricht: {message}")
         if success:
             self.statusBar().showMessage(f"Erfolg: {message} ({zeitstempel(1)})", 7000)
         else:
             self.statusBar().showMessage(f"Fehler: {message} ({zeitstempel(1)})", 10000)
 
-    # NEU: Generischer Slot, um eine Informations-MessageBox anzuzeigen
     @qtc.Slot(str, str)
     def show_information_dialog(self, title: str, text: str):
-        """Zeigt einen Informationsdialog an."""
         qtw.QMessageBox.information(self, title, text)
 
     @qtc.Slot()
     def spannmittel_erstellen(self):
+        # --- GEÄNDERT: Logik wurde angepasst ---
+        # 1. Validieren der Eingaben
         spannmittel_typ = self.cb_spannmittel.currentText()
         if not spannmittel_typ or "Fehler" in spannmittel_typ or "Keine" in spannmittel_typ:
             self.statusBar().showMessage("Fehler: Bitte gültiges Spannmittel aus der Liste wählen.", 7000)
             return
         spannmittel_groesse = self.le_spannmittel.text()
         if not spannmittel_groesse:
-            self.statusBar().showMessage("Fehler: Bitte eine Spannmittel-Größe (z.B. 50) angeben.", 7000)
+            self.statusBar().showMessage("Fehler: Bitte eine Spannmittel-Größe angeben.", 7000)
             return
-        ziel_ordner_str = self.le_pfad.text()
-        if not ziel_ordner_str:
-            self.statusBar().showMessage("Fehler: Zielpfad konnte nicht ermittelt werden.", 7000)
-            return
+        
+        # 2. Zielordner validieren mit der neuen Hilfsmethode
+        ziel_ordner = self._get_and_validate_target_dir()
+        if not ziel_ordner:
+            return # Fehlermeldung kommt schon aus der Hilfsmethode
+
+        # 3. Pfade zusammenbauen
         spannmittel_basis_pfad_str = self.settings.get("spannmittel_basis_pfad")
         if not spannmittel_basis_pfad_str:
             self.statusBar().showMessage("Fehler: 'spannmittel_basis_pfad' nicht in Einstellungen gefunden.", 7000)
             return
+        
         quell_ordner = Path(spannmittel_basis_pfad_str) / spannmittel_typ
         quell_datei = quell_ordner / f"{spannmittel_groesse}.step"
-        ziel_ordner = Path(ziel_ordner_str)
         ziel_datei = ziel_ordner / f"!schraubstock{quell_datei.suffix}"
+        
+        # 4. Kopiervorgang
         try:
-            if not quell_datei.exists():
+            if not quell_datei.is_file(): # Sicherer: Prüft ob es eine Datei ist
                 self.statusBar().showMessage(f"Fehler: Quelldatei nicht gefunden: {quell_datei.name}", 7000)
                 print(f"[FEHLER] Quelldatei nicht gefunden: {quell_datei}")
                 return
-            ziel_ordner.mkdir(parents=True, exist_ok=True)
+            
+            # Die Zeile ziel_ordner.mkdir(...) wurde entfernt!
             shutil.copy2(quell_datei, ziel_datei)
-            self.statusBar().showMessage(f"Spannmittel '{ziel_datei.name}' erfolgreich erstellt. ({zeitstempel(1)})",
-                                         7000)
+            self.statusBar().showMessage(f"Spannmittel '{ziel_datei.name}' erfolgreich erstellt.", 7000)
             print(f"[INFO] Spannmittel kopiert: '{quell_datei}' -> '{ziel_datei}'")
         except PermissionError:
             self.statusBar().showMessage("Fehler: Keine Berechtigung zum Schreiben im Zielordner.", 7000)
-            print(f"[FEHLER] Keine Berechtigung für Pfad: {ziel_ordner}")
         except Exception as e:
             self.statusBar().showMessage(f"Ein unerwarteter Fehler ist aufgetreten: {e}", 7000)
-            print(f"[FEHLER] Beim Kopieren des Spannmittels: {e}")
 
     @qtc.Slot()
     def rechteck_erstellen_clicked(self):
+        # --- GEÄNDERT: Logik wurde angepasst ---
+        # 1. Maße validieren
         length_str = self.le_rechteck_laenge.text()
         width_str = self.le_rechteck_breite.text()
         height_str = self.le_rechteck_hoehe.text()
         is_valid, length, width, height, error_message = validate_dimensions(length_str, width_str, height_str)
         if not is_valid:
-            self.statusBar().showMessage(f"Rechteck Fehler: {error_message} ({zeitstempel(1)})", 7000)
+            self.statusBar().showMessage(f"Rechteck Fehler: {error_message}", 7000)
             return
-        dir_path_str = self.le_pfad.text()
-        if not dir_path_str:
-            self.statusBar().showMessage(f"'Fehler beim Erstellen von !rohteil.dxf'. ({zeitstempel(1)})", 7000)
+        
+        # 2. Zielordner validieren
+        dir_path = self._get_and_validate_target_dir()
+        if not dir_path:
             return
+
+        # 3. DXF erstellen
         file_name = "!rohteil.dxf"
-        full_output_path = str(Path(dir_path_str) / file_name)
+        full_output_path = str(dir_path / file_name)
         self.statusBar().showMessage(f"Erstelle Rechteck-DXF: {file_name}...", 3000)
+        
+        # WICHTIG: Stelle sicher, dass `rechteck_erstellen` in `utils/rechteck.py`
+        # die Zeile `file_path.parent.mkdir(...)` ebenfalls entfernt hat!
         success, message_from_module = rechteck_erstellen(length, width, height, full_output_path)
+        
         if success:
             self.statusBar().showMessage(f"Rechteck erstellt ({zeitstempel(1)})", 7000)
-            self.spannmittel_erstellen()
+            self.spannmittel_erstellen() # Ruft Spannmittel-Erstellung auf, die ihre eigene Prüfung hat
         else:
-            self.statusBar().showMessage(f"Rechteck Fehler DXF: {message_from_module} ({zeitstempel(1)})", 7000)
+            self.statusBar().showMessage(f"Rechteck Fehler DXF: {message_from_module}", 7000)
 
     @qtc.Slot()
     def kreis_erstellen_clicked(self):
+        # --- GEÄNDERT: Logik wurde angepasst ---
+        # 1. Maße validieren
         diameter_str = self.le_durchmesser.text()
         height_str = self.le_z_kreis.text()
         is_valid, diameter, height, error_message = validate_circle_dimensions(diameter_str, height_str)
         if not is_valid:
-            self.statusBar().showMessage(f"Kreis Fehler: {error_message} ({zeitstempel(1)})", 7000)
+            self.statusBar().showMessage(f"Kreis Fehler: {error_message}", 7000)
             return
-        dir_path_str = self.le_pfad.text()
-        if not dir_path_str:
-            self.statusBar().showMessage(f"Fehler beim Erstellen von '!rohteil.dxf'. ({zeitstempel(1)})", 7000)
+        
+        # 2. Zielordner validieren
+        dir_path = self._get_and_validate_target_dir()
+        if not dir_path:
             return
+
+        # 3. DXF erstellen
         file_name = "!rohteil.dxf"
-        full_output_path = str(Path(dir_path_str) / file_name)
+        full_output_path = str(dir_path / file_name)
         self.statusBar().showMessage(f"Erstelle Kreis-DXF: {file_name}...", 3000)
+        
+        # WICHTIG: Stelle sicher, dass `kreis_erstellen` in `utils/kreis.py`
+        # die Zeile `file_path.parent.mkdir(...)` ebenfalls entfernt hat!
         success, message_from_module = kreis_erstellen(diameter, height, full_output_path)
+
         if success:
             self.statusBar().showMessage(f"Kreis erstellt ({zeitstempel(1)})", 7000)
         else:
-            self.statusBar().showMessage(f"Kreis Fehler DXF: {message_from_module} ({zeitstempel(1)})", 7000)
+            self.statusBar().showMessage(f"Kreis Fehler DXF: {message_from_module}", 7000)
 
     @qtc.Slot()
     def pfad_aktualisieren(self):
@@ -383,18 +398,14 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             self.le_pfad.setText("")
             self.statusBar().showMessage("Warnung: Pfad konnte nicht generiert werden.", 5000)
 
-
 if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)
     settings = load_settings()
-
     style_filename = settings.get("styles")
-
     if style_filename:
         script_dir = Path(__file__).resolve().parent
         styles_folder = script_dir / "UI" / "Styles"
         full_stylesheet_path = styles_folder / style_filename
-
         if full_stylesheet_path.is_file():
             try:
                 with full_stylesheet_path.open("r", encoding="utf-8") as f:
@@ -406,7 +417,6 @@ if __name__ == "__main__":
             print(f"[Warnung] Stylesheet-Datei nicht gefunden unter: {full_stylesheet_path}")
     else:
         print("[Info] Kein Stylesheet in den Einstellungen ('styles') angegeben.")
-
     window = MainWindow()
     window.show()
     sys.exit(app.exec())
