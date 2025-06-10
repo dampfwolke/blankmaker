@@ -3,18 +3,18 @@ import clipboard
 
 
 class EspritA:
-    def __init__(self, laenge_roh: str, breite_roh: str, hoehe_roh: str, pfad: Path, maschinenauswahl: str, typ: str,
+    def __init__(self, x_roh: str, y_roh: str, z_roh: str, pfad: Path, maschinenauswahl: str, typ: str,
                  sleep_timer: int):
-        self.laenge_roh = laenge_roh
-        self.breite_roh = breite_roh
-        self.hoehe_roh = hoehe_roh
+        self.x_roh = x_roh
+        self.y_roh = y_roh
+        self.z_roh = z_roh
         self.pfad = pfad
         self.maschinenauswahl = maschinenauswahl
         self.typ = typ
         self.sleep_timer = sleep_timer
 
     def __str__(self):
-        return (f"Abmaße:'X:{self.laenge_roh}'X'Y:{self.breite_roh}'X'Z:{self.hoehe_roh}'\n"
+        return (f"Abmaße:'X:{self.x_roh}'X'Y:{self.y_roh}'X'Z:{self.z_roh}'\n"
                 f"Pfad: {self.pfad}\n"
                 f"Bearbeitung: {self.maschinenauswahl}\n"
                 f"Umfang der Automation: {self.typ}\n"
