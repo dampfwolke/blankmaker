@@ -34,7 +34,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.frm_settings = Settings()
         self.settings = load_settings()
         
-        # Anpassung
+        # Anpassung erfolgreich
         self.cbx_at_nr_editieren.setChecked(True)
 
         # --- UI-Initialisierung ---
