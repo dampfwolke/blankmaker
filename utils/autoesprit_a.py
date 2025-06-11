@@ -1,8 +1,9 @@
 from pathlib import Path
-import time
+from time import sleep
 
 from PySide6.QtCore import QObject, Signal
-import pyautogui
+import pyautogui as pag
+import clipboard
 
 from click_image import click_image
 
@@ -15,11 +16,12 @@ class EspritA(QObject):
     # Signal(bool, str) -> sendet Beendigungsstatus (Erfolg/Fehler) und eine finale Nachricht
     finished = Signal(bool, str)
 
-    def __init__(self, x_roh: str, y_roh: str, z_roh: str, pfad: Path, bearbeitung_auswahl: str, typ: str,
+    def __init__(self, pgm_name: str, x_roh: str, y_roh: str, z_roh: str, pfad: Path, bearbeitung_auswahl: str, typ: str,
                  sleep_timer: int):
         # Super(:D) Wichtig: super().__init__() aufrufen, da wir von QObject erben
         super().__init__()
         # Parameter für die Instanziierung der EspritA Klasse
+        self.pgm_name = pgm_name
         self.x_roh = x_roh
         self.y_roh = y_roh
         self.z_roh = z_roh
@@ -83,15 +85,64 @@ class EspritA(QObject):
 
     def ausfuellhilfe_a(self) -> None:
         """ Datei und Programmname werden in den Eigenschaften eingefügt."""
+        self.status_update.emit("Ausfüllhilfe gestartet...")
+        # Automation
+        verweilzeit = self.verweilzeit - 0.15
+        pag.click(2438, 122)
+        sleep(verweilzeit)
+        pag.click(2679, 258)
+        sleep(verweilzeit)
+        pag.doubleClick(2887, 302)
+        sleep(verweilzeit)
+        pag.press('delete')
+        sleep(verweilzeit)
+        # Programmname einfügen und "_A" als Endung hinzufügen
+        pgm_name_mit_endung = f"{self.pgm_name}_A".strip()
+        # mit clipboard in den Zwischenspeicher kopieren
+        clipboard.copy(pgm_name_mit_endung)
+        sleep(0.1)
+        pag.hotkey("ctrl", "v")
+        sleep(verweilzeit)
+        pag.press('tab')
+        sleep(0.1)
+        pag.press('tab')
+        sleep(0.1)
+        pag.press('delete')
+        sleep(0.1)
+        # Programmname einfügen ohne Endung
+        pgm_name_ohne_endung = self.pgm_name.strip()
+        clipboard.copy(pgm_name_ohne_endung)
+        sleep(0.1)
+        pag.hotkey("ctrl", "v")
+        sleep(0.1)
+        pag.press('tab')
+        sleep(0.1)
+        pag.hotkey('ctrl', 'a')
+        pag.press('delete')
+        sleep(0.1)
+        # Art der Bearbeitung einfügen z.B. 5 Achs 3 Achs
+        clipboard.copy(self.bearbeitung_auswahl)
+        sleep(0.1)
+        pag.hotkey("ctrl", "v")
+        sleep(verweilzeit)
+        pag.press('Enter')
+        sleep(verweilzeit)
+        # Fokussieren Klick
+        pag.doubleClick(2109, 668)
+        self.status_update.emit("Ausfüllhilfe abgeschlossen!")
 
     def esprit_datei_speichern(self) -> None:
         """ Datei wird im aktuellen KW-Wochen Ordner gespeichert"""
+        self.status_update.emit("Esprit Datei gespeichert!")
 
     def rohteil_dxf_importieren(self) -> None:
         """dxf Datei wird aus dem aktuellen KW-Wochen Ordner, in Esprit importiert."""
+        self.status_update.emit("Rohteil-DXF geladen!")
 
     def spannmittel_importieren(self) -> None:
         """Spannmittel wird aus dem aktuellen KW-Wochen Ordner, in Esprit importiert und die Automatisierung abgeschlossen."""
+        self.status_update.emit("Importiere Schraubstock...")
+        self.status_update.emit("Automatisierung abgeschlossen!")
 
 #####################################################################################################
 

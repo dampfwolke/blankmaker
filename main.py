@@ -98,6 +98,8 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 ##############################################################################################################
     @qtc.Slot()
     def on_wizard_a_clicked(self):
+        # pgm_name hinzugefügt prüfen!
+        pgm_name = self.le_zeichnungsnr.text()
         x_roh = self.le_rechteck_laenge.text()
         y_roh = self.le_rechteck_breite.text()
         z_roh = self.le_rechteck_hoehe.text()
@@ -112,7 +114,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             return
 
         self.wizard_a = EspritA(
-            x_roh=x_roh, y_roh=y_roh, z_roh=z_roh, pfad=pfad,
+            pgm_name=pgm_name,x_roh=x_roh, y_roh=y_roh, z_roh=z_roh, pfad=pfad,
             bearbeitung_auswahl=bearbeitung, typ=typ, sleep_timer=sleep_timer
         )
         self.wizard_a.status_update.connect(self.statusBar().showMessage)
