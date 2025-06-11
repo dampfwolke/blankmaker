@@ -6,6 +6,7 @@ import pyautogui as pag
 import clipboard
 
 from utils.click_image import click_image
+from utils.zeitstempel import zeitstempel
 
 class EspritA(QObject):
     # --- Signale für die Kommunikation mit der GUI ---
@@ -88,14 +89,14 @@ class EspritA(QObject):
 
     def ausfuellhilfe_a(self) -> None:
         """ Datei und Programmname werden in den Eigenschaften eingefügt."""
-        self.status_update.emit("Ausfüllhilfe gestartet...")
-        # Automation
+        self.status_update.emit(f"Ausfüllhilfe gestartet...  {zeitstempel(1)}")
         verweilzeit = self.verweilzeit - 0.15
         pag.click(2438, 122)
         sleep(verweilzeit)
         pag.click(2679, 258)
         sleep(verweilzeit)
         pag.doubleClick(2887, 302)
+        self.status_update.emit("Eigenschaften werden ausgefüllt...")
         sleep(verweilzeit)
         pag.press('delete')
         sleep(verweilzeit)
@@ -132,10 +133,11 @@ class EspritA(QObject):
         sleep(verweilzeit)
         # Fokussieren Klick
         pag.doubleClick(2109, 668)
-        self.status_update.emit("Ausfüllhilfe abgeschlossen!")
+        self.status_update.emit(f"Ausfüllhilfe abgeschlossen!  {zeitstempel(1)}")
 
     def esprit_datei_speichern(self) -> None:
         """ Datei wird im aktuellen KW-Wochen Ordner gespeichert"""
+        self.status_update.emit("Bereite speichern vor..")
         pag.click(1965, 36)
         sleep(self.verweilzeit)
         pag.click(2007, 172)
@@ -149,6 +151,7 @@ class EspritA(QObject):
         pag.press('Enter')
         self.status_update.emit("Esprit wird Datei gespeichert...")
         sleep(4)
+        self.status_update.emit(f"Esprit Datei erfolgreich gespeichert. {zeitstempel(1)}")
 
     def rohteil_erstellen(self) -> None:
         """dxf Datei wird aus dem aktuellen KW-Wochen Ordner in Esprit importiert und die Simulationsbauteile werden erstellt."""
@@ -159,21 +162,21 @@ class EspritA(QObject):
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2853, 795)                # Koordinaten vom Pfad im Öffnen Fenster
         sleep(self.verweilzeit)                   # verweilzeit
-
+        self.status_update.emit("Rohteil DXF wird importiert...")
         pfad_rohteil = self.pfad / "!rohteil.dxf"
         clipboard.copy(str(pfad_rohteil))
         sleep(0.1)
         pag.hotkey("ctrl", "v")             # Einfügen des Rohteil.dxf Pfads
-
         pag.click(3151, 793)                # Öffnen !rohteil.dxf
         sleep(self.verweilzeit)                   # verweilzeit
+        self.status_update.emit("Rohteil DXF eingefügt!")
         pag.click(2914, 66)                 # Klick auf Ansichten
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2900, 133)                # Klick auf Ansicht Vorne
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2109, 668)                # Klick auf Layer
         sleep(self.verweilzeit)                   # verweilzeit
-
+        self.status_update.emit("Rohteilabmaße werden eingefügt....")
         pag.click(2246, 96)                 # Simulationsparameter
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2071, 192)                # Klick auf Bauteil
@@ -197,6 +200,8 @@ class EspritA(QObject):
         pag.press('tab')
         pag.typewrite('-4')
         pag.press('tab')
+
+        self.status_update.emit("Fertigteil wird erstellt....")
 
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2425, 574)                # Aktualisieren
@@ -239,20 +244,22 @@ class EspritA(QObject):
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2333, 618)                # OK Klicken
 
-        self.status_update.emit("Simulationsbauteile erstellt!")
+        self.status_update.emit(f"Simulationsbauteile erstellt!   {zeitstempel(1)}")
 
     def spannmittel_importieren(self) -> None:
         """Spannmittel wird aus dem aktuellen KW-Wochen Ordner, in Esprit importiert und die Automatisierung abgeschlossen."""
-
+        self.status_update.emit(f"Spannmittel Importieren gestartet.  {zeitstempel(1)}")
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2109, 668)                # Klick auf Layer (Fokussieren)
         sleep(0.2)                                # verweilzeit
+        self.status_update.emit("Layer werden ausgeblendet...")
         pag.click(1995, 713)                # Solid Layer ausblenden (Haken)
         sleep(0.2)                                # verweilzeit
         pag.click(1995, 729)                # Rohteil Layer ausblenden (Haken)
         sleep(0.2)                                # verweilzeit
         pag.doubleClick(2038, 827)          # Doppelklick auf Müll Layer
         sleep(self.verweilzeit)                   # verweilzeit
+        self.status_update.emit("Schraubstock wird geöffnet...")
         pag.click(1973, 63)                 # Öffnen !schraubstock.step
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2853, 795)                # Koordinaten vom Pfad im Öffnen Fenster
@@ -265,10 +272,10 @@ class EspritA(QObject):
 
         pag.click(3151, 793)                # Öffnen !schraubstock.step
         sleep(10)                                 # self.verweilzeit 10 sec (Warten auf Laden von STEP)
-        self.status_update.emit("Importiere Schraubstock...")
-
+        self.status_update.emit(f"Schraubstock erfolgreich importiert.  {zeitstempel(1)}")
         pag.click(2109, 640)                # Fokussieren Klick
         sleep(self.verweilzeit)                   # verweilzeit
+        self.status_update.emit("Schraubstock wird als Spannmittel definiert...")
         pag.hotkey('ctrl', 'a')             # Alles markieren im Müll Layer
         sleep(self.verweilzeit)                   # self.verweilzeit
         pag.click(2373, 126)                # Simulationsbauteil erstellen
@@ -278,6 +285,7 @@ class EspritA(QObject):
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(1995, 825)                # Müll Layer ausblenden (Haken)
         sleep(0.2)                                # verweilzeit
+        self.status_update.emit("Layer werden wieder eingeblendet...")
         pag.click(1995, 713)                # Solid Layer einblenden (Haken)
         sleep(0.2)                                # verweilzeit
         pag.click(1995, 729)                # Rohteil Layer einblenden (Haken)
@@ -286,7 +294,7 @@ class EspritA(QObject):
         sleep(0.2)                                # verweilzeit
         pag.click(2246, 96)                 # Simulationsparameter öffnen
         sleep(self.verweilzeit)                   # verweilzeit
-        self.status_update.emit("Automatisierung abgeschlossen!")
+        self.status_update.emit(f"Automatisierung abgeschlossen! {zeitstempel(1)}")
 
 #####################################################################################################
 
