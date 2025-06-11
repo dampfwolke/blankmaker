@@ -680,6 +680,10 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_22.addWidget(self.pb_wizard_a)
 
+        self.horizontalSpacer_40 = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_22.addItem(self.horizontalSpacer_40)
+
         self.cb_auto_option_a = QComboBox(self.wg_wizard_a_buttons)
         self.cb_auto_option_a.addItem("")
         self.cb_auto_option_a.addItem("")
@@ -769,6 +773,10 @@ class Ui_frm_main_window(object):
         self.pb_wizard_b.setAutoDefault(True)
 
         self.horizontalLayout_23.addWidget(self.pb_wizard_b)
+
+        self.horizontalSpacer_48 = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_23.addItem(self.horizontalSpacer_48)
 
         self.cb_auto_option_b = QComboBox(self.wg_wizard_b_buttons)
         self.cb_auto_option_b.addItem("")
@@ -1242,6 +1250,7 @@ class Ui_frm_main_window(object):
         font3.setFamilies([u"Comic Sans MS"])
         font3.setPointSize(8)
         font3.setBold(True)
+        font3.setKerning(True)
         font3.setHintingPreference(QFont.PreferFullHinting)
         self.statusbar.setFont(font3)
         self.statusbar.setStyleSheet(u"QStatusBar {\n"

@@ -7,7 +7,7 @@ from functools import partial
 
 # --- Konfiguration ---
 # Hier können alle Einstellungen einfach geändert werden.
-CONFIDENCE_LEVEL = 0.85
+CONFIDENCE_LEVEL = 0.88
 CLICK_TIMEOUT_SECONDS = 2.0
 IMAGE1_FILENAME = "verk.PNG"
 IMAGE2_FILENAME = "erstellen.PNG"

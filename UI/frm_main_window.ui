@@ -1957,6 +1957,22 @@
            </widget>
           </item>
           <item>
+           <spacer name="horizontalSpacer_40">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QComboBox" name="cb_auto_option_a">
             <property name="minimumSize">
              <size>
@@ -2209,6 +2225,22 @@
              <bool>true</bool>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_48">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item>
            <widget class="QComboBox" name="cb_auto_option_b">
@@ -3608,6 +3640,7 @@
      <family>Comic Sans MS</family>
      <pointsize>8</pointsize>
      <bold>true</bold>
+     <kerning>true</kerning>
      <hintingpreference>PreferFullHinting</hintingpreference>
     </font>
    </property>
