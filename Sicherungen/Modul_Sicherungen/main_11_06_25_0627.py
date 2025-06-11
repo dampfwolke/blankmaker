@@ -24,17 +24,13 @@ from UI.animated_tabhelper import AnimatedTabHelper
 from einstellungen import Settings
 
 class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
-    # --- Python Commander Konstanten ---
-    NC_BASE_PATH = Path("K:/NC-PGM")
-    MACHINES = ["HERMLE-C40", "HERMLE-C400", "DMU-EVO60", "DMU-100EVO", "DMC650V", "DMC1035V"]
-
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.frm_settings = Settings()
         self.settings = load_settings()
-        
-        # --- UI-Initialisierung ---
+        # self.gb_python_commander.setHidden(True)
+
         self.running_processes = {}
         self.process_check_timer = qtc.QTimer(self)
         self.process_check_timer.timeout.connect(self.check_running_processes)
@@ -42,6 +38,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.wg_datum_editieren.setHidden(True)
         self.le_pfad.setDisabled(True)
         self.fr_scripts.setHidden(True)
+        self.le_at_nr.setDisabled(True)
         self.wg_fertigtielmasse.setHidden(True)
         self.wg_sleep_timer.setHidden(True)
         self.de_datum.setDate(qtc.QDate.currentDate())
@@ -66,7 +63,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
         self.initialize_ui_elements()
 
-        # --- Signale verbinden ---
+        # Signale verbinden
         self.actionEinstellungen.triggered.connect(self.execute_frm_settings)
         self.pb_rechteck.clicked.connect(self.rechteck_erstellen_clicked)
         self.le_rechteck_hoehe.editingFinished.connect(self.rechteck_erstellen_clicked)
@@ -80,113 +77,12 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.pb_esprit_start_makro.clicked.connect(self.on_esprit_makro_clicked)
         self.pb_wizard_a.clicked.connect(self.on_wizard_a_clicked)
 
-        # --- Python Commander Setup ---
-        self.le_at_nr.setDisabled(False)
-        projekt_prefix = self.settings.get("projekt_prefix", "").replace("AT-", "")
-        self.le_at_nr.setText(projekt_prefix)
-
-        self.pb_rausspielen.clicked.connect(self.on_rausspielen_clicked)
-        
-        # Timer für die Programmsuche
-        self.nc_file_check_timer = qtc.QTimer(self)
-        self.nc_file_check_timer.timeout.connect(self.update_nc_file_count)
-        self.nc_file_check_timer.start(2000)
-        self.update_nc_file_count()
-
-    @qtc.Slot()
-    def update_nc_file_count(self):
-        """Sucht nach .H/.h-Dateien, aktualisiert die LCD-Anzeige und den Button-Stil."""
-        wks = self.settings.get("wks")
-        if not wks:
-            self.lcdn_programme_gefunden.display(0)
-            return
-
-        if not self.NC_BASE_PATH.is_dir():
-            if self.lcdn_programme_gefunden.intValue() != -1:
-                self.statusBar().showMessage(f"Fehler: NC-Basispfad '{self.NC_BASE_PATH}' nicht gefunden!", 10000)
-                self.lcdn_programme_gefunden.display(-1)
-            return
-            
-        wks_folder = f"WKS{wks}"
-        found_files_count = 0
-        for machine in self.MACHINES:
-            source_dir = self.NC_BASE_PATH / machine / wks_folder
-            if source_dir.is_dir():
-                found_files_count += len(list(source_dir.glob('*.[hH]')))
-
-        self.lcdn_programme_gefunden.display(found_files_count)
-
-        # NEU: Button-Stil basierend auf der Anzahl der gefundenen Programme aktualisieren
-        if found_files_count > 0:
-            # Setzt eine auffällige Farbe, wenn Programme zum Rausspielen bereit sind
-            self.pb_rausspielen.setStyleSheet("background-color: #FFA500; color: black;")
-        else:
-            # Setzt den Stil auf den Standard zurück, wenn keine Programme gefunden wurden
-            self.pb_rausspielen.setStyleSheet("")
-    
-    @qtc.Slot()
-    def on_rausspielen_clicked(self):
-        """
-        Sammelt NC-Programme, verschiebt sie in einen neuen Projektordner
-        und löscht die Originaldateien.
-        """
-        at_prefix = self.le_at_nr.text()
-        auftrags_nr = self.le_auftrags_nr.text()
-
-        # 1. Eingaben validieren
-        if not at_prefix:
-            self.statusBar().showMessage("Fehler: Bitte eine AT-Nr. angeben.", 7000)
-            return
-        if not auftrags_nr:
-            self.statusBar().showMessage("Fehler: Bitte eine Auftragsnummer angeben.", 7000)
-            return
-            
-        # 2. Pfade aus Einstellungen und Konstanten laden
-        wks = self.settings.get("wks")
-        if not wks:
-            self.statusBar().showMessage("Fehler: 'wks' nicht in Einstellungen gefunden.", 7000)
-            return
-
-        wks_folder = f"WKS{wks}"
-        
-        # 3. Alle zu verschiebenden Dateien sammeln
-        files_to_move = []
-        for machine in self.MACHINES:
-            source_dir = self.NC_BASE_PATH / machine / wks_folder
-            if source_dir.is_dir():
-                files_to_move.extend(source_dir.glob('*.[hH]'))
-
-        if not files_to_move:
-            self.statusBar().showMessage("Keine Programme zum Verschieben im WKS-Ordner gefunden.", 7000)
-            return
-
-        # 4. Dateien verschieben (kopieren und löschen)
-        moved_count = 0
-        dest_folder_name = f"AT{at_prefix}-{auftrags_nr}"
-        try:
-            for source_file in files_to_move:
-                machine_name = source_file.parent.parent.name
-                destination_dir = self.NC_BASE_PATH / machine_name / dest_folder_name
-                
-                destination_dir.mkdir(parents=True, exist_ok=True)
-                destination_file = destination_dir / source_file.name
-                
-                shutil.copy2(source_file, destination_file)
-                source_file.unlink()
-                moved_count += 1
-            
-            self.statusBar().showMessage(f"{moved_count} Programme erfolgreich nach '{dest_folder_name}' verschoben.", 7000)
-            
-            # KORRIGIERT: Das Feld wird nicht mehr geleert, wie gewünscht.
-            # self.le_auftrags_nr.clear()
-
-        except Exception as e:
-            self.statusBar().showMessage(f"Fehler beim Verschieben: {e}", 10000)
-            print(f"[FEHLER] Python Commander: {e}")
-            
-        self.update_nc_file_count()
-
+    # --- NEUE HILFSMETHODE zur Prüfung des Zielordners ---
     def _get_and_validate_target_dir(self) -> Path | None:
+        """
+        Holt den Pfad aus le_pfad und prüft, ob er als Ordner existiert.
+        Gibt ein Path-Objekt bei Erfolg oder None bei einem Fehler zurück.
+        """
         dir_path_str = self.le_pfad.text()
         if not dir_path_str:
             self.statusBar().showMessage("Fehler: Zielpfad ist nicht angegeben.", 7000)
@@ -198,7 +94,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             return None
         
         return target_dir
-    
+
     @qtc.Slot(str)
     def update_spanntiefe_from_z_fertig(self, text: str):
         is_valid, spanntiefe_value = calculate_spanntiefe(text)
@@ -277,6 +173,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         return []
 
     def get_args_for_backup_script(self):
+        # GEÄNDERT: Verwendet die neue Hilfsmethode
         source_folder = self._get_and_validate_target_dir()
         if not source_folder:
             self.statusBar().showMessage("Backup-Fehler: Quell-Pfad ungültig oder nicht vorhanden.", 7000)
@@ -351,6 +248,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         x_roh = self.le_rechteck_laenge.text()
         y_roh = self.le_rechteck_breite.text()
         z_roh = self.le_rechteck_hoehe.text()
+        # GEÄNDERT: Verwendet die neue Hilfsmethode
         pfad = self._get_and_validate_target_dir()
         if not pfad: return
         bearbeitung = self.cb_bearbeitung_auswahl.currentText()
@@ -384,6 +282,8 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
     @qtc.Slot()
     def spannmittel_erstellen(self):
+        # --- GEÄNDERT: Logik wurde angepasst ---
+        # 1. Validieren der Eingaben
         spannmittel_typ = self.cb_spannmittel.currentText()
         if not spannmittel_typ or "Fehler" in spannmittel_typ or "Keine" in spannmittel_typ:
             self.statusBar().showMessage("Fehler: Bitte gültiges Spannmittel aus der Liste wählen.", 7000)
@@ -393,10 +293,12 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             self.statusBar().showMessage("Fehler: Bitte eine Spannmittel-Größe angeben.", 7000)
             return
         
+        # 2. Zielordner validieren mit der neuen Hilfsmethode
         ziel_ordner = self._get_and_validate_target_dir()
         if not ziel_ordner:
-            return 
+            return # Fehlermeldung kommt schon aus der Hilfsmethode
 
+        # 3. Pfade zusammenbauen
         spannmittel_basis_pfad_str = self.settings.get("spannmittel_basis_pfad")
         if not spannmittel_basis_pfad_str:
             self.statusBar().showMessage("Fehler: 'spannmittel_basis_pfad' nicht in Einstellungen gefunden.", 7000)
@@ -406,12 +308,14 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         quell_datei = quell_ordner / f"{spannmittel_groesse}.step"
         ziel_datei = ziel_ordner / f"!schraubstock{quell_datei.suffix}"
         
+        # 4. Kopiervorgang
         try:
-            if not quell_datei.is_file(): 
+            if not quell_datei.is_file(): # Sicherer: Prüft ob es eine Datei ist
                 self.statusBar().showMessage(f"Fehler: Quelldatei nicht gefunden: {quell_datei.name}", 7000)
                 print(f"[FEHLER] Quelldatei nicht gefunden: {quell_datei}")
                 return
             
+            # Die Zeile ziel_ordner.mkdir(...) wurde entfernt!
             shutil.copy2(quell_datei, ziel_datei)
             self.statusBar().showMessage(f"Spannmittel '{ziel_datei.name}' erfolgreich erstellt.", 7000)
             print(f"[INFO] Spannmittel kopiert: '{quell_datei}' -> '{ziel_datei}'")
@@ -422,6 +326,8 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
     @qtc.Slot()
     def rechteck_erstellen_clicked(self):
+        # --- GEÄNDERT: Logik wurde angepasst ---
+        # 1. Maße validieren
         length_str = self.le_rechteck_laenge.text()
         width_str = self.le_rechteck_breite.text()
         height_str = self.le_rechteck_hoehe.text()
@@ -430,24 +336,30 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             self.statusBar().showMessage(f"Rechteck Fehler: {error_message}", 7000)
             return
         
+        # 2. Zielordner validieren
         dir_path = self._get_and_validate_target_dir()
         if not dir_path:
             return
 
+        # 3. DXF erstellen
         file_name = "!rohteil.dxf"
         full_output_path = str(dir_path / file_name)
         self.statusBar().showMessage(f"Erstelle Rechteck-DXF: {file_name}...", 3000)
         
+        # WICHTIG: Stelle sicher, dass `rechteck_erstellen` in `utils/rechteck.py`
+        # die Zeile `file_path.parent.mkdir(...)` ebenfalls entfernt hat!
         success, message_from_module = rechteck_erstellen(length, width, height, full_output_path)
         
         if success:
             self.statusBar().showMessage(f"Rechteck erstellt ({zeitstempel(1)})", 7000)
-            self.spannmittel_erstellen() 
+            self.spannmittel_erstellen() # Ruft Spannmittel-Erstellung auf, die ihre eigene Prüfung hat
         else:
             self.statusBar().showMessage(f"Rechteck Fehler DXF: {message_from_module}", 7000)
 
     @qtc.Slot()
     def kreis_erstellen_clicked(self):
+        # --- GEÄNDERT: Logik wurde angepasst ---
+        # 1. Maße validieren
         diameter_str = self.le_durchmesser.text()
         height_str = self.le_z_kreis.text()
         is_valid, diameter, height, error_message = validate_circle_dimensions(diameter_str, height_str)
@@ -455,14 +367,18 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             self.statusBar().showMessage(f"Kreis Fehler: {error_message}", 7000)
             return
         
+        # 2. Zielordner validieren
         dir_path = self._get_and_validate_target_dir()
         if not dir_path:
             return
 
+        # 3. DXF erstellen
         file_name = "!rohteil.dxf"
         full_output_path = str(dir_path / file_name)
         self.statusBar().showMessage(f"Erstelle Kreis-DXF: {file_name}...", 3000)
         
+        # WICHTIG: Stelle sicher, dass `kreis_erstellen` in `utils/kreis.py`
+        # die Zeile `file_path.parent.mkdir(...)` ebenfalls entfernt hat!
         success, message_from_module = kreis_erstellen(diameter, height, full_output_path)
 
         if success:
