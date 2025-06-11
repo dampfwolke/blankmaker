@@ -5,7 +5,7 @@ from PySide6.QtCore import QObject, Signal
 import pyautogui as pag
 import clipboard
 
-from click_image import click_image
+from utils.click_image import click_image
 
 class EspritA(QObject):
     # --- Signale für die Kommunikation mit der GUI ---
@@ -54,7 +54,10 @@ class EspritA(QObject):
             self.ausfuellhilfe_a()
         elif self.typ == "Gandalf":
             self.status_update.emit("Starte Automatisierung mit 'Gandalf'")
-            self.run()
+            self.ausfuellhilfe_a()
+            self.esprit_datei_speichern()
+            self.rohteil_erstellen()
+            self.spannmittel_importieren()
         else:
             self.status_update.emit("Kein gültiger 'automations_typ' ausgewählt!")
             print("Es wurde kein gültiger 'automations_typ' ausgewählt!")
@@ -157,7 +160,7 @@ class EspritA(QObject):
         pag.click(2853, 795)                # Koordinaten vom Pfad im Öffnen Fenster
         sleep(self.verweilzeit)                   # verweilzeit
 
-        pfad_rohteil = self.pfad / "!rohteil.dxt"
+        pfad_rohteil = self.pfad / "!rohteil.dxf"
         clipboard.copy(str(pfad_rohteil))
         sleep(0.1)
         pag.hotkey("ctrl", "v")             # Einfügen des Rohteil.dxf Pfads
@@ -287,36 +290,40 @@ class EspritA(QObject):
 
 #####################################################################################################
 
-
     def run(self):
-        """
-        Hauptmethode, die den Automationsprozess startet.
-        Hier kommt deine eigentliche Logik hin.
-        """
-        self.status_update.emit("Starte Wizard A...")
-        print(f"Wizard A gestartet mit folgenden Daten:\n{self}")
+        self.automations_typ_bestimmen()
 
-        if not self.roh_abmasse_pruefen():
-            # Prozess mit Fehlermeldung beenden
-            self.finished.emit(False, "Validierung der Abmaße fehlgeschlagen.")
-            return
 
-        # --- Hier deine Logik einfügen ---
-        # Beispiel: Simuliere Arbeitsschritte und sende Updates an die GUI
-        try:
-            self.status_update.emit("Schritt 1: Analysiere Geometrie...")
-            sleep(self.sleep_timer / 2.0)  # Simuliere Arbeit
 
-            self.status_update.emit("Schritt 2: Generiere Werkzeugwege...")
-            sleep(self.sleep_timer / 2.0)  # Simuliere Arbeit
-
-            # Beispiel für eine Interaktion: Zeige eine Info-Box über die GUI
-            self.show_info_dialog.emit("Hinweis", f"Die Bearbeitung '{self.bearbeitung_auswahl}' wurde ausgewählt.")
-
-            # Wenn alles gut geht, sende ein Erfolgssignal
-            self.finished.emit(True, "Wizard A erfolgreich abgeschlossen.")
-
-        except Exception as e:
-            # Bei einem Fehler, sende ein Fehlersignal
-            error_message = f"Ein Fehler ist im Wizard A aufgetreten: {e}"
-            self.finished.emit(False, error_message)
+    # def run(self):
+    #     """
+    #     Hauptmethode, die den Automationsprozess startet.
+    #     Hier kommt deine eigentliche Logik hin.
+    #     """
+    #     self.status_update.emit("Starte Wizard A...")
+    #     print(f"Wizard A gestartet mit folgenden Daten:\n{self}")
+    #
+    #     if not self.roh_abmasse_pruefen():
+    #         # Prozess mit Fehlermeldung beenden
+    #         self.finished.emit(False, "Validierung der Abmaße fehlgeschlagen.")
+    #         return
+    #
+    #     # --- Hier deine Logik einfügen ---
+    #     # Beispiel: Simuliere Arbeitsschritte und sende Updates an die GUI
+    #     try:
+    #         self.status_update.emit("Schritt 1: Analysiere Geometrie...")
+    #         sleep(self.sleep_timer / 2.0)  # Simuliere Arbeit
+    #
+    #         self.status_update.emit("Schritt 2: Generiere Werkzeugwege...")
+    #         sleep(self.sleep_timer / 2.0)  # Simuliere Arbeit
+    #
+    #         # Beispiel für eine Interaktion: Zeige eine Info-Box über die GUI
+    #         self.show_info_dialog.emit("Hinweis", f"Die Bearbeitung '{self.bearbeitung_auswahl}' wurde ausgewählt.")
+    #
+    #         # Wenn alles gut geht, sende ein Erfolgssignal
+    #         self.finished.emit(True, "Wizard A erfolgreich abgeschlossen.")
+    #
+    #     except Exception as e:
+    #         # Bei einem Fehler, sende ein Fehlersignal
+    #         error_message = f"Ein Fehler ist im Wizard A aufgetreten: {e}"
+    #         self.finished.emit(False, error_message)
