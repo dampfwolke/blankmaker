@@ -1498,7 +1498,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>99</width>
+              <width>101</width>
               <height>20</height>
              </size>
             </property>
@@ -2075,10 +2075,10 @@
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>10</number>
+             <number>100</number>
             </property>
             <property name="pageStep">
-             <number>2</number>
+             <number>5</number>
             </property>
             <property name="sliderPosition">
              <number>1</number>
@@ -2386,7 +2386,7 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>47</width>
+                 <width>45</width>
                  <height>20</height>
                 </size>
                </property>
@@ -2509,7 +2509,7 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>48</width>
+                 <width>45</width>
                  <height>20</height>
                 </size>
                </property>
@@ -2632,7 +2632,7 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>47</width>
+                 <width>45</width>
                  <height>20</height>
                 </size>
                </property>
@@ -2755,7 +2755,7 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>50</width>
+                 <width>52</width>
                  <height>20</height>
                 </size>
                </property>
@@ -3187,7 +3187,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>117</width>
+              <width>118</width>
               <height>20</height>
              </size>
             </property>
@@ -3232,7 +3232,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>40</width>
+              <width>42</width>
               <height>20</height>
              </size>
             </property>
@@ -3621,7 +3621,7 @@
      <x>0</x>
      <y>0</y>
      <width>489</width>
-     <height>21</height>
+     <height>33</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">

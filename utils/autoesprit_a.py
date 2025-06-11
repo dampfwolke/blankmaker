@@ -2,6 +2,7 @@ from pathlib import Path
 import time
 from PySide6.QtCore import QObject, Signal
 
+from click_image import click_image
 
 class EspritA(QObject):
     # --- Signale für die Kommunikation mit der GUI ---
@@ -25,6 +26,9 @@ class EspritA(QObject):
         self.typ = typ
         self.sleep_timer = sleep_timer
 
+        # Verzögerung zwischen den Aktionen (min. 0.3s, max. 10.2s) je nach QSlider Einstellung im main script
+        self.verweilzeit: float = round(0.2 + (self.sleep_timer / 10), 2)
+
         # Fertigteil Abmaße von dem aktuellen Solid Bauteil (werden in dieser Klasse ausgelesen und weiter verarbeitet)
         self.x_fertig = None
         self.y_fertig = None
@@ -37,8 +41,14 @@ class EspritA(QObject):
                 f"Umfang der Automation: {self.typ}\n"
                 f"Verweilzeit: {self.sleep_timer} Sekunden")
 
+    def automations_typ_bestimmen(self) -> str:
+        """ Hier wird entschieden welche Autoaktionsabschnitte ausgeführt werden z.B. nur Ausfüllhilfe oder vollständig etc.
+        abhängig von dem übergebenen Wert aus der "cb_bearbeitung_auswahl" im main script
+        :return: str """
+        pass
 
     def roh_abmasse_pruefen(self) -> bool:
+        """ Prüfung ob Rohteilmaße gültig sind :return: bool"""
         try:
             if float(self.x_roh) > 0 and float(self.y_roh) > 0 and float(self.z_roh) > 0:
                 return True
@@ -49,16 +59,31 @@ class EspritA(QObject):
             self.status_update.emit("Fehler: Rohteilabmaße sind keine gültigen Zahlen.")
             return False
 
-
 #####################################################################################################
-    def fertigteil_bounding_box_auslesen(self):
-        pass
-
-    def fertig_und_rohmasse_vergleichen(self):
-        pass
+    def fertigteil_bounding_box_auslesen(self) -> tuple[str]:
+        """Mithilfe von pyautogui und Hilfsmodul click_image wird in Esprit die Bounding Box des aktuellen Bauteils ausgelesen. :return: tuple[str]"""
 
     def fertig_abmasse_pruefen(self) -> bool:
         pass
+
+    def fertig_und_rohmasse_vergleichen(self) -> bool:
+        pass
+
+    def esprit_dateiname_pruefen(self) -> bool:
+        pass
+
+    def esprit_datei_speichern(self):
+        pass
+
+    def ausfuellhilfe_a(self):
+        pass
+
+    def rohteil_dxf_importieren(self):
+        pass
+
+    def spannmittel_importieren(self):
+        pass
+
 #####################################################################################################
 
 
