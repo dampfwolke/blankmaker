@@ -87,7 +87,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.le_at_nr.setDisabled(False)
         projekt_prefix = self.settings.get("projekt_prefix", "").replace("AT-", "")
         self.le_at_nr.setText(projekt_prefix)
-
         self.pb_rausspielen.clicked.connect(self.on_rausspielen_clicked)
         
         # Timer für die Programmsuche
@@ -95,6 +94,45 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.nc_file_check_timer.timeout.connect(self.update_nc_file_count)
         self.nc_file_check_timer.start(2000)
         self.update_nc_file_count()
+
+##############################################################################################################
+    @qtc.Slot()
+    def on_wizard_a_clicked(self):
+        x_roh = self.le_rechteck_laenge.text()
+        y_roh = self.le_rechteck_breite.text()
+        z_roh = self.le_rechteck_hoehe.text()
+        pfad = self._get_and_validate_target_dir()
+        if not pfad: return
+        bearbeitung = self.cb_bearbeitung_auswahl.currentText()
+        typ = self.cb_auto_option_a.currentText()
+        sleep_timer = self.hsl_sleep_timer.value()
+
+        if not all([x_roh, y_roh, z_roh]):
+            self.statusBar().showMessage("Fehler: Bitte Rohteilmaße sicherstellen.", 7000)
+            return
+
+        self.wizard_a = EspritA(
+            x_roh=x_roh, y_roh=y_roh, z_roh=z_roh, pfad=pfad,
+            bearbeitung_auswahl=bearbeitung, typ=typ, sleep_timer=sleep_timer
+        )
+        self.wizard_a.status_update.connect(self.statusBar().showMessage)
+        self.wizard_a.show_info_dialog.connect(self.show_information_dialog)
+        self.wizard_a.finished.connect(self.on_wizard_a_finished)
+        self.wizard_a.run()
+
+    @qtc.Slot(bool, str)
+    def on_wizard_a_finished(self, success: bool, message: str):
+        print(f"Wizard A beendet. Erfolg: {success}. Nachricht: {message}")
+        if success:
+            self.statusBar().showMessage(f"Erfolg: {message} ({zeitstempel(1)})", 7000)
+        else:
+            self.statusBar().showMessage(f"Fehler: {message} ({zeitstempel(1)})", 10000)
+
+    @qtc.Slot(str, str)
+    def show_information_dialog(self, title: str, text: str):
+        qtw.QMessageBox.information(self, title, text)
+######################################################################################################
+
 
     @qtc.Slot()
     def update_nc_file_count(self):
@@ -179,9 +217,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
                 moved_count += 1
             
             self.statusBar().showMessage(f"{moved_count} Programme erfolgreich nach '{dest_folder_name}' verschoben.", 7000)
-            
-            # KORRIGIERT: Das Feld wird nicht mehr geleert, wie gewünscht.
-            # self.le_auftrags_nr.clear()
 
         except Exception as e:
             self.statusBar().showMessage(f"Fehler beim Verschieben: {e}", 10000)
@@ -348,42 +383,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.frm_settings = Settings()
         self.statusBar().showMessage(f"Einstellungen geöffnet. ({zeitstempel(1)})", 7000)
         self.frm_settings.show()
-
-    @qtc.Slot()
-    def on_wizard_a_clicked(self):
-        x_roh = self.le_rechteck_laenge.text()
-        y_roh = self.le_rechteck_breite.text()
-        z_roh = self.le_rechteck_hoehe.text()
-        pfad = self._get_and_validate_target_dir()
-        if not pfad: return
-        bearbeitung = self.cb_bearbeitung_auswahl.currentText()
-        typ = self.cb_auto_option_a.currentText()
-        sleep_timer = self.hsl_sleep_timer.value()
-
-        if not all([x_roh, y_roh, z_roh]):
-            self.statusBar().showMessage("Fehler: Bitte Rohteilmaße sicherstellen.", 7000)
-            return
-
-        self.wizard_a = EspritA(
-            x_roh=x_roh, y_roh=y_roh, z_roh=z_roh, pfad=pfad,
-            bearbeitung_auswahl=bearbeitung, typ=typ, sleep_timer=sleep_timer
-        )
-        self.wizard_a.status_update.connect(self.statusBar().showMessage)
-        self.wizard_a.show_info_dialog.connect(self.show_information_dialog)
-        self.wizard_a.finished.connect(self.on_wizard_a_finished)
-        self.wizard_a.run()
-
-    @qtc.Slot(bool, str)
-    def on_wizard_a_finished(self, success: bool, message: str):
-        print(f"Wizard A beendet. Erfolg: {success}. Nachricht: {message}")
-        if success:
-            self.statusBar().showMessage(f"Erfolg: {message} ({zeitstempel(1)})", 7000)
-        else:
-            self.statusBar().showMessage(f"Fehler: {message} ({zeitstempel(1)})", 10000)
-
-    @qtc.Slot(str, str)
-    def show_information_dialog(self, title: str, text: str):
-        qtw.QMessageBox.information(self, title, text)
 
     @qtc.Slot()
     def spannmittel_erstellen(self):

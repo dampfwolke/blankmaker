@@ -1,11 +1,11 @@
 {
-  "nc_base_path": "K:\\Esprit\\NC-Files",
-  "nutzername": "Hasanovic",
-  "pfad_backup": "C:\\Users\\hasanovic\\Desktop\\Backup",
+  "nc_base_path": "C:\\Users\\Ismail\\Desktop\\Zielordner\\NC-Files",
+  "nutzername": "hasanovic",
+  "pfad_backup": "C:\\Users\\Ismail\\Desktop\\Zielordner\\Backup",
   "pfad_template": "{base_path}/{projekt}-KW{kw}/{nutzer}/{wochentag}",
   "platzhalter_1": "platzhalter_1",
   "projekt_prefix": "AT-25",
-  "spannmittel_basis_pfad": "C:\\Users\\hasanovic\\Desktop\\Spannmittel",
+  "spannmittel_basis_pfad": "C:\\Users\\Ismail\\Documents\\CAD\\Spannmittel",
   "wks": "07",
   "styles": "Combinear.qss"
 }
