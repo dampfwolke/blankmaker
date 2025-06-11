@@ -29,7 +29,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.setupUi(self)
         self.frm_settings = Settings()
         self.settings = load_settings()
-        self.gb_python_commander.setHidden(True)
+        # self.gb_python_commander.setHidden(True)
 
         self.running_processes = {}
         self.process_check_timer = qtc.QTimer(self)
