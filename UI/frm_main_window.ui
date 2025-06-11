@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>350</width>
+    <width>489</width>
     <height>944</height>
    </rect>
   </property>
@@ -68,13 +68,13 @@
       <property name="minimumSize">
        <size>
         <width>400</width>
-        <height>150</height>
+        <height>170</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>800</width>
-        <height>150</height>
+        <height>180</height>
        </size>
       </property>
       <property name="font">
@@ -558,7 +558,7 @@
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>119</width>
+               <width>118</width>
                <height>20</height>
               </size>
              </property>
@@ -991,13 +991,13 @@
       <property name="minimumSize">
        <size>
         <width>400</width>
-        <height>80</height>
+        <height>100</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>200</height>
+        <height>250</height>
        </size>
       </property>
       <property name="font">
@@ -1045,7 +1045,7 @@
            <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>4</number>
+           <number>5</number>
           </property>
           <item>
            <widget class="QLabel" name="lb_pfad">
@@ -1167,7 +1167,7 @@
            <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>0</number>
+           <number>3</number>
           </property>
           <item>
            <widget class="QComboBox" name="cb_spannmittel">
@@ -1322,7 +1322,7 @@
            <number>6</number>
           </property>
           <property name="bottomMargin">
-           <number>9</number>
+           <number>5</number>
           </property>
           <item>
            <widget class="QLabel" name="lb_spannmittel_wert">
@@ -1764,7 +1764,7 @@
            <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>0</number>
+           <number>3</number>
           </property>
           <item>
            <widget class="QLabel" name="lb_zeichnungsnr">
@@ -1819,6 +1819,12 @@
               <height>25</height>
              </size>
             </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>800</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Comic Sans MS</family>
@@ -1859,7 +1865,7 @@
            <number>0</number>
           </property>
           <property name="topMargin">
-           <number>0</number>
+           <number>3</number>
           </property>
           <property name="bottomMargin">
            <number>0</number>
@@ -2008,7 +2014,7 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_24">
           <property name="spacing">
-           <number>0</number>
+           <number>5</number>
           </property>
           <property name="topMargin">
            <number>0</number>
@@ -2717,7 +2723,7 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>54</width>
+                 <width>50</width>
                  <height>20</height>
                 </size>
                </property>
@@ -3007,6 +3013,15 @@
           </size>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_20">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>5</number>
+          </property>
           <item>
            <widget class="QLabel" name="lb_auftrags_nr">
             <property name="sizePolicy">
@@ -3052,7 +3067,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>17</width>
+              <width>28</width>
               <height>20</height>
              </size>
             </property>
@@ -3573,7 +3588,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>350</width>
+     <width>489</width>
      <height>21</height>
     </rect>
    </property>
@@ -3591,7 +3606,7 @@
    <property name="font">
     <font>
      <family>Comic Sans MS</family>
-     <pointsize>10</pointsize>
+     <pointsize>8</pointsize>
      <bold>true</bold>
      <hintingpreference>PreferFullHinting</hintingpreference>
     </font>

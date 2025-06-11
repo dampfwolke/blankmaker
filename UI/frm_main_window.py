@@ -27,7 +27,7 @@ class Ui_frm_main_window(object):
     def setupUi(self, frm_main_window):
         if not frm_main_window.objectName():
             frm_main_window.setObjectName(u"frm_main_window")
-        frm_main_window.resize(350, 944)
+        frm_main_window.resize(489, 944)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -58,8 +58,8 @@ class Ui_frm_main_window(object):
         self.tw_rohteil_erstellen.setObjectName(u"tw_rohteil_erstellen")
         sizePolicy.setHeightForWidth(self.tw_rohteil_erstellen.sizePolicy().hasHeightForWidth())
         self.tw_rohteil_erstellen.setSizePolicy(sizePolicy)
-        self.tw_rohteil_erstellen.setMinimumSize(QSize(400, 150))
-        self.tw_rohteil_erstellen.setMaximumSize(QSize(800, 150))
+        self.tw_rohteil_erstellen.setMinimumSize(QSize(400, 170))
+        self.tw_rohteil_erstellen.setMaximumSize(QSize(800, 180))
         font1 = QFont()
         font1.setFamilies([u"Comic Sans MS"])
         font1.setPointSize(8)
@@ -220,7 +220,7 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_4.setSpacing(0)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalLayout_4.setContentsMargins(-1, 0, -1, 0)
-        self.horizontalSpacer = QSpacerItem(119, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer = QSpacerItem(118, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_4.addItem(self.horizontalSpacer)
 
@@ -374,8 +374,8 @@ class Ui_frm_main_window(object):
         sizePolicy4.setVerticalStretch(0)
         sizePolicy4.setHeightForWidth(self.gb_spannmittel.sizePolicy().hasHeightForWidth())
         self.gb_spannmittel.setSizePolicy(sizePolicy4)
-        self.gb_spannmittel.setMinimumSize(QSize(400, 80))
-        self.gb_spannmittel.setMaximumSize(QSize(16777215, 200))
+        self.gb_spannmittel.setMinimumSize(QSize(400, 100))
+        self.gb_spannmittel.setMaximumSize(QSize(16777215, 250))
         self.gb_spannmittel.setFont(font1)
         self.gb_spannmittel.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
         self.verticalLayout_3 = QVBoxLayout(self.gb_spannmittel)
@@ -389,7 +389,7 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_10 = QHBoxLayout(self.wg_zielpfad)
         self.horizontalLayout_10.setSpacing(0)
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
-        self.horizontalLayout_10.setContentsMargins(-1, 0, -1, 4)
+        self.horizontalLayout_10.setContentsMargins(-1, 0, -1, 5)
         self.lb_pfad = QLabel(self.wg_zielpfad)
         self.lb_pfad.setObjectName(u"lb_pfad")
         sizePolicy3.setHeightForWidth(self.lb_pfad.sizePolicy().hasHeightForWidth())
@@ -430,7 +430,7 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_11 = QHBoxLayout(self.fr_spannmittelauswahl)
         self.horizontalLayout_11.setSpacing(0)
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
-        self.horizontalLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_11.setContentsMargins(0, 0, 0, 3)
         self.cb_spannmittel = QComboBox(self.fr_spannmittelauswahl)
         self.cb_spannmittel.setObjectName(u"cb_spannmittel")
         self.cb_spannmittel.setMinimumSize(QSize(180, 25))
@@ -472,7 +472,7 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_12 = QHBoxLayout(self.wg_spannmittel_breite)
         self.horizontalLayout_12.setSpacing(0)
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.horizontalLayout_12.setContentsMargins(-1, 6, -1, 9)
+        self.horizontalLayout_12.setContentsMargins(-1, 6, -1, 5)
         self.lb_spannmittel_wert = QLabel(self.wg_spannmittel_breite)
         self.lb_spannmittel_wert.setObjectName(u"lb_spannmittel_wert")
         sizePolicy3.setHeightForWidth(self.lb_spannmittel_wert.sizePolicy().hasHeightForWidth())
@@ -616,7 +616,7 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_13 = QHBoxLayout(self.wg_zeichnungsnr)
         self.horizontalLayout_13.setSpacing(0)
         self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
-        self.horizontalLayout_13.setContentsMargins(-1, 0, -1, 0)
+        self.horizontalLayout_13.setContentsMargins(-1, 0, -1, 3)
         self.lb_zeichnungsnr = QLabel(self.wg_zeichnungsnr)
         self.lb_zeichnungsnr.setObjectName(u"lb_zeichnungsnr")
         sizePolicy3.setHeightForWidth(self.lb_zeichnungsnr.sizePolicy().hasHeightForWidth())
@@ -634,6 +634,7 @@ class Ui_frm_main_window(object):
         self.le_zeichnungsnr = QLineEdit(self.wg_zeichnungsnr)
         self.le_zeichnungsnr.setObjectName(u"le_zeichnungsnr")
         self.le_zeichnungsnr.setMinimumSize(QSize(335, 25))
+        self.le_zeichnungsnr.setMaximumSize(QSize(16777215, 800))
         self.le_zeichnungsnr.setFont(font1)
 
         self.horizontalLayout_13.addWidget(self.le_zeichnungsnr)
@@ -650,7 +651,7 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_22 = QHBoxLayout(self.wg_wizard_a_buttons)
         self.horizontalLayout_22.setSpacing(0)
         self.horizontalLayout_22.setObjectName(u"horizontalLayout_22")
-        self.horizontalLayout_22.setContentsMargins(-1, 0, -1, 0)
+        self.horizontalLayout_22.setContentsMargins(-1, 3, -1, 0)
         self.tb_wizard_a_aufklappen = QToolButton(self.wg_wizard_a_buttons)
         self.tb_wizard_a_aufklappen.setObjectName(u"tb_wizard_a_aufklappen")
         self.tb_wizard_a_aufklappen.setMinimumSize(QSize(20, 20))
@@ -700,7 +701,7 @@ class Ui_frm_main_window(object):
         self.wg_sleep_timer.setMinimumSize(QSize(0, 25))
         self.wg_sleep_timer.setMaximumSize(QSize(16777215, 30))
         self.horizontalLayout_24 = QHBoxLayout(self.wg_sleep_timer)
-        self.horizontalLayout_24.setSpacing(0)
+        self.horizontalLayout_24.setSpacing(5)
         self.horizontalLayout_24.setObjectName(u"horizontalLayout_24")
         self.horizontalLayout_24.setContentsMargins(-1, 0, -1, 0)
         self.lb_sleep_timer = QLabel(self.wg_sleep_timer)
@@ -935,7 +936,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_17.addWidget(self.lb_spanntiefe_b)
 
-        self.horizontalSpacer_31 = QSpacerItem(54, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_31 = QSpacerItem(50, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_17.addItem(self.horizontalSpacer_31)
 
@@ -1033,7 +1034,9 @@ class Ui_frm_main_window(object):
         self.wg_auftrags_nr.setMinimumSize(QSize(0, 20))
         self.wg_auftrags_nr.setMaximumSize(QSize(16777215, 25))
         self.horizontalLayout_20 = QHBoxLayout(self.wg_auftrags_nr)
+        self.horizontalLayout_20.setSpacing(0)
         self.horizontalLayout_20.setObjectName(u"horizontalLayout_20")
+        self.horizontalLayout_20.setContentsMargins(-1, 0, -1, 5)
         self.lb_auftrags_nr = QLabel(self.wg_auftrags_nr)
         self.lb_auftrags_nr.setObjectName(u"lb_auftrags_nr")
         sizePolicy3.setHeightForWidth(self.lb_auftrags_nr.sizePolicy().hasHeightForWidth())
@@ -1045,7 +1048,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_20.addWidget(self.lb_auftrags_nr)
 
-        self.horizontalSpacer_25 = QSpacerItem(17, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_25 = QSpacerItem(28, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_20.addItem(self.horizontalSpacer_25)
 
@@ -1229,7 +1232,7 @@ class Ui_frm_main_window(object):
         frm_main_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(frm_main_window)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 350, 21))
+        self.menubar.setGeometry(QRect(0, 0, 489, 21))
         self.menuDatei = QMenu(self.menubar)
         self.menuDatei.setObjectName(u"menuDatei")
         frm_main_window.setMenuBar(self.menubar)
@@ -1237,7 +1240,7 @@ class Ui_frm_main_window(object):
         self.statusbar.setObjectName(u"statusbar")
         font3 = QFont()
         font3.setFamilies([u"Comic Sans MS"])
-        font3.setPointSize(10)
+        font3.setPointSize(8)
         font3.setBold(True)
         font3.setHintingPreference(QFont.PreferFullHinting)
         self.statusbar.setFont(font3)

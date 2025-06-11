@@ -34,6 +34,9 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.frm_settings = Settings()
         self.settings = load_settings()
         
+        # Anpassung
+        self.cbx_at_nr_editieren.setChecked(True)
+
         # --- UI-Initialisierung ---
         self.running_processes = {}
         self.process_check_timer = qtc.QTimer(self)
