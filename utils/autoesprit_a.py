@@ -169,14 +169,14 @@ class EspritA(QObject):
         pag.hotkey("ctrl", "v")             # Einfügen des Rohteil.dxf Pfads
         pag.click(3151, 793)                # Öffnen !rohteil.dxf
         sleep(self.verweilzeit)                   # verweilzeit
-        self.status_update.emit("Rohteil DXF eingefügt!")
+        self.status_update.emit(f"Rohteil DXF eingefügt!  {zeitstempel(1)}")
         pag.click(2914, 66)                 # Klick auf Ansichten
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2900, 133)                # Klick auf Ansicht Vorne
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2109, 668)                # Klick auf Layer
         sleep(self.verweilzeit)                   # verweilzeit
-        self.status_update.emit("Rohteilabmaße werden eingefügt....")
+        self.status_update.emit("Rohteilabmaße werden eingetragen....")
         pag.click(2246, 96)                 # Simulationsparameter
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2071, 192)                # Klick auf Bauteil
@@ -201,7 +201,7 @@ class EspritA(QObject):
         pag.typewrite('-4')
         pag.press('tab')
 
-        self.status_update.emit("Fertigteil wird erstellt....")
+        self.status_update.emit("Simulationsbauteil (Fertigteil) wird erstellt....")
 
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2425, 574)                # Aktualisieren
@@ -248,7 +248,7 @@ class EspritA(QObject):
 
     def spannmittel_importieren(self) -> None:
         """Spannmittel wird aus dem aktuellen KW-Wochen Ordner, in Esprit importiert und die Automatisierung abgeschlossen."""
-        self.status_update.emit(f"Spannmittel Importieren gestartet.  {zeitstempel(1)}")
+        self.status_update.emit(f"Spannmittel Import gestartet.  {zeitstempel(1)}")
         sleep(self.verweilzeit)                   # verweilzeit
         pag.click(2109, 668)                # Klick auf Layer (Fokussieren)
         sleep(0.2)                                # verweilzeit
@@ -295,6 +295,7 @@ class EspritA(QObject):
         pag.click(2246, 96)                 # Simulationsparameter öffnen
         sleep(self.verweilzeit)                   # verweilzeit
         self.status_update.emit(f"Automatisierung abgeschlossen! {zeitstempel(1)}")
+        self.finished.emit(True, "Wizard A erfolgreich abgeschlossen.")
 
 #####################################################################################################
 
