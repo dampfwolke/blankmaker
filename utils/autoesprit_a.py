@@ -1,4 +1,3 @@
-# autoesprit_a.py
 from pathlib import Path
 import time
 from PySide6.QtCore import QObject, Signal
@@ -17,6 +16,7 @@ class EspritA(QObject):
                  sleep_timer: int):
         # Super(:D) Wichtig: super().__init__() aufrufen, da wir von QObject erben
         super().__init__()
+        # Parameter für die Instanziierung der EspritA Klasse
         self.x_roh = x_roh
         self.y_roh = y_roh
         self.z_roh = z_roh
@@ -25,12 +25,30 @@ class EspritA(QObject):
         self.typ = typ
         self.sleep_timer = sleep_timer
 
+        # Fertigteil Abmaße von dem aktuellen Solid Bauteil (werden in dieser Klasse ausgelesen und weiter verarbeitet)
+        self.x_fertig = None
+        self.y_fertig = None
+        self.z_fertig = None
+
     def __str__(self):
         return (f"Abmaße: 'X:{self.x_roh}' x 'Y:{self.y_roh}' x 'Z:{self.z_roh}'\n"
                 f"Pfad: {self.pfad}\n"
                 f"Bearbeitung: {self.bearbeitung_auswahl}\n"
                 f"Umfang der Automation: {self.typ}\n"
                 f"Verweilzeit: {self.sleep_timer} Sekunden")
+
+
+    def roh_abmasse_pruefen(self) -> bool:
+        try:
+            if float(self.x_roh) > 0 and float(self.y_roh) > 0 and float(self.z_roh) > 0:
+                return True
+            else:
+                self.status_update.emit("Fehler: Rohteilabmaße müssen größer als 0 sein.")
+                return False
+        except (ValueError, TypeError):
+            self.status_update.emit("Fehler: Rohteilabmaße sind keine gültigen Zahlen.")
+            return False
+
 
 #####################################################################################################
     def fertigteil_bounding_box_auslesen(self):
@@ -43,16 +61,6 @@ class EspritA(QObject):
         pass
 #####################################################################################################
 
-    def roh_abmasse_pruefen(self) -> bool:
-        try:
-            if float(self.x_roh) > 0 and float(self.y_roh) > 0 and float(self.z_roh) > 0:
-                return True
-            else:
-                self.status_update.emit("Fehler: Rohteilabmaße müssen größer als 0 sein.")
-                return False
-        except (ValueError, TypeError):
-            self.status_update.emit("Fehler: Rohteilabmaße sind keine gültigen Zahlen.")
-            return False
 
     def run(self):
         """
