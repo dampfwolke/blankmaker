@@ -1,6 +1,8 @@
 from pathlib import Path
 import time
+
 from PySide6.QtCore import QObject, Signal
+import pyautogui
 
 from click_image import click_image
 
@@ -41,11 +43,19 @@ class EspritA(QObject):
                 f"Umfang der Automation: {self.typ}\n"
                 f"Verweilzeit: {self.sleep_timer} Sekunden")
 
-    def automations_typ_bestimmen(self) -> str:
+    def automations_typ_bestimmen(self) -> None:
         """ Hier wird entschieden welche Autoaktionsabschnitte ausgeführt werden z.B. nur Ausfüllhilfe oder vollständig etc.
-        abhängig von dem übergebenen Wert aus der "cb_bearbeitung_auswahl" im main script
+        abhängig von dem übergebenen Wert aus der "cb_bearbeitung_auswahl" im main script.
         :return: str """
-        pass
+        if self.typ == "Ausfüllhilfe":
+            self.status_update.emit("Starte 'Ausfüllhilfe'")
+            self.ausfuellhilfe_a()
+        elif self.typ == "Gandalf":
+            self.status_update.emit("Starte Automatisierung mit 'Gandalf'")
+            self.run()
+        else:
+            self.status_update.emit("Kein gültiger 'automations_typ' ausgewählt!")
+            print("Es wurde kein gültiger 'automations_typ' ausgewählt!")
 
     def roh_abmasse_pruefen(self) -> bool:
         """ Prüfung ob Rohteilmaße gültig sind :return: bool"""
@@ -59,30 +69,29 @@ class EspritA(QObject):
             self.status_update.emit("Fehler: Rohteilabmaße sind keine gültigen Zahlen.")
             return False
 
-#####################################################################################################
     def fertigteil_bounding_box_auslesen(self) -> tuple[str]:
         """Mithilfe von pyautogui und Hilfsmodul click_image wird in Esprit die Bounding Box des aktuellen Bauteils ausgelesen. :return: tuple[str]"""
 
     def fertig_abmasse_pruefen(self) -> bool:
-        pass
+        """ Es wird geprüft ob, die Fertigteilmaße korrekt ausgelesen wurden. :return: bool"""
 
     def fertig_und_rohmasse_vergleichen(self) -> bool:
-        pass
+        """ Prüfung ob Rohteil in X > 1.5mm, in Y > 0.8mm, Z > 4.5mm Aufmaß für Fertigteil hat. :return: bool"""
 
     def esprit_dateiname_pruefen(self) -> bool:
-        pass
+        """ Prüfung, ob der Pfad existiert und korrekt ist, und ob eine Datei mit demselben Dateinamen im Ordner ist. :return: bool"""
 
-    def esprit_datei_speichern(self):
-        pass
+    def ausfuellhilfe_a(self) -> None:
+        """ Datei und Programmname werden in den Eigenschaften eingefügt."""
 
-    def ausfuellhilfe_a(self):
-        pass
+    def esprit_datei_speichern(self) -> None:
+        """ Datei wird im aktuellen KW-Wochen Ordner gespeichert"""
 
-    def rohteil_dxf_importieren(self):
-        pass
+    def rohteil_dxf_importieren(self) -> None:
+        """dxf Datei wird aus dem aktuellen KW-Wochen Ordner, in Esprit importiert."""
 
-    def spannmittel_importieren(self):
-        pass
+    def spannmittel_importieren(self) -> None:
+        """Spannmittel wird aus dem aktuellen KW-Wochen Ordner, in Esprit importiert und die Automatisierung abgeschlossen."""
 
 #####################################################################################################
 
