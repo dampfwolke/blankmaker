@@ -31,7 +31,7 @@ class EspritA(QObject):
         self.sleep_timer = sleep_timer
 
         # Verzögerung zwischen den Aktionen (min. 0.3s, max. 10.2s) je nach QSlider Einstellung im main script
-        self.verweilzeit: float = round(0.2 + (self.sleep_timer / 10), 2)
+        self.verweilzeit: float = round(0.1 + (self.sleep_timer / 10), 2)
 
         # Fertigteil Abmaße von dem aktuellen Solid Bauteil (werden in dieser Klasse ausgelesen und weiter verarbeitet)
         self.x_fertig = None
@@ -133,15 +133,156 @@ class EspritA(QObject):
 
     def esprit_datei_speichern(self) -> None:
         """ Datei wird im aktuellen KW-Wochen Ordner gespeichert"""
-        self.status_update.emit("Esprit Datei gespeichert!")
+        pag.click(1965, 36)
+        sleep(self.verweilzeit)
+        pag.click(2007, 172)
+        sleep(0.5)
+        pgm_name_mit_endung = f"{self.pgm_name}_A".strip()
+        abs_path_mit_pgm_name = Path(self.pfad) / pgm_name_mit_endung
+        clipboard.copy(str(abs_path_mit_pgm_name))
+        sleep(0.1)
+        pag.hotkey("ctrl", "v")
+        sleep(0.5)
+        pag.press('Enter')
+        self.status_update.emit("Esprit wird Datei gespeichert...")
+        sleep(4)
 
-    def rohteil_dxf_importieren(self) -> None:
-        """dxf Datei wird aus dem aktuellen KW-Wochen Ordner, in Esprit importiert."""
-        self.status_update.emit("Rohteil-DXF geladen!")
+    def rohteil_erstellen(self) -> None:
+        """dxf Datei wird aus dem aktuellen KW-Wochen Ordner in Esprit importiert und die Simulationsbauteile werden erstellt."""
+
+        pag.doubleClick(2109, 668)          # Doppelklick auf Layer
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(1973, 63)                 # Öffnen !rohteil.dxf
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2853, 795)                # Koordinaten vom Pfad im Öffnen Fenster
+        sleep(self.verweilzeit)                   # verweilzeit
+
+        pfad_rohteil = self.pfad / "!rohteil.dxt"
+        clipboard.copy(str(pfad_rohteil))
+        sleep(0.1)
+        pag.hotkey("ctrl", "v")             # Einfügen des Rohteil.dxf Pfads
+
+        pag.click(3151, 793)                # Öffnen !rohteil.dxf
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2914, 66)                 # Klick auf Ansichten
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2900, 133)                # Klick auf Ansicht Vorne
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2109, 668)                # Klick auf Layer
+        sleep(self.verweilzeit)                   # verweilzeit
+
+        pag.click(2246, 96)                 # Simulationsparameter
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2071, 192)                # Klick auf Bauteil
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.doubleClick(2231, 293)          # Doppelklick auf Länge
+        sleep(self.verweilzeit)                   # verweilzeit
+
+        length = float(self.x_roh)
+        width = float(self.y_roh)
+        height = float(self.z_roh)
+
+        pag.typewrite(str(length))
+        pag.press('tab')
+        pag.typewrite(str(width))
+        pag.press('tab')
+        pag.typewrite(str(height))
+        pag.press('tab')
+        pag.typewrite(str(-length / 2))
+        pag.press('tab')
+        pag.typewrite(str(-width / 2))
+        pag.press('tab')
+        pag.typewrite('-4')
+        pag.press('tab')
+
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2425, 574)                # Aktualisieren
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2064, 247)                # Fertigteil anklicken
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2175, 294)                # Fertigteil Pfeil anklicken
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2900, 631)                # Solid anklicken (Bauteil definieren)
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2900, 631)                # Solid anklicken bestätigen
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2425, 574)                # Aktualisieren
+
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2904, 67)                 # Arbeitsebenen
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2904, 102)                # Arbeitsebene Oben
+        sleep(self.verweilzeit)                   # self.verweilzeit
+        pag.click(2175, 294)                # Fertigteil Pfeil anklicken
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2900, 631)                # Solid anklicken (Bauteil definieren)
+        sleep(self.verweilzeit)                   # self.verweilzeit
+        pag.click(2900, 631)                # Solid anklicken bestätigen
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2425, 574)                # Aktualisieren
+
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2904, 67)                 # Arbeitsebenen
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2904, 118)                # Arbeitsebene Isometrisch
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2175, 294)                # Fertigteil Pfeil anklicken
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2900, 631)                # Solid anklicken (Bauteil definieren)
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2900, 631)                # Solid anklicken bestätigen
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2425, 574)                # Aktualisieren
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2333, 618)                # OK Klicken
+
+        self.status_update.emit("Simulationsbauteile erstellt!")
 
     def spannmittel_importieren(self) -> None:
         """Spannmittel wird aus dem aktuellen KW-Wochen Ordner, in Esprit importiert und die Automatisierung abgeschlossen."""
+
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2109, 668)                # Klick auf Layer (Fokussieren)
+        sleep(0.2)                                # verweilzeit
+        pag.click(1995, 713)                # Solid Layer ausblenden (Haken)
+        sleep(0.2)                                # verweilzeit
+        pag.click(1995, 729)                # Rohteil Layer ausblenden (Haken)
+        sleep(0.2)                                # verweilzeit
+        pag.doubleClick(2038, 827)          # Doppelklick auf Müll Layer
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(1973, 63)                 # Öffnen !schraubstock.step
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2853, 795)                # Koordinaten vom Pfad im Öffnen Fenster
+        sleep(self.verweilzeit)                   # verweilzeit
+
+        pfad_schraubstock = self.pfad / "!schraubstock"
+        clipboard.copy(str(pfad_schraubstock))
+        sleep(0.1)
+        pag.hotkey("ctrl", "v")             # Einfügen des schraubstock.step Pfads
+
+        pag.click(3151, 793)                # Öffnen !schraubstock.step
+        sleep(10)                                 # self.verweilzeit 10 sec (Warten auf Laden von STEP)
         self.status_update.emit("Importiere Schraubstock...")
+
+        pag.click(2109, 640)                # Fokussieren Klick
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.hotkey('ctrl', 'a')             # Alles markieren im Müll Layer
+        sleep(self.verweilzeit)                   # self.verweilzeit
+        pag.click(2373, 126)                # Simulationsbauteil erstellen
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2766, 659)                # Übernehmen
+        pag.click(2109, 640)                # Fokussieren Klick
+        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(1995, 825)                # Müll Layer ausblenden (Haken)
+        sleep(0.2)                                # verweilzeit
+        pag.click(1995, 713)                # Solid Layer einblenden (Haken)
+        sleep(0.2)                                # verweilzeit
+        pag.click(1995, 729)                # Rohteil Layer einblenden (Haken)
+        sleep(0.2)                                # verweilzeit
+        pag.doubleClick(2038, 745)          # Doppelklick auf Feature
+        sleep(0.2)                                # verweilzeit
+        pag.click(2246, 96)                 # Simulationsparameter öffnen
+        sleep(self.verweilzeit)                   # verweilzeit
         self.status_update.emit("Automatisierung abgeschlossen!")
 
 #####################################################################################################
@@ -164,10 +305,10 @@ class EspritA(QObject):
         # Beispiel: Simuliere Arbeitsschritte und sende Updates an die GUI
         try:
             self.status_update.emit("Schritt 1: Analysiere Geometrie...")
-            time.sleep(self.sleep_timer / 2.0)  # Simuliere Arbeit
+            sleep(self.sleep_timer / 2.0)  # Simuliere Arbeit
 
             self.status_update.emit("Schritt 2: Generiere Werkzeugwege...")
-            time.sleep(self.sleep_timer / 2.0)  # Simuliere Arbeit
+            sleep(self.sleep_timer / 2.0)  # Simuliere Arbeit
 
             # Beispiel für eine Interaktion: Zeige eine Info-Box über die GUI
             self.show_info_dialog.emit("Hinweis", f"Die Bearbeitung '{self.bearbeitung_auswahl}' wurde ausgewählt.")
