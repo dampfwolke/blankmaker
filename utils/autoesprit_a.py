@@ -17,6 +17,8 @@ class EspritA(QObject):
     show_info_dialog = Signal(str, str)
     # Signal(bool, str) -> sendet Beendigungsstatus (Erfolg/Fehler) und eine finale Nachricht
     finished = Signal(bool, str)
+    # Signal Fertigteil Abmasse X Y Z ausgelesen
+    ausgelesene_fertig_werte = Signal(str, str, str)
 
     def __init__(self, pgm_name: str, x_roh: str, y_roh: str, z_roh: str, pfad: Path, bearbeitung_auswahl: str, typ: str,
                  sleep_timer: int):
@@ -62,6 +64,7 @@ class EspritA(QObject):
             self.spannmittel_importieren()
         elif self.typ == "Bounding Box auslesen":
             self.fertigteil_bounding_box_auslesen()
+            self.fertig_abmasse_eintragen()
         else:
             self.status_update.emit("Kein gültiger 'automations_typ' ausgewählt!")
             print("Es wurde kein gültiger 'automations_typ' ausgewählt!")
@@ -140,9 +143,12 @@ class EspritA(QObject):
         """ Prüfung ob Rohteil in X > 1.5mm, in Y > 0.8mm, Z > 4.5mm Aufmaß für Fertigteil hat. :return: bool"""
         pass
 
-    def fertig_abmasse_eintragen() -> None:
+    def fertig_abmasse_eintragen(self) -> None:
         '''Trägt die ausgelesenen Abmasse ins Hauptprogramm in die entsprechenden lineedits ein.'''
-        pass
+        x = str(self.x_fertig)
+        y = str(self.y_fertig)
+        z = str(self.z_fertig)
+        self.ausgelesene_fertig_werte.emit(x, y, z)
 
     def esprit_dateiname_pruefen(self) -> bool:
         """ Prüfung, ob der Pfad existiert und korrekt ist, und ob eine Datei mit demselben Dateinamen im Ordner ist. :return: bool"""
