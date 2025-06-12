@@ -38,7 +38,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         
         # Anpassung erfolgreich
         self.cbx_at_nr_editieren.setChecked(True)
-        #self.progressBar.setHidden(True)
         # Zeitmessung
         self.startzeit = None
         self.endzeit = None

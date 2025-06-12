@@ -43,7 +43,30 @@ class EspritB(QObject):
         self.finished_b.emit(True, f"Automatisierung '{self.typ_b}' erfolgreich abgeschlossen.")
 
     def automations_typ_bestimmen_b(self):
-        pass
+        """ Hier wird entschieden welche Autoaktionsabschnitte ausgeführt werden z.B. nur Ausfüllhilfe oder vollständig etc.
+        abhängig von dem übergebenen Wert aus der "cb_bearbeitung_auswahl" im main script.
+        :return: None """
+        if self.typ_b == "Ausfüllhilfe B":
+            self.status_update_b.emit("Starte 'Ausfüllhilfe_B'")
+            self.ausfuellhilfe_b()
+
+            if self.esprit_dateiname_pruefen_b():
+                self.esprit_datei_speichern_b()
+
+            self.abgeschlossen_b()
+
+        elif self.typ_b == "TEST_B":
+            # Hier deine Logik für den Platzhalter-Typ einfügen
+            self.status_update_b.emit("Platzhalter-Funktion wurde aufgerufen.")
+            self.finished_b.emit(True, "Platzhalter-Funktion beendet.")
+            pass  # Platzhalter für Testfunktionen
+
+        else:
+            error_msg = "Kein gültiger 'automations_typ' ausgewählt!"
+            self.status_update_b.emit(error_msg)
+            self.show_info_dialog_b.emit("Auswahlfehler", error_msg)
+            self.finished_b.emit(False, error_msg)
+
 
     def esprit_dateiname_pruefen_b(self) -> tuple[bool, str]:
         """ Prüfung, ob der Pfad existiert und ob eine Datei mit demselben Namen bereits im Ordner ist.
@@ -296,3 +319,15 @@ class EspritB(QObject):
     # Für Zukünftige Automatisierung --> Prüft ob der NP auf der B-Seite stimmt
     def nullpunkt_pruefen(self):
         pass
+
+    def run_b(self):
+        """Hauptmethode des Workers, die beim Start des Threads ausgeführt wird."""
+        try:
+            self.automations_typ_bestimmen_b()
+        except Exception as e:
+            # Bei einem Fehler, sende ein Fehlersignal mit der Fehlermeldung
+            error_message = f"Ein unerwarteter Fehler ist aufgetreten: {e}"
+            self.status_update_b.emit(error_message)
+            self.show_info_dialog_b.emit("Kritischer Fehler", error_message)
+            self.finished_b.emit(False, error_message)
+            print(f"[FEHLER] im EspritA Worker: {e}")

@@ -19,10 +19,9 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateEdit,
     QFormLayout, QFrame, QGridLayout, QGroupBox,
     QHBoxLayout, QLCDNumber, QLabel, QLineEdit,
-    QMainWindow, QMenu, QMenuBar, QProgressBar,
-    QPushButton, QSizePolicy, QSlider, QSpacerItem,
-    QStatusBar, QTabWidget, QToolButton, QVBoxLayout,
-    QWidget)
+    QMainWindow, QMenu, QMenuBar, QPushButton,
+    QSizePolicy, QSlider, QSpacerItem, QStatusBar,
+    QTabWidget, QToolButton, QVBoxLayout, QWidget)
 
 class Ui_frm_main_window(object):
     def setupUi(self, frm_main_window):
@@ -44,6 +43,8 @@ class Ui_frm_main_window(object):
         self.actionEinstellungen.setObjectName(u"actionEinstellungen")
         self.actionBeenden = QAction(frm_main_window)
         self.actionBeenden.setObjectName(u"actionBeenden")
+        self.actionAktualisieren = QAction(frm_main_window)
+        self.actionAktualisieren.setObjectName(u"actionAktualisieren")
         self.centralwidget = QWidget(frm_main_window)
         self.centralwidget.setObjectName(u"centralwidget")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
@@ -1239,14 +1240,6 @@ class Ui_frm_main_window(object):
 
         self.verticalLayout_8.addWidget(self.fr_scripts_aufklappen)
 
-        self.progressBar = QProgressBar(self.centralwidget)
-        self.progressBar.setObjectName(u"progressBar")
-        self.progressBar.setMinimumSize(QSize(0, 25))
-        self.progressBar.setMaximumSize(QSize(16777215, 50))
-        self.progressBar.setValue(24)
-
-        self.verticalLayout_8.addWidget(self.progressBar)
-
         self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_8.addItem(self.verticalSpacer_5)
@@ -1275,6 +1268,7 @@ class Ui_frm_main_window(object):
 
         self.menubar.addAction(self.menuDatei.menuAction())
         self.menuDatei.addAction(self.actionEinstellungen)
+        self.menuDatei.addAction(self.actionAktualisieren)
         self.menuDatei.addSeparator()
         self.menuDatei.addAction(self.actionBeenden)
 
@@ -1283,9 +1277,10 @@ class Ui_frm_main_window(object):
         self.cbx_datum_editieren.clicked["bool"].connect(self.le_pfad.setEnabled)
         self.actionBeenden.triggered.connect(frm_main_window.close)
         self.tb_scripts_aufklappen.clicked["bool"].connect(self.fr_scripts.setHidden)
-        self.cbx_at_nr_editieren.clicked["bool"].connect(self.le_at_nr.setEnabled)
         self.tb_wizard_b_aufklappen.clicked["bool"].connect(self.wg_fertigtielmasse.setHidden)
         self.tb_wizard_a_aufklappen.clicked["bool"].connect(self.wg_sleep_timer.setHidden)
+        self.actionAktualisieren.triggered.connect(frm_main_window.update)
+        self.cbx_at_nr_editieren.clicked["bool"].connect(self.le_at_nr.setEnabled)
 
         self.tw_rohteil_erstellen.setCurrentIndex(0)
 
@@ -1297,6 +1292,7 @@ class Ui_frm_main_window(object):
         frm_main_window.setWindowTitle(QCoreApplication.translate("frm_main_window", u"BlankMaker", None))
         self.actionEinstellungen.setText(QCoreApplication.translate("frm_main_window", u"Einstellungen", None))
         self.actionBeenden.setText(QCoreApplication.translate("frm_main_window", u"Beenden", None))
+        self.actionAktualisieren.setText(QCoreApplication.translate("frm_main_window", u"Aktualisieren", None))
         self.lb_rechteck_laenge.setText(QCoreApplication.translate("frm_main_window", u"L\u00e4nge X: ", None))
         self.le_rechteck_laenge.setText(QCoreApplication.translate("frm_main_window", u"100", None))
         self.lb_rechteck_breite.setText(QCoreApplication.translate("frm_main_window", u"Breite Y: ", None))
