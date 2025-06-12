@@ -32,7 +32,7 @@ class EspritA(QObject):
         self.sleep_timer = sleep_timer
 
         # Verzögerung zwischen den Aktionen (min. 0.3s, max. 10.2s) je nach QSlider Einstellung im main script
-        self.verweilzeit: float = round(0.1 + (self.sleep_timer / 10), 2)
+        self.verweilzeit: float = round(0.1 + (self.sleep_timer / 20), 2)
 
         # Fertigteil Abmaße von dem aktuellen Solid Bauteil (werden in dieser Klasse ausgelesen und weiter verarbeitet)
         self.x_fertig = None
@@ -265,7 +265,7 @@ class EspritA(QObject):
         pag.click(2853, 795)                # Koordinaten vom Pfad im Öffnen Fenster
         sleep(self.verweilzeit)                   # verweilzeit
 
-        pfad_schraubstock = self.pfad / "!schraubstock"
+        pfad_schraubstock = self.pfad / "!schraubstock.step"
         clipboard.copy(str(pfad_schraubstock))
         sleep(0.1)
         pag.hotkey("ctrl", "v")             # Einfügen des schraubstock.step Pfads
