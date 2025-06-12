@@ -193,8 +193,10 @@ class EspritB(QObject):
             return False, msg
 
     def ausfuellhilfe_b(self):
+        self.status_update_b.emit("Ausfüllhilfe B-Seite gestartet...")
         pag.click(2438, 122)
         sleep(0.2)
+        self.status_update_b.emit("PGM-Name wird auf _B geändert...")
         pag.click(2679, 258)
         for i in range(11):
             sleep(0.05)
@@ -206,6 +208,7 @@ class EspritB(QObject):
         sleep(self.verweilzeit)
         pag.hotkey("ctrl", "v")
         sleep(self.verweilzeit)
+        self.status_update_b.emit("Eigenschaften Fenster schließen...")
         pag.press('Enter')
         sleep(self.verweilzeit)
         pag.doubleClick(2109, 668)

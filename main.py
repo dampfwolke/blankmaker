@@ -162,7 +162,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.pb_wizard_a.setEnabled(False)
         self.pb_wizard_b.setEnabled(False)
         self.startzeit = time.perf_counter()
-        self.statusBar().showMessage("Automatisierung gestartet...", 3000)
+        self.statusBar().showMessage("Automatisierung A-Seite gestartet...", 3000)
         
         # NEU: Slot, der die Daten vom Worker empfängt und in die UI einträgt
     @qtc.Slot(str, str, str)
@@ -218,7 +218,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         # <<< HIER IST DIE ÄNDERUNG >>>
         # Wir verbinden das Signal mit unserem neuen, robusten Slot.
         self.wizard_worker.show_info_dialog_b.connect(self.display_worker_message)
-        # self.wizard_worker.ausgelesene_fertig_werte.connect(self.fertig_abmasse_eintragen)
 
         # WICHTIG: Aufräum-Logik
         # Erst wenn der Worker fertig ist, den Thread beenden.
@@ -228,15 +227,13 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.wizard_thread.finished.connect(self.wizard_thread.deleteLater)
         # UND: Wenn der Thread gelöscht ist, die Python-Referenz entfernen!
         self.wizard_thread.finished.connect(self.clear_wizard_thread_reference)
-
         # 5. Den Thread starten
         self.wizard_thread.start()
-
         # UI anpassen
         self.pb_wizard_a.setEnabled(False)
         self.pb_wizard_b.setEnabled(False)
         self.startzeit = time.perf_counter()
-        self.statusBar().showMessage("Automatisierung gestartet...", 3000)
+        self.statusBar().showMessage("Automatisierung B-Seite gestartet...", 3000)
 
     @qtc.Slot(bool, str)
     def on_wizard_b_finished(self, success: bool, message: str):
