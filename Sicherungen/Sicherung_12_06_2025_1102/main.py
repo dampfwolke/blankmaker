@@ -124,9 +124,19 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         typ = self.cb_auto_option_a.currentText()
         sleep_timer = self.hsl_sleep_timer.value()
 
-        if not all([x_roh, y_roh, z_roh]) and typ != "Bounding Box auslesen":
+        if not all([x_roh, y_roh, z_roh]):
             self.statusBar().showMessage("Fehler: Bitte Rohteilmaße sicherstellen.", 7000)
             return
+
+        # 3. Thread und Worker erstellen und verbinden (Das ist der neue Teil)
+
+        # Einen neuen QThread erstellen
+        self.wizard_thread = qtc.QThread()
+
+        # Den Worker (EspritA) erstellen
+        self.wizard_worker = EspritA(
+            pgm_name=pgm_name, x_roh=x_roh, y_roh=y_roh, z_roh=z_roh, pfad=pfad,
+            bearbeitung_auswahl=bearbeitung, typ=typ, sleep_timer=sleep_timer)
 
         # 3. Thread und Worker erstellen und verbinden
         self.wizard_thread = qtc.QThread()
@@ -140,9 +150,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.wizard_worker.finished.connect(self.on_wizard_a_finished)
         self.wizard_worker.status_update.connect(self.statusBar().showMessage)
         self.wizard_worker.show_info_dialog.connect(self.show_information_dialog)
-        
-        # NEU: Signal zum Eintragen der Fertigmaße mit dem entsprechenden Slot verbinden
-        self.wizard_worker.ausgelesene_fertig_werte.connect(self.fertig_abmasse_eintragen)
 
         # WICHTIG: Aufräum-Logik
         # Erst wenn der Worker fertig ist, den Thread beenden.
@@ -152,25 +159,13 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.wizard_thread.finished.connect(self.wizard_thread.deleteLater)
         # UND: Wenn der Thread gelöscht ist, die Python-Referenz entfernen!
         self.wizard_thread.finished.connect(self.clear_wizard_thread_reference)
-        
         # 5. Den Thread starten
         self.wizard_thread.start()
-        
         # UI anpassen
         self.pb_wizard_a.setEnabled(False)
         self.pb_wizard_b.setEnabled(False)
         self.startzeit = time.perf_counter()
         self.statusBar().showMessage("Automatisierung gestartet...", 3000)
-        
-        # NEU: Slot, der die Daten vom Worker empfängt und in die UI einträgt
-    @qtc.Slot(str, str, str)
-    def fertig_abmasse_eintragen(self, x: str, y: str, z: str):
-        """Dieser Slot wird aufgerufen, wenn der Worker das Signal 'ausgelesene_fertig_werte' sendet."""
-        # KORREKTUR: Verwende die richtigen Namen der QLineEdit-Widgets ('le_' statt 'wg_')
-        self.le_x_fertig.setText(x)
-        self.le_y_fertig.setText(y)
-        self.le_z_fertig.setText(z)
-        self.statusBar().showMessage(f"Fertigmaße erfolgreich ausgelesen und eingetragen.", 5000)
 
     @qtc.Slot(bool, str)
     def on_wizard_a_finished(self, success: bool, message: str):
@@ -200,6 +195,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         qtw.QMessageBox.information(self, title, text)
 ######################################################################################################
 
+
     @qtc.Slot()
     def update_nc_file_count(self):
         """Sucht nach .H/.h-Dateien, aktualisiert die LCD-Anzeige und den Button-Stil."""
@@ -223,9 +219,12 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
         self.lcdn_programme_gefunden.display(found_files_count)
 
+        # NEU: Button-Stil basierend auf der Anzahl der gefundenen Programme aktualisieren
         if found_files_count > 0:
+            # Setzt eine auffällige Farbe, wenn Programme zum Rausspielen bereit sind
             self.pb_rausspielen.setStyleSheet("background-color: #FFA500; color: black;")
         else:
+            # Setzt den Stil auf den Standard zurück, wenn keine Programme gefunden wurden
             self.pb_rausspielen.setStyleSheet("")
     
     @qtc.Slot()
@@ -237,6 +236,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         at_prefix = self.le_at_nr.text()
         auftrags_nr = self.le_auftrags_nr.text()
 
+        # 1. Eingaben validieren
         if not at_prefix:
             self.statusBar().showMessage("Fehler: Bitte eine AT-Nr. angeben.", 7000)
             return
@@ -244,6 +244,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             self.statusBar().showMessage("Fehler: Bitte eine Auftragsnummer angeben.", 7000)
             return
             
+        # 2. Pfade aus Einstellungen und Konstanten laden
         wks = self.settings.get("wks")
         if not wks:
             self.statusBar().showMessage("Fehler: 'wks' nicht in Einstellungen gefunden.", 7000)
@@ -251,6 +252,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
         wks_folder = f"WKS{wks}"
         
+        # 3. Alle zu verschiebenden Dateien sammeln
         files_to_move = []
         for machine in self.MACHINES:
             source_dir = self.NC_BASE_PATH / machine / wks_folder
@@ -261,6 +263,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             self.statusBar().showMessage("Keine Programme zum Verschieben im WKS-Ordner gefunden.", 7000)
             return
 
+        # 4. Dateien verschieben (kopieren und löschen)
         moved_count = 0
         dest_folder_name = f"AT{at_prefix}-{auftrags_nr}"
         try:

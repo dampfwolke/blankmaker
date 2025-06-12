@@ -63,16 +63,8 @@ class EspritA(QObject):
             self.rohteil_erstellen()
             self.spannmittel_importieren()
         elif self.typ == "Bounding Box auslesen":
-            # TEST
             self.fertigteil_bounding_box_auslesen()
             self.fertig_abmasse_eintragen()
-            self.status_update.emit("Starte Automatisierung mit 'Gandalf'")
-            self.ausfuellhilfe_a()
-            self.esprit_datei_speichern()
-            self.rohteil_erstellen()
-            self.spannmittel_importieren()
-
-            ###########
         else:
             self.status_update.emit("Kein gültiger 'automations_typ' ausgewählt!")
             print("Es wurde kein gültiger 'automations_typ' ausgewählt!")
@@ -374,15 +366,9 @@ class EspritA(QObject):
 #####################################################################################################
 
     def run(self):
-        """Hauptmethode des Workers, die beim Start des Threads ausgeführt wird."""
-        try:
-            self.automations_typ_bestimmen()
-        except Exception as e:
-            # Bei einem Fehler, sende ein Fehlersignal mit der Fehlermeldung
-            error_message = f"Ein unerwarteter Fehler ist aufgetreten: {e}"
-            self.status_update.emit(error_message)
-            self.finished.emit(False, error_message)
-            print(f"[FEHLER] im EspritA Worker: {e}")
+        self.automations_typ_bestimmen()
+
+
     # def run(self):
     #     """
     #     Hauptmethode, die den Automationsprozess startet.
