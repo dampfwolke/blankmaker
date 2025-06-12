@@ -295,13 +295,13 @@ class EspritA(QObject):
         pag.click(2246, 96)                 # Simulationsparameter öffnen
         sleep(self.verweilzeit)                   # verweilzeit
         self.status_update.emit(f"Automatisierung abgeschlossen! {zeitstempel(1)}")
-        self.finished.emit(True, "Wizard A erfolgreich abgeschlossen.")
+        # self.finished.emit(True, "Wizard A erfolgreich abgeschlossen.")
 
 #####################################################################################################
 
     def run(self):
         self.automations_typ_bestimmen()
-
+        self.finished.emit(True, "Wizard A erfolgreich abgeschlossen.")
 
 
     # def run(self):

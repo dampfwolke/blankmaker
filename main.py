@@ -4,6 +4,8 @@ import math
 import subprocess
 from functools import partial
 from pathlib import Path
+import time
+
 
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtCore as qtc
@@ -36,6 +38,13 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         
         # Anpassung erfolgreich
         self.cbx_at_nr_editieren.setChecked(True)
+        # Zeitmessung
+        self.startzeit = None
+        self.endzeit = None
+
+        # threads Initialisierung (zum Aufräumen später)
+        self.wizard_thread = None
+        self.wizard_worker = None
 
         # --- UI-Initialisierung ---
         self.running_processes = {}
@@ -100,7 +109,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
     @qtc.Slot()
     def on_wizard_a_clicked(self):
         # 1. Prüfen, ob bereits ein Wizard läuft, um doppelte Starts zu verhindern
-        if hasattr(self, 'wizard_thread') and self.wizard_thread.isRunning():
+        if self.wizard_thread and self.wizard_thread.isRunning():
             self.statusBar().showMessage("Ein Automatisierungs-Prozess läuft bereits.", 5000)
             return
 
@@ -127,46 +136,59 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         # Den Worker (EspritA) erstellen
         self.wizard_worker = EspritA(
             pgm_name=pgm_name, x_roh=x_roh, y_roh=y_roh, z_roh=z_roh, pfad=pfad,
-            bearbeitung_auswahl=bearbeitung, typ=typ, sleep_timer=sleep_timer
-        )
+            bearbeitung_auswahl=bearbeitung, typ=typ, sleep_timer=sleep_timer)
 
-        # Den Worker in den Thread "verschieben"
+        # 3. Thread und Worker erstellen und verbinden
+        self.wizard_thread = qtc.QThread()
+        self.wizard_worker = EspritA(
+            pgm_name=pgm_name, x_roh=x_roh, y_roh=y_roh, z_roh=z_roh, pfad=pfad,
+            bearbeitung_auswahl=bearbeitung, typ=typ, sleep_timer=sleep_timer)
         self.wizard_worker.moveToThread(self.wizard_thread)
 
         # 4. Signale und Slots verbinden
-
-        # Wenn der Thread startet, soll er die run-Methode des Workers ausführen
         self.wizard_thread.started.connect(self.wizard_worker.run)
-
-        # Die Signale des Workers mit den Slots im Hauptfenster verbinden
+        self.wizard_worker.finished.connect(self.on_wizard_a_finished)
         self.wizard_worker.status_update.connect(self.statusBar().showMessage)
         self.wizard_worker.show_info_dialog.connect(self.show_information_dialog)
-        self.wizard_worker.finished.connect(self.on_wizard_a_finished)
 
-        # Wenn der Worker fertig ist, soll der Thread beendet werden
+        # WICHTIG: Aufräum-Logik
+        # Erst wenn der Worker fertig ist, den Thread beenden.
         self.wizard_worker.finished.connect(self.wizard_thread.quit)
-
-        # Aufräumen: Wenn der Thread beendet ist, sollen Worker und Thread gelöscht werden
-        self.wizard_worker.deleteLater()
+        # Erst wenn der Thread beendet ist, die Objekte zum Löschen markieren.
+        self.wizard_thread.finished.connect(self.wizard_worker.deleteLater)
         self.wizard_thread.finished.connect(self.wizard_thread.deleteLater)
-
-        # 5. Den Thread starten (dieser Aufruf blockiert nicht!)
+        # UND: Wenn der Thread gelöscht ist, die Python-Referenz entfernen!
+        self.wizard_thread.finished.connect(self.clear_wizard_thread_reference)
+        # 5. Den Thread starten
         self.wizard_thread.start()
-
-        # Optional: UI anpassen, um zu zeigen, dass etwas läuft
-        self.pb_wizard_a.setEnabled(False)  # Button deaktivieren, während der Task läuft
+        # UI anpassen
+        self.pb_wizard_a.setEnabled(False)
+        self.pb_wizard_b.setEnabled(False)
+        self.startzeit = time.perf_counter()
         self.statusBar().showMessage("Automatisierung gestartet...", 3000)
 
     @qtc.Slot(bool, str)
     def on_wizard_a_finished(self, success: bool, message: str):
         print(f"Wizard A beendet. Erfolg: {success}. Nachricht: {message}")
         if success:
-            self.statusBar().showMessage(f"Erfolg: {message} ({zeitstempel(1)})", 7000)
+            self.endzeit = time.perf_counter()
+            duration = self.endzeit - self.startzeit
+            minutes = int(duration // 60)
+            seconds = int(duration % 60)
+            self.statusBar().showMessage(f"Erfolg: {message}! (Laufzeit: {minutes}m {seconds}s))", 7000)
         else:
             self.statusBar().showMessage(f"Fehler: {message} ({zeitstempel(1)})", 10000)
 
         # Wichtig: Den Button wieder aktivieren
         self.pb_wizard_a.setEnabled(True)
+        self.pb_wizard_b.setEnabled(True)
+
+    @qtc.Slot()
+    def clear_wizard_thread_reference(self):
+        """Setzt die Thread- und Worker-Referenzen auf None, um Fehler zu vermeiden."""
+        print("Räume Thread- und Worker-Referenzen auf.")
+        self.wizard_worker = None
+        self.wizard_thread = None
 
     @qtc.Slot(str, str)
     def show_information_dialog(self, title: str, text: str):
