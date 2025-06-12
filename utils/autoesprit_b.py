@@ -65,13 +65,38 @@ class EspritB(QObject):
         return True, ""
 
     def esprit_datei_speichern_b(self):
-        pass
+        pag.doubleClick(2109, 668)            # Doppelklick auf Layer
+        sleep(self.verweilzeit)                     # Verweilzeit
+        pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
+        sleep(self.verweilzeit)                     # Verweilzeit
+        pag.hotkey('ctrl', 's')               # A-Seite speichern
+        sleep(4)                                    # Verweilzeit
+        pag.doubleClick(2109, 668)            # Doppelklick auf Layer
+        sleep(self.verweilzeit)                     # Verweilzeit
+
+        # wird evtl. nicht gebraucht --> TESTEN
+        pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
+        sleep(self.verweilzeit)                     # Verweilzeit
+        pag.click(2197, 728)                  # Klick auf "Alles auswählen"
+        sleep(self.verweilzeit)                     # Verweilzeit
+        pag.click(2000, 698)                  # Alle Layer ausblenden (Haken)
+        sleep(self.verweilzeit)                     # Verweilzeit
+        pag.doubleClick(2038, 713)            # Doppelklick auf Solid Layer
 
     def fertigteil_bounding_box_auslesen(self) -> None:
         """Mithilfe von pyautogui und Hilfsmodul click_image wird in Esprit die Bounding Box des aktuellen Bauteils ausgelesen."""
         self.status_update_b.emit("Starte Fertigteilmaß auslesen....")
         bild_pfad_relativ = Path(".") / "utils" / "automation_bilder" / "bauteil.png"
         bild_pfad_absolut = bild_pfad_relativ.resolve()
+
+        # KÖNNTE evtl. PASSEN --> TESTEN
+        pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
+        sleep(self.verweilzeit)                     # Verweilzeit
+        pag.click(2197, 728)                  # Klick auf "Alles auswählen"
+        sleep(self.verweilzeit)                     # Verweilzeit
+        pag.click(2000, 698)                  # Alle Layer ausblenden (Haken)
+        sleep(self.verweilzeit)                     # Verweilzeit
+        pag.doubleClick(2038, 713)            # Doppelklick auf Solid Layer
 
         # Anpassen für B-SEITE
         # NACH DEM AUSLESEN MUSS DERSELBE ZUSTAND WIE OHNE AUSLESEN SEIN DAMIT ROHTEILMITNAHME USW. FUNKTIONIEREN
@@ -144,5 +169,130 @@ class EspritB(QObject):
             self.status_update_b.emit(f"Fehler: {msg}")
             return False, msg
 
+    def ausfuellhilfe_b(self):
+        pag.click(2438, 122)
+        sleep(0.2)
+        pag.click(2679, 258)
+        for i in range(11):
+            sleep(0.05)
+            pag.press('tab')
+        pag.press('delete')
+        sleep(self.verweilzeit)
+        pgm_name_mit_endung = f"{self.pgm_name_b}_B".strip()
+        clipboard.copy(pgm_name_mit_endung)
+        sleep(self.verweilzeit)
+        pag.hotkey("ctrl", "v")
+        sleep(self.verweilzeit)
+        pag.press('Enter')
+        sleep(self.verweilzeit)
+        pag.doubleClick(2109, 668)
+        sleep(self.verweilzeit)
+
+
     def rohteilmitnahme(self):
+        verweilzeit = self.verweilzeit  # festlegen der Sleep Zeit
+
+        pag.doubleClick(2109, 668)  # Doppelklick auf Layer
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2197, 728)  # Klick auf "Alles auswählen"
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(1996, 697)  # Alle Layer ausblenden (Haken)
+        sleep(verweilzeit)  # Verweilzeit
+        pag.doubleClick(2038, 827)  # Doppelklick auf Müll Layer
+        sleep(verweilzeit)  # Verweilzeit
+        pag.doubleClick(2038, 875)  # Doppelklick auf Spannmittel Layer
+        sleep(verweilzeit)  # Verweilzeit
+        pag.doubleClick(2109, 668)  # Doppelklick auf Layer
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2094, 591)  # Klick auf Layer (Fokussieren)
+        sleep(verweilzeit)  # Verweilzeit
+        pag.hotkey('ctrl', 'a')  # Alles markieren im Müll und Spannmittel Layer
+        sleep(verweilzeit)  # Verweilzeit
+        pag.rightClick(2094, 591)  # Rechtsklick für Kontextmenü
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2154, 625)  # Löschen im Kontextmenü klicken
+        sleep(2)  # Verweilzeit 2 Sekunden
+
+        pag.doubleClick(2038, 857)  # Doppelklick auf Rohteilmitnahme Layer
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(1973, 63)  # Öffnen Rohteilmitnahme.stl
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2853, 795)  # Koordinaten vom Pfad im Öffnen Fenster
+        sleep(verweilzeit)  # Verweilzeit
+
+        sleep(self.verweilzeit)
+        self.status_update_b.emit("Rohteilmitnahme STL wird importiert...")
+        pfad_rohteilmitnahme = self.PFAD_ROHTEILMITNAHME
+        clipboard.copy(str(pfad_rohteilmitnahme))
+        sleep(0.1)
+        pag.hotkey("ctrl", "v")
+
+
+        pag.click(3151, 793)  # Öffnen Rohteilmitnahme.stl
+        sleep(5)  # Verweilzeit
+        pag.click(2109, 668)  # Klick auf Layer
+
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2246, 96)  # Simulationsparameter
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2071, 192)  # Klick auf Bauteil
+        sleep(0.5)  # Verweilzeit
+        pag.click(2064, 230)  # Klick auf Rohteil
+        sleep(0.5)  # Verweilzeit
+        pag.click(2418, 246)  # Volumenmodell auswählen
+        sleep(0.5)  # Verweilzeit
+        pag.click(2418, 276)  # Volumenmodell anklicken
+        sleep(0.5)  # Verweilzeit
+        pag.click(2418, 276)  # Volumenmodell anklicken
+
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2904, 67)  # Arbeitsebenen
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2904, 133)  # Arbeitsebene Vorne
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2175, 294)  # Fertigteil Pfeil anklicken
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2900, 640)  # Solid anklicken (Bauteil definieren)
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2900, 640)  # Solid anklicken bestätigen
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2425, 574)  # Aktualisieren
+
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2904, 67)  # Arbeitsebenen
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2904, 102)  # Arbeitsebene Oben
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2175, 294)  # Fertigteil Pfeil anklicken
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2900, 640)  # Solid anklicken (Bauteil definieren)
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2900, 640)  # Solid anklicken bestätigen
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2425, 574)  # Aktualisieren
+
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2904, 67)  # Arbeitsebenen
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2904, 118)  # Arbeitsebene Isometrisch
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2175, 294)  # Fertigteil Pfeil anklicken
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2900, 640)  # Solid anklicken (Bauteil definieren)
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2900, 640)  # Solid anklicken bestätigen
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2425, 574)  # Aktualisieren
+
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2333, 618)  # OK Klicken
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
+        sleep(verweilzeit)  # Verweilzeit
+
+
+    # Für Zukünftige Automatisierung --> Prüft ob der NP auf der B-Seite stimmt
+    def nullpunkt_pruefen(self):
         pass
