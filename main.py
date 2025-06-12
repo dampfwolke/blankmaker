@@ -19,6 +19,7 @@ from utils.kreis import kreis_erstellen
 from utils.input_validators import validate_dimensions, validate_circle_dimensions, calculate_spanntiefe
 from utils.ui_helpers import populate_combobox_with_subfolders
 from utils.autoesprit_a import EspritA
+from utils.autoesprit_b import EspritB
 
 from UI.frm_main_window import Ui_frm_main_window
 from UI.animated_tabhelper import AnimatedTabHelper
@@ -92,6 +93,8 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.pb_esprit_start_makro.clicked.connect(self.on_esprit_makro_clicked)
         self.pb_wizard_a.clicked.connect(self.on_wizard_a_clicked)
 
+        self.pb_wizard_b.clicked.connect(self.on_wizard_b_clicked)
+
         # --- Python Commander Setup ---
         self.le_at_nr.setDisabled(False)
         projekt_prefix = self.settings.get("projekt_prefix", "").replace("AT-", "")
@@ -104,7 +107,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.nc_file_check_timer.start(2000)
         self.update_nc_file_count()
 
-##############################################################################################################
 
     @qtc.Slot()
     def on_wizard_a_clicked(self):
@@ -187,6 +189,72 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         # Wichtig: Den Button wieder aktivieren
         self.pb_wizard_a.setEnabled(True)
         self.pb_wizard_b.setEnabled(True)
+
+    #######################################################################################################################
+
+    @qtc.Slot()
+    def on_wizard_b_clicked(self):
+        # 1. Prüfen, ob bereits ein Wizard läuft, um doppelte Starts zu verhindern
+        if self.wizard_thread and self.wizard_thread.isRunning():
+            self.statusBar().showMessage("Ein Automatisierungs-Prozess läuft bereits.", 5000)
+            return
+
+        # 2. Daten wie bisher sammeln
+        pgm_name = self.le_zeichnungsnr.text()
+        pfad = self._get_and_validate_target_dir()
+        if not pfad: return
+        typ = self.cb_auto_option_b.currentText()
+        sleep_timer = self.hsl_sleep_timer.value()
+
+        # 3. Thread und Worker erstellen und verbinden
+        self.wizard_thread = qtc.QThread()
+        self.wizard_worker = EspritB(pgm_name_b=pgm_name, pfad_b=pfad, typ_b=typ, sleep_timer=sleep_timer)
+        self.wizard_worker.moveToThread(self.wizard_thread)
+
+        # 4. Signale und Slots verbinden
+        self.wizard_thread.started.connect(self.wizard_worker.run_b)
+        self.wizard_worker.finished_b.connect(self.on_wizard_b_finished)
+        self.wizard_worker.status_update_b.connect(self.statusBar().showMessage)
+        # <<< HIER IST DIE ÄNDERUNG >>>
+        # Wir verbinden das Signal mit unserem neuen, robusten Slot.
+        self.wizard_worker.show_info_dialog_b.connect(self.display_worker_message)
+        # self.wizard_worker.ausgelesene_fertig_werte.connect(self.fertig_abmasse_eintragen)
+
+        # WICHTIG: Aufräum-Logik
+        # Erst wenn der Worker fertig ist, den Thread beenden.
+        self.wizard_worker.finished_b.connect(self.wizard_thread.quit)
+        # Erst wenn der Thread beendet ist, die Objekte zum Löschen markieren.
+        self.wizard_thread.finished.connect(self.wizard_worker.deleteLater)
+        self.wizard_thread.finished.connect(self.wizard_thread.deleteLater)
+        # UND: Wenn der Thread gelöscht ist, die Python-Referenz entfernen!
+        self.wizard_thread.finished.connect(self.clear_wizard_thread_reference)
+
+        # 5. Den Thread starten
+        self.wizard_thread.start()
+
+        # UI anpassen
+        self.pb_wizard_a.setEnabled(False)
+        self.pb_wizard_b.setEnabled(False)
+        self.startzeit = time.perf_counter()
+        self.statusBar().showMessage("Automatisierung gestartet...", 3000)
+
+    @qtc.Slot(bool, str)
+    def on_wizard_b_finished(self, success: bool, message: str):
+        print(f"Wizard B beendet. Erfolg: {success}. Nachricht: {message}")
+        if success:
+            self.endzeit = time.perf_counter()
+            duration = self.endzeit - self.startzeit
+            minutes = int(duration // 60)
+            seconds = int(duration % 60)
+            self.statusBar().showMessage(f"Erfolg: {message}! (Laufzeit: {minutes}m {seconds}s))", 7000)
+        else:
+            self.statusBar().showMessage(f"Fehler: {message} ({zeitstempel(1)})", 10000)
+
+        # Wichtig: Den Button wieder aktivieren
+        self.pb_wizard_a.setEnabled(True)
+        self.pb_wizard_b.setEnabled(True)
+
+#######################################################################################################################
 
     @qtc.Slot()
     def clear_wizard_thread_reference(self):
