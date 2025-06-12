@@ -139,9 +139,9 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.wizard_thread.started.connect(self.wizard_worker.run)
         self.wizard_worker.finished.connect(self.on_wizard_a_finished)
         self.wizard_worker.status_update.connect(self.statusBar().showMessage)
-        self.wizard_worker.show_info_dialog.connect(self.show_information_dialog)
-        
-        # NEU: Signal zum Eintragen der Fertigmaße mit dem entsprechenden Slot verbinden
+        # <<< HIER IST DIE ÄNDERUNG >>>
+        # Wir verbinden das Signal mit unserem neuen, robusten Slot.
+        self.wizard_worker.show_info_dialog.connect(self.display_worker_message)
         self.wizard_worker.ausgelesene_fertig_werte.connect(self.fertig_abmasse_eintragen)
 
         # WICHTIG: Aufräum-Logik
@@ -196,9 +196,24 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.wizard_thread = None
 
     @qtc.Slot(str, str)
-    def show_information_dialog(self, title: str, text: str):
-        qtw.QMessageBox.information(self, title, text)
-######################################################################################################
+    def display_worker_message(self, title: str, text: str):
+        """
+        Erstellt und zeigt eine MessageBox an, die vom Worker-Thread getriggert wird.
+        Diese Methode ist der Slot für das 'show_info_dialog'-Signal.
+        """
+        # Wir erstellen eine Instanz, anstatt eine statische Methode zu verwenden. Das ist robuster.
+        msg_box = qtw.QMessageBox(self)  # 'self' setzt das Hauptfenster als Parent
+
+        # Entscheide über das Icon basierend auf dem Titel
+        if "fehler" in title.lower() or "abbruch" in title.lower():
+            msg_box.setIcon(qtw.QMessageBox.Icon.Critical)
+        else:
+            msg_box.setIcon(qtw.QMessageBox.Icon.Warning)
+
+        msg_box.setWindowTitle(title)
+        msg_box.setText(text)
+        msg_box.setStandardButtons(qtw.QMessageBox.StandardButton.Ok)
+        msg_box.exec()  # Zeigt die Box an und blockiert, bis der User 'OK' klickt
 
     @qtc.Slot()
     def update_nc_file_count(self):

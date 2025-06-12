@@ -2,15 +2,15 @@ from pathlib import Path
 from time import sleep
 import re
 
-from PySide6.QtCore import QObject, Signal
+from PySide6.QtCore import QObject, Signal, QThread
 import pyautogui as pag
 import clipboard
 
 from utils.click_image import click_image
 from utils.zeitstempel import zeitstempel
 
+
 class EspritA(QObject):
-    # --- Signale für die Kommunikation mit der GUI ---
     # Signal(str) -> sendet eine Statusmeldung als Text
     status_update = Signal(str)
     # Signal(str, str) -> sendet Titel und Text für eine Informations-MessageBox
@@ -20,7 +20,8 @@ class EspritA(QObject):
     # Signal Fertigteil Abmasse X Y Z ausgelesen
     ausgelesene_fertig_werte = Signal(str, str, str)
 
-    def __init__(self, pgm_name: str, x_roh: str, y_roh: str, z_roh: str, pfad: Path, bearbeitung_auswahl: str, typ: str,
+    def __init__(self, pgm_name: str, x_roh: str, y_roh: str, z_roh: str, pfad: Path, bearbeitung_auswahl: str,
+                 typ: str,
                  sleep_timer: int):
         # Super(:D) Wichtig: super().__init__() aufrufen, da wir von QObject erben
         super().__init__()
@@ -49,90 +50,136 @@ class EspritA(QObject):
                 f"Umfang der Automation: {self.typ}\n"
                 f"Verweilzeit: {self.sleep_timer} Sekunden")
 
+    def abgeschlossen(self) -> None:
+        """Sendet das finale Erfolgssignal."""
+        self.finished.emit(True, f"Automatisierung '{self.typ}' erfolgreich abgeschlossen.")
+
     def automations_typ_bestimmen(self) -> None:
         """ Hier wird entschieden welche Autoaktionsabschnitte ausgeführt werden z.B. nur Ausfüllhilfe oder vollständig etc.
         abhängig von dem übergebenen Wert aus der "cb_bearbeitung_auswahl" im main script.
-        :return: str """
+        :return: None """
         if self.typ == "Ausfüllhilfe":
             self.status_update.emit("Starte 'Ausfüllhilfe'")
             self.ausfuellhilfe_a()
+            self.abgeschlossen()
+
         elif self.typ == "Gandalf":
             self.status_update.emit("Starte Automatisierung mit 'Gandalf'")
+            # Prüfen der Rohteilmaße
+            erfolg, msg = self.roh_abmasse_pruefen()
+            if not erfolg:
+                self.show_info_dialog.emit("Ungültige Eingabe", msg)
+                self.finished.emit(False, "Abbruch wegen ungültiger Rohteilabmaße.")
+                return
+            # Prüfen des Dateinamens
+            erfolg, msg = self.esprit_dateiname_pruefen()
+            if not erfolg:
+                self.show_info_dialog.emit("Dateifehler", msg)
+                self.finished.emit(False, "Abbruch wegen Dateikonflikt.")
+                return
+            # Aktionen durchführen
             self.ausfuellhilfe_a()
             self.esprit_datei_speichern()
-            self.rohteil_erstellen()
-            self.spannmittel_importieren()
-        elif self.typ == "Bounding Box auslesen":
-            # TEST
+            # Fertigteilmaße auslesen und prüfen
             self.fertigteil_bounding_box_auslesen()
-            self.fertig_abmasse_eintragen()
-            self.status_update.emit("Starte Automatisierung mit 'Gandalf'")
-            self.ausfuellhilfe_a()
+            erfolg, msg = self.fertig_abmasse_pruefen()
+            if not erfolg:
+                self.show_info_dialog.emit("Fehler beim Auslesen", msg)
+                self.finished.emit(False, "Abbruch: Fertigteilmaße konnten nicht validiert werden.")
+                return
+            # Aufmaß vergleichen
+            erfolg, msg = self.fertig_und_rohmasse_vergleichen()
+            if not erfolg:
+                self.show_info_dialog.emit("Fehler im Aufmaß", msg)
+                self.finished.emit(False, "Abbruch: Aufmaß außerhalb der Toleranzen.")
+                return
+
+            # Restliche Aktionen
             self.esprit_datei_speichern()
             self.rohteil_erstellen()
             self.spannmittel_importieren()
+            self.abgeschlossen()
 
-            ###########
+        elif self.typ == "Bounding Box auslesen":
+            self.fertigteil_bounding_box_auslesen()
+            erfolg, msg = self.fertig_abmasse_pruefen()
+            if not erfolg:
+                self.show_info_dialog.emit("Fehler beim Auslesen der Bounding Box", msg)
+                self.finished.emit(False, "Fehler beim Validieren der Bounding Box.")
+                return
+            self.fertig_abmasse_eintragen()
+            self.abgeschlossen()
+
+        elif self.typ == "Platzhalter":
+            # Hier deine Logik für den Platzhalter-Typ einfügen
+            self.status_update.emit("Platzhalter-Funktion wurde aufgerufen.")
+            self.finished.emit(True, "Platzhalter-Funktion beendet.")
+            pass  # Platzhalter für Testfunktionen
+
         else:
-            self.status_update.emit("Kein gültiger 'automations_typ' ausgewählt!")
-            print("Es wurde kein gültiger 'automations_typ' ausgewählt!")
+            error_msg = "Kein gültiger 'automations_typ' ausgewählt!"
+            self.status_update.emit(error_msg)
+            self.show_info_dialog.emit("Auswahlfehler", error_msg)
+            self.finished.emit(False, error_msg)
 
-    def roh_abmasse_pruefen(self) -> bool:
-        """ Prüfung ob Rohteilmaße gültig sind :return: bool"""
+    def roh_abmasse_pruefen(self) -> tuple[bool, str]:
+        """ Prüfung ob Rohteilmaße gültig sind. :return: (bool, str)"""
         try:
             if float(self.x_roh) > 0 and float(self.y_roh) > 0 and float(self.z_roh) > 0:
-                return True
+                return True, ""
             else:
-                self.status_update.emit("Fehler: Rohteilabmaße müssen größer als 0 sein.")
-                return False
+                msg = "Rohteilabmaße müssen größer als 0 sein."
+                self.status_update.emit(f"Fehler: {msg}")
+                return False, msg
         except (ValueError, TypeError):
-            self.status_update.emit("Fehler: Rohteilabmaße sind keine gültigen Zahlen.")
-            return False
+            msg = "Rohteilabmaße sind keine gültigen Zahlen."
+            self.status_update.emit(f"Fehler: {msg}")
+            return False, msg
 
     def fertigteil_bounding_box_auslesen(self) -> None:
         """Mithilfe von pyautogui und Hilfsmodul click_image wird in Esprit die Bounding Box des aktuellen Bauteils ausgelesen."""
         self.status_update.emit("Starte Fertigteilmaß auslesen....")
         bild_pfad_relavtiv = Path(".") / "utils" / "automation_bilder" / "bauteil.png"
         bild_pfad_absolut = bild_pfad_relavtiv.resolve()
-        verweilzeit = self.verweilzeit         # festlegen der Sleep Zeit
-        pag.doubleClick(2109, 668)            # Doppelklick auf Layer
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.doubleClick(2038, 713)            # Doppelklick auf Solid Layer
-        sleep(verweilzeit)                     # Verweilzeit
+        verweilzeit = self.verweilzeit  # festlegen der Sleep Zeit
+        pag.doubleClick(2109, 668)  # Doppelklick auf Layer
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
+        sleep(verweilzeit)  # Verweilzeit
+        pag.doubleClick(2038, 713)  # Doppelklick auf Solid Layer
+        sleep(verweilzeit)  # Verweilzeit
         self.status_update.emit("Fertigteilmaß wird ausgelesen...")
-        pag.click(2481, 68)                   # Nur Volumenmodell Auswahl anklicken (aufklappen)
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.click(2480, 434)                  # Nur Volumenmodell auswählen
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.click(2109, 640)                  # Fokussieren Klick
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.hotkey('ctrl', 'a')               # Alles markieren (Solid)
-        sleep(verweilzeit)                     # Verweilzeit
+        pag.click(2481, 68)  # Nur Volumenmodell Auswahl anklicken (aufklappen)
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2480, 434)  # Nur Volumenmodell auswählen
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2109, 640)  # Fokussieren Klick
+        sleep(verweilzeit)  # Verweilzeit
+        pag.hotkey('ctrl', 'a')  # Alles markieren (Solid)
+        sleep(verweilzeit)  # Verweilzeit
         click_image(str(bild_pfad_absolut), toleranz=0.65)  # Auf Bauteil Reiter klicken mit Bilderkennung
         self.status_update.emit("Reiter Bauteil gefunden...")
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.click(1291, 47)                   # Auf Erkunden Reiter im Bauteil Menü klicken
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(1291, 47)  # Auf Erkunden Reiter im Bauteil Menü klicken
         self.status_update.emit("Abmaße werden in Zwischenspeicher kopiert...")
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.doubleClick(1669, 331)            # Doppelklick auf Länge des Bauteils
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.hotkey('ctrl', 'c')               # Abmaße des Fertigteils kopieren
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.click(2481, 68)                   # Nur Volmenmodell Auswahl anklicken (aufklappen)
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.click(2472, 88)                   # Alles auswählen
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.click(2109, 640)                  # Fokussieren Klick
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.click(1308, 1009)                 # Auf Feature im Projekt-Manager klicken
-        sleep(verweilzeit)                     # Verweilzeit
-        pag.doubleClick(2038, 697)            # Doppelklick auf Standard Layer
+        sleep(verweilzeit)  # Verweilzeit
+        pag.doubleClick(1669, 331)  # Doppelklick auf Länge des Bauteils
+        sleep(verweilzeit)  # Verweilzeit
+        pag.hotkey('ctrl', 'c')  # Abmaße des Fertigteils kopieren
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2481, 68)  # Nur Volmenmodell Auswahl anklicken (aufklappen)
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2472, 88)  # Alles auswählen
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(2109, 640)  # Fokussieren Klick
+        sleep(verweilzeit)  # Verweilzeit
+        pag.click(1308, 1009)  # Auf Feature im Projekt-Manager klicken
+        sleep(verweilzeit)  # Verweilzeit
+        pag.doubleClick(2038, 697)  # Doppelklick auf Standard Layer
         clipboard_content = clipboard.paste()
         string = clipboard_content.strip("()")
         string = re.sub(r'(\d+),(\d+)', r'\1.\2', string)
@@ -140,16 +187,56 @@ class EspritA(QObject):
         self.x_fertig = abmasse[0]
         self.y_fertig = abmasse[1]
         self.z_fertig = abmasse[2]
-        self.status_update.emit(f"X={self.x_fertig}, Y={self.y_fertig}, Z={self.z_fertig}")
-        print(self.x_fertig, self.y_fertig, self.z_fertig)
-        self.finished.emit(True, "Fertigteilmaß ausgelesen erfolgreich abgeschlossen.")
+        self.status_update.emit(f"Ausgelesen: X={self.x_fertig}, Y={self.y_fertig}, Z={self.z_fertig}")
 
-    def fertig_abmasse_pruefen(self) -> bool:
-        """ Es wird geprüft ob, die Fertigteilmaße korrekt ausgelesen wurden. :return: bool"""
+    def fertig_abmasse_pruefen(self) -> tuple[bool, str]:
+        """ Es wird geprüft ob, die Fertigteilmaße korrekt ausgelesen wurden. :return: (bool, str)"""
+        try:
+            if self.x_fertig is None or self.y_fertig is None or self.z_fertig is None:
+                msg = "Fertigteilmaße wurden nicht ausgelesen."
+                self.status_update.emit(f"Fehler: {msg}")
+                return False, msg
 
-    def fertig_und_rohmasse_vergleichen(self) -> bool:
-        """ Prüfung ob Rohteil in X > 1.5mm, in Y > 0.8mm, Z > 4.5mm Aufmaß für Fertigteil hat. :return: bool"""
-        pass
+            if float(self.x_fertig) > 0 and float(self.y_fertig) > 0 and float(self.z_fertig) > 0:
+                self.status_update.emit("Fertigteilmaße erfolgreich validiert.")
+                return True, ""
+            else:
+                msg = "Ausgelesene Fertigteilmaße müssen größer als 0 sein."
+                self.status_update.emit(f"Fehler: {msg}")
+                return False, msg
+        except (ValueError, TypeError):
+            msg = "Ausgelesene Fertigteilmaße sind keine gültigen Zahlen."
+            self.status_update.emit(f"Fehler: {msg}")
+            return False, msg
+
+    def fertig_und_rohmasse_vergleichen(self) -> tuple[bool, str]:
+        """ Prüfung ob Rohteil Aufmaß für Fertigteil hat und ob der Rohteil nicht zu groß ist.
+        :return: (bool, str)"""
+        try:
+            x_r, y_r, z_r = float(self.x_roh), float(self.y_roh), float(self.z_roh)
+            x_f, y_f, z_f = float(self.x_fertig), float(self.y_fertig), float(self.z_fertig)
+
+            aufmass_x, aufmass_y, aufmass_z = x_r - x_f, y_r - y_f, z_r - z_f
+
+            fehler_liste = []
+            if aufmass_x < 1.5: fehler_liste.append(f"• X-Aufmaß zu gering ({aufmass_x:.2f}mm < 1.5mm)")
+            if aufmass_y < 0.6: fehler_liste.append(f"• Y-Aufmaß zu gering ({aufmass_y:.2f}mm < 0.6mm)")
+            if aufmass_z < 4.5: fehler_liste.append(f"• Z-Aufmaß zu gering ({aufmass_z:.2f}mm < 4.5mm)")
+            if aufmass_x > 11.0: fehler_liste.append(f"• X-Aufmaß zu groß ({aufmass_x:.2f}mm > 11mm)")
+            if aufmass_y > 14.0: fehler_liste.append(f"• Y-Aufmaß zu groß ({aufmass_y:.2f}mm > 14mm)")
+            if aufmass_z > 25.0: fehler_liste.append(f"• Z-Aufmaß zu groß ({aufmass_z:.2f}mm > 25mm)")
+
+            if fehler_liste:
+                fehler_nachricht = "Die Aufmaße liegen außerhalb der Toleranzen:\n\n" + "\n".join(fehler_liste)
+                self.status_update.emit("Fehler im Aufmaß festgestellt. Abbruch.")
+                return False, fehler_nachricht
+            else:
+                self.status_update.emit("Aufmaße sind innerhalb der Toleranzen.")
+                return True, ""
+        except (ValueError, TypeError):
+            error_msg = "Fehler: Konnte Roh- oder Fertigmaße für den Vergleich nicht in Zahlen umwandeln."
+            self.status_update.emit(error_msg)
+            return False, error_msg
 
     def fertig_abmasse_eintragen(self) -> None:
         '''Trägt die ausgelesenen Abmasse ins Hauptprogramm in die entsprechenden lineedits ein.'''
@@ -158,8 +245,24 @@ class EspritA(QObject):
         z = str(self.z_fertig)
         self.ausgelesene_fertig_werte.emit(x, y, z)
 
-    def esprit_dateiname_pruefen(self) -> bool:
-        """ Prüfung, ob der Pfad existiert und korrekt ist, und ob eine Datei mit demselben Dateinamen im Ordner ist. :return: bool"""
+    def esprit_dateiname_pruefen(self) -> tuple[bool, str]:
+        """ Prüfung, ob der Pfad existiert und ob eine Datei mit demselben Namen bereits im Ordner ist.
+         :return: (bool, str)"""
+        if not self.pfad.is_dir():
+            error_msg = f"Fehler: Der angegebene Pfad '{self.pfad}' existiert nicht oder ist kein Ordner."
+            self.status_update.emit(error_msg)
+            return False, error_msg
+
+        dateiname_mit_endung = f"{self.pgm_name}_A.esp"
+        zieldatei_pfad = self.pfad / dateiname_mit_endung
+
+        if zieldatei_pfad.exists():
+            error_msg = f"Die Datei '{dateiname_mit_endung}' existiert bereits im Zielordner."
+            self.status_update.emit(f"Abbruch: {error_msg}")
+            return False, error_msg
+
+        self.status_update.emit("Dateiname und Pfad sind gültig.")
+        return True, ""
 
     def ausfuellhilfe_a(self) -> None:
         """ Datei und Programmname werden in den Eigenschaften eingefügt."""
@@ -174,9 +277,7 @@ class EspritA(QObject):
         sleep(verweilzeit)
         pag.press('delete')
         sleep(verweilzeit)
-        # Programmname einfügen und "_A" als Endung hinzufügen
         pgm_name_mit_endung = f"{self.pgm_name}_A".strip()
-        # mit clipboard in den Zwischenspeicher kopieren
         clipboard.copy(pgm_name_mit_endung)
         sleep(0.1)
         pag.hotkey("ctrl", "v")
@@ -187,7 +288,6 @@ class EspritA(QObject):
         sleep(0.1)
         pag.press('delete')
         sleep(0.1)
-        # Programmname einfügen ohne Endung
         pgm_name_ohne_endung = self.pgm_name.strip()
         clipboard.copy(pgm_name_ohne_endung)
         sleep(0.1)
@@ -198,14 +298,12 @@ class EspritA(QObject):
         pag.hotkey('ctrl', 'a')
         pag.press('delete')
         sleep(0.1)
-        # Art der Bearbeitung einfügen z.B. 5 Achs 3 Achs
         clipboard.copy(self.bearbeitung_auswahl)
         sleep(0.1)
         pag.hotkey("ctrl", "v")
         sleep(verweilzeit)
         pag.press('Enter')
         sleep(verweilzeit)
-        # Fokussieren Klick
         pag.doubleClick(2109, 668)
         self.status_update.emit(f"Ausfüllhilfe abgeschlossen!  {zeitstempel(1)}")
 
@@ -229,38 +327,35 @@ class EspritA(QObject):
 
     def rohteil_erstellen(self) -> None:
         """dxf Datei wird aus dem aktuellen KW-Wochen Ordner in Esprit importiert und die Simulationsbauteile werden erstellt."""
-
-        pag.doubleClick(2109, 668)          # Doppelklick auf Layer
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(1973, 63)                 # Öffnen !rohteil.dxf
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2853, 795)                # Koordinaten vom Pfad im Öffnen Fenster
-        sleep(self.verweilzeit)                   # verweilzeit
+        pag.doubleClick(2109, 668)
+        sleep(self.verweilzeit)
+        pag.click(1973, 63)
+        sleep(self.verweilzeit)
+        pag.click(2853, 795)
+        sleep(self.verweilzeit)
         self.status_update.emit("Rohteil DXF wird importiert...")
         pfad_rohteil = self.pfad / "!rohteil.dxf"
         clipboard.copy(str(pfad_rohteil))
         sleep(0.1)
-        pag.hotkey("ctrl", "v")             # Einfügen des Rohteil.dxf Pfads
-        pag.click(3151, 793)                # Öffnen !rohteil.dxf
-        sleep(self.verweilzeit)                   # verweilzeit
+        pag.hotkey("ctrl", "v")
+        pag.click(3151, 793)
+        sleep(self.verweilzeit)
         self.status_update.emit(f"Rohteil DXF eingefügt!  {zeitstempel(1)}")
-        pag.click(2914, 66)                 # Klick auf Ansichten
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2900, 133)                # Klick auf Ansicht Vorne
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2109, 668)                # Klick auf Layer
-        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2914, 66)
+        sleep(self.verweilzeit)
+        pag.click(2900, 133)
+        sleep(self.verweilzeit)
+        pag.click(2109, 668)
+        sleep(self.verweilzeit)
         self.status_update.emit("Rohteilabmaße werden eingetragen....")
-        pag.click(2246, 96)                 # Simulationsparameter
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2071, 192)                # Klick auf Bauteil
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.doubleClick(2231, 293)          # Doppelklick auf Länge
-        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2246, 96)
+        sleep(self.verweilzeit)
+        pag.click(2071, 192)
+        sleep(self.verweilzeit)
+        pag.doubleClick(2231, 293)
+        sleep(self.verweilzeit)
 
-        length = float(self.x_roh)
-        width = float(self.y_roh)
-        height = float(self.z_roh)
+        length, width, height = float(self.x_roh), float(self.y_roh), float(self.z_roh)
 
         pag.typewrite(str(length))
         pag.press('tab')
@@ -276,102 +371,96 @@ class EspritA(QObject):
         pag.press('tab')
 
         self.status_update.emit("Simulationsbauteil (Fertigteil) wird erstellt....")
-
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2425, 574)                # Aktualisieren
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2064, 247)                # Fertigteil anklicken
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2175, 294)                # Fertigteil Pfeil anklicken
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2900, 631)                # Solid anklicken (Bauteil definieren)
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2900, 631)                # Solid anklicken bestätigen
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2425, 574)                # Aktualisieren
-
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2904, 67)                 # Arbeitsebenen
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2904, 102)                # Arbeitsebene Oben
-        sleep(self.verweilzeit)                   # self.verweilzeit
-        pag.click(2175, 294)                # Fertigteil Pfeil anklicken
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2900, 631)                # Solid anklicken (Bauteil definieren)
-        sleep(self.verweilzeit)                   # self.verweilzeit
-        pag.click(2900, 631)                # Solid anklicken bestätigen
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2425, 574)                # Aktualisieren
-
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2904, 67)                 # Arbeitsebenen
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2904, 118)                # Arbeitsebene Isometrisch
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2175, 294)                # Fertigteil Pfeil anklicken
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2900, 631)                # Solid anklicken (Bauteil definieren)
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2900, 631)                # Solid anklicken bestätigen
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2425, 574)                # Aktualisieren
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2333, 618)                # OK Klicken
+        sleep(self.verweilzeit)
+        pag.click(2425, 574)
+        sleep(self.verweilzeit)
+        pag.click(2064, 247)
+        sleep(self.verweilzeit)
+        pag.click(2175, 294)
+        sleep(self.verweilzeit)
+        pag.click(2900, 631)
+        sleep(self.verweilzeit)
+        pag.click(2900, 631)
+        sleep(self.verweilzeit)
+        pag.click(2425, 574)
+        sleep(self.verweilzeit)
+        pag.click(2904, 67)
+        sleep(self.verweilzeit)
+        pag.click(2904, 102)
+        sleep(self.verweilzeit)
+        pag.click(2175, 294)
+        sleep(self.verweilzeit)
+        pag.click(2900, 631)
+        sleep(self.verweilzeit)
+        pag.click(2900, 631)
+        sleep(self.verweilzeit)
+        pag.click(2425, 574)
+        sleep(self.verweilzeit)
+        pag.click(2904, 67)
+        sleep(self.verweilzeit)
+        pag.click(2904, 118)
+        sleep(self.verweilzeit)
+        pag.click(2175, 294)
+        sleep(self.verweilzeit)
+        pag.click(2900, 631)
+        sleep(self.verweilzeit)
+        pag.click(2900, 631)
+        sleep(self.verweilzeit)
+        pag.click(2425, 574)
+        sleep(self.verweilzeit)
+        pag.click(2333, 618)
 
         self.status_update.emit(f"Simulationsbauteile erstellt!   {zeitstempel(1)}")
 
     def spannmittel_importieren(self) -> None:
         """Spannmittel wird aus dem aktuellen KW-Wochen Ordner, in Esprit importiert und die Automatisierung abgeschlossen."""
         self.status_update.emit(f"Spannmittel Import gestartet.  {zeitstempel(1)}")
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2109, 668)                # Klick auf Layer (Fokussieren)
-        sleep(0.2)                                # verweilzeit
+        sleep(self.verweilzeit)
+        pag.click(2109, 668)
+        sleep(0.2)
         self.status_update.emit("Layer werden ausgeblendet...")
-        pag.click(1995, 713)                # Solid Layer ausblenden (Haken)
-        sleep(0.2)                                # verweilzeit
-        pag.click(1995, 729)                # Rohteil Layer ausblenden (Haken)
-        sleep(0.2)                                # verweilzeit
-        pag.doubleClick(2038, 827)          # Doppelklick auf Müll Layer
-        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(1995, 713)
+        sleep(0.2)
+        pag.click(1995, 729)
+        sleep(0.2)
+        pag.doubleClick(2038, 827)
+        sleep(self.verweilzeit)
         self.status_update.emit("Schraubstock wird geöffnet...")
-        pag.click(1973, 63)                 # Öffnen !schraubstock.step
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2853, 795)                # Koordinaten vom Pfad im Öffnen Fenster
-        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(1973, 63)
+        sleep(self.verweilzeit)
+        pag.click(2853, 795)
+        sleep(self.verweilzeit)
 
         pfad_schraubstock = self.pfad / "!schraubstock.step"
         clipboard.copy(str(pfad_schraubstock))
         sleep(0.1)
-        pag.hotkey("ctrl", "v")             # Einfügen des schraubstock.step Pfads
-
-        pag.click(3151, 793)                # Öffnen !schraubstock.step
-        sleep(10)                                 # self.verweilzeit 10 sec (Warten auf Laden von STEP)
+        pag.hotkey("ctrl", "v")
+        pag.click(3151, 793)
+        sleep(10)  # Längere Wartezeit für STEP-Datei-Import
         self.status_update.emit(f"Schraubstock erfolgreich importiert.  {zeitstempel(1)}")
-        pag.click(2109, 640)                # Fokussieren Klick
-        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(2109, 640)
+        sleep(self.verweilzeit)
         self.status_update.emit("Schraubstock wird als Spannmittel definiert...")
-        pag.hotkey('ctrl', 'a')             # Alles markieren im Müll Layer
-        sleep(self.verweilzeit)                   # self.verweilzeit
-        pag.click(2373, 126)                # Simulationsbauteil erstellen
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(2766, 659)                # Übernehmen
-        pag.click(2109, 640)                # Fokussieren Klick
-        sleep(self.verweilzeit)                   # verweilzeit
-        pag.click(1995, 825)                # Müll Layer ausblenden (Haken)
-        sleep(0.2)                                # verweilzeit
+        pag.hotkey('ctrl', 'a')
+        sleep(self.verweilzeit)
+        pag.click(2373, 126)
+        sleep(self.verweilzeit)
+        pag.click(2766, 659)
+        pag.click(2109, 640)
+        sleep(self.verweilzeit)
+        pag.click(1995, 825)
+        sleep(0.2)
         self.status_update.emit("Layer werden wieder eingeblendet...")
-        pag.click(1995, 713)                # Solid Layer einblenden (Haken)
-        sleep(0.2)                                # verweilzeit
-        pag.click(1995, 729)                # Rohteil Layer einblenden (Haken)
-        sleep(0.2)                                # verweilzeit
-        pag.doubleClick(2038, 745)          # Doppelklick auf Feature
-        sleep(0.2)                                # verweilzeit
-        pag.click(2246, 96)                 # Simulationsparameter öffnen
-        sleep(self.verweilzeit)                   # verweilzeit
+        pag.click(1995, 713)
+        sleep(0.2)
+        pag.click(1995, 729)
+        sleep(0.2)
+        pag.doubleClick(2038, 745)
+        sleep(0.2)
+        pag.click(2246, 96)
+        sleep(self.verweilzeit)
         self.status_update.emit(f"Automatisierung abgeschlossen! {zeitstempel(1)}")
-        self.finished.emit(True, "Wizard A erfolgreich abgeschlossen.")
-
-#####################################################################################################
+        # Der finale 'finished'-Aufruf wird jetzt in `automations_typ_bestimmen` gemacht.
 
     def run(self):
         """Hauptmethode des Workers, die beim Start des Threads ausgeführt wird."""
@@ -381,37 +470,6 @@ class EspritA(QObject):
             # Bei einem Fehler, sende ein Fehlersignal mit der Fehlermeldung
             error_message = f"Ein unerwarteter Fehler ist aufgetreten: {e}"
             self.status_update.emit(error_message)
+            self.show_info_dialog.emit("Kritischer Fehler", error_message)
             self.finished.emit(False, error_message)
             print(f"[FEHLER] im EspritA Worker: {e}")
-    # def run(self):
-    #     """
-    #     Hauptmethode, die den Automationsprozess startet.
-    #     Hier kommt deine eigentliche Logik hin.
-    #     """
-    #     self.status_update.emit("Starte Wizard A...")
-    #     print(f"Wizard A gestartet mit folgenden Daten:\n{self}")
-    #
-    #     if not self.roh_abmasse_pruefen():
-    #         # Prozess mit Fehlermeldung beenden
-    #         self.finished.emit(False, "Validierung der Abmaße fehlgeschlagen.")
-    #         return
-    #
-    #     # --- Hier deine Logik einfügen ---
-    #     # Beispiel: Simuliere Arbeitsschritte und sende Updates an die GUI
-    #     try:
-    #         self.status_update.emit("Schritt 1: Analysiere Geometrie...")
-    #         sleep(self.sleep_timer / 2.0)  # Simuliere Arbeit
-    #
-    #         self.status_update.emit("Schritt 2: Generiere Werkzeugwege...")
-    #         sleep(self.sleep_timer / 2.0)  # Simuliere Arbeit
-    #
-    #         # Beispiel für eine Interaktion: Zeige eine Info-Box über die GUI
-    #         self.show_info_dialog.emit("Hinweis", f"Die Bearbeitung '{self.bearbeitung_auswahl}' wurde ausgewählt.")
-    #
-    #         # Wenn alles gut geht, sende ein Erfolgssignal
-    #         self.finished.emit(True, "Wizard A erfolgreich abgeschlossen.")
-    #
-    #     except Exception as e:
-    #         # Bei einem Fehler, sende ein Fehlersignal
-    #         error_message = f"Ein Fehler ist im Wizard A aufgetreten: {e}"
-    #         self.finished.emit(False, error_message)
