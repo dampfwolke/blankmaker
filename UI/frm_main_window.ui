@@ -1976,13 +1976,13 @@
            <widget class="QComboBox" name="cb_auto_option_a">
             <property name="minimumSize">
              <size>
-              <width>120</width>
+              <width>150</width>
               <height>20</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>160</width>
+              <width>200</width>
               <height>25</height>
              </size>
             </property>
@@ -1994,6 +1994,11 @@
             <item>
              <property name="text">
               <string>Ausfüllhilfe</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Bounding Box auslesen</string>
              </property>
             </item>
            </widget>
@@ -2246,13 +2251,13 @@
            <widget class="QComboBox" name="cb_auto_option_b">
             <property name="minimumSize">
              <size>
-              <width>120</width>
+              <width>150</width>
               <height>20</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>160</width>
+              <width>200</width>
               <height>25</height>
              </size>
             </property>
@@ -3621,7 +3626,7 @@
      <x>0</x>
      <y>0</y>
      <width>489</width>
-     <height>33</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">

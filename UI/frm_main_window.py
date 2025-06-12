@@ -687,9 +687,10 @@ class Ui_frm_main_window(object):
         self.cb_auto_option_a = QComboBox(self.wg_wizard_a_buttons)
         self.cb_auto_option_a.addItem("")
         self.cb_auto_option_a.addItem("")
+        self.cb_auto_option_a.addItem("")
         self.cb_auto_option_a.setObjectName(u"cb_auto_option_a")
-        self.cb_auto_option_a.setMinimumSize(QSize(120, 20))
-        self.cb_auto_option_a.setMaximumSize(QSize(160, 25))
+        self.cb_auto_option_a.setMinimumSize(QSize(150, 20))
+        self.cb_auto_option_a.setMaximumSize(QSize(200, 25))
 
         self.horizontalLayout_22.addWidget(self.cb_auto_option_a)
 
@@ -782,8 +783,8 @@ class Ui_frm_main_window(object):
         self.cb_auto_option_b.addItem("")
         self.cb_auto_option_b.addItem("")
         self.cb_auto_option_b.setObjectName(u"cb_auto_option_b")
-        self.cb_auto_option_b.setMinimumSize(QSize(120, 20))
-        self.cb_auto_option_b.setMaximumSize(QSize(160, 25))
+        self.cb_auto_option_b.setMinimumSize(QSize(150, 20))
+        self.cb_auto_option_b.setMaximumSize(QSize(200, 25))
 
         self.horizontalLayout_23.addWidget(self.cb_auto_option_b)
 
@@ -1240,7 +1241,7 @@ class Ui_frm_main_window(object):
         frm_main_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(frm_main_window)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 489, 33))
+        self.menubar.setGeometry(QRect(0, 0, 489, 21))
         self.menuDatei = QMenu(self.menubar)
         self.menuDatei.setObjectName(u"menuDatei")
         frm_main_window.setMenuBar(self.menubar)
@@ -1321,6 +1322,7 @@ class Ui_frm_main_window(object):
         self.pb_wizard_a.setText(QCoreApplication.translate("frm_main_window", u"Wizard_A", None))
         self.cb_auto_option_a.setItemText(0, QCoreApplication.translate("frm_main_window", u"Gandalf", None))
         self.cb_auto_option_a.setItemText(1, QCoreApplication.translate("frm_main_window", u"Ausf\u00fcllhilfe", None))
+        self.cb_auto_option_a.setItemText(2, QCoreApplication.translate("frm_main_window", u"Bounding Box auslesen", None))
 
         self.lb_sleep_timer.setText(QCoreApplication.translate("frm_main_window", u"Sleep Timer", None))
         self.tb_wizard_b_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
