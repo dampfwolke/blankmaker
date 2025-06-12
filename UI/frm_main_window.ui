@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>489</width>
-    <height>944</height>
+    <height>966</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -2001,6 +2001,11 @@
               <string>Bounding Box auslesen</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>TEST_A</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item>
@@ -2268,7 +2273,22 @@
             </item>
             <item>
              <property name="text">
-              <string>Ausfüllhilfe</string>
+              <string>ohne Spannmittel</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ausfüllhilfe B</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Bounding Box auslesen B</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>TEST_B</string>
              </property>
             </item>
            </widget>
@@ -3606,6 +3626,25 @@
      </widget>
     </item>
     <item>
+     <widget class="QProgressBar" name="progressBar">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>25</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="value">
+       <number>24</number>
+      </property>
+     </widget>
+    </item>
+    <item>
      <spacer name="verticalSpacer_5">
       <property name="orientation">
        <enum>Qt::Orientation::Vertical</enum>
@@ -3626,7 +3665,7 @@
      <x>0</x>
      <y>0</y>
      <width>489</width>
-     <height>21</height>
+     <height>33</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">

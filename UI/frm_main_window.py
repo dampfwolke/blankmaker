@@ -19,15 +19,16 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateEdit,
     QFormLayout, QFrame, QGridLayout, QGroupBox,
     QHBoxLayout, QLCDNumber, QLabel, QLineEdit,
-    QMainWindow, QMenu, QMenuBar, QPushButton,
-    QSizePolicy, QSlider, QSpacerItem, QStatusBar,
-    QTabWidget, QToolButton, QVBoxLayout, QWidget)
+    QMainWindow, QMenu, QMenuBar, QProgressBar,
+    QPushButton, QSizePolicy, QSlider, QSpacerItem,
+    QStatusBar, QTabWidget, QToolButton, QVBoxLayout,
+    QWidget)
 
 class Ui_frm_main_window(object):
     def setupUi(self, frm_main_window):
         if not frm_main_window.objectName():
             frm_main_window.setObjectName(u"frm_main_window")
-        frm_main_window.resize(489, 944)
+        frm_main_window.resize(489, 966)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -688,6 +689,7 @@ class Ui_frm_main_window(object):
         self.cb_auto_option_a.addItem("")
         self.cb_auto_option_a.addItem("")
         self.cb_auto_option_a.addItem("")
+        self.cb_auto_option_a.addItem("")
         self.cb_auto_option_a.setObjectName(u"cb_auto_option_a")
         self.cb_auto_option_a.setMinimumSize(QSize(150, 20))
         self.cb_auto_option_a.setMaximumSize(QSize(200, 25))
@@ -780,6 +782,9 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_23.addItem(self.horizontalSpacer_48)
 
         self.cb_auto_option_b = QComboBox(self.wg_wizard_b_buttons)
+        self.cb_auto_option_b.addItem("")
+        self.cb_auto_option_b.addItem("")
+        self.cb_auto_option_b.addItem("")
         self.cb_auto_option_b.addItem("")
         self.cb_auto_option_b.addItem("")
         self.cb_auto_option_b.setObjectName(u"cb_auto_option_b")
@@ -1234,6 +1239,14 @@ class Ui_frm_main_window(object):
 
         self.verticalLayout_8.addWidget(self.fr_scripts_aufklappen)
 
+        self.progressBar = QProgressBar(self.centralwidget)
+        self.progressBar.setObjectName(u"progressBar")
+        self.progressBar.setMinimumSize(QSize(0, 25))
+        self.progressBar.setMaximumSize(QSize(16777215, 50))
+        self.progressBar.setValue(24)
+
+        self.verticalLayout_8.addWidget(self.progressBar)
+
         self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_8.addItem(self.verticalSpacer_5)
@@ -1241,7 +1254,7 @@ class Ui_frm_main_window(object):
         frm_main_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(frm_main_window)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 489, 21))
+        self.menubar.setGeometry(QRect(0, 0, 489, 33))
         self.menuDatei = QMenu(self.menubar)
         self.menuDatei.setObjectName(u"menuDatei")
         frm_main_window.setMenuBar(self.menubar)
@@ -1323,12 +1336,16 @@ class Ui_frm_main_window(object):
         self.cb_auto_option_a.setItemText(0, QCoreApplication.translate("frm_main_window", u"Gandalf", None))
         self.cb_auto_option_a.setItemText(1, QCoreApplication.translate("frm_main_window", u"Ausf\u00fcllhilfe", None))
         self.cb_auto_option_a.setItemText(2, QCoreApplication.translate("frm_main_window", u"Bounding Box auslesen", None))
+        self.cb_auto_option_a.setItemText(3, QCoreApplication.translate("frm_main_window", u"TEST_A", None))
 
         self.lb_sleep_timer.setText(QCoreApplication.translate("frm_main_window", u"Sleep Timer", None))
         self.tb_wizard_b_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
         self.pb_wizard_b.setText(QCoreApplication.translate("frm_main_window", u"Wizard_B", None))
         self.cb_auto_option_b.setItemText(0, QCoreApplication.translate("frm_main_window", u"Saruman", None))
-        self.cb_auto_option_b.setItemText(1, QCoreApplication.translate("frm_main_window", u"Ausf\u00fcllhilfe", None))
+        self.cb_auto_option_b.setItemText(1, QCoreApplication.translate("frm_main_window", u"ohne Spannmittel", None))
+        self.cb_auto_option_b.setItemText(2, QCoreApplication.translate("frm_main_window", u"Ausf\u00fcllhilfe B", None))
+        self.cb_auto_option_b.setItemText(3, QCoreApplication.translate("frm_main_window", u"Bounding Box auslesen B", None))
+        self.cb_auto_option_b.setItemText(4, QCoreApplication.translate("frm_main_window", u"TEST_B", None))
 
         self.lb_x_fertig.setText(QCoreApplication.translate("frm_main_window", u"Fertigma\u00df X:", None))
         self.le_x_fertig.setText(QCoreApplication.translate("frm_main_window", u"100", None))

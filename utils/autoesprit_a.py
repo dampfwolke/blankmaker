@@ -139,8 +139,8 @@ class EspritA(QObject):
     def fertigteil_bounding_box_auslesen(self) -> None:
         """Mithilfe von pyautogui und Hilfsmodul click_image wird in Esprit die Bounding Box des aktuellen Bauteils ausgelesen."""
         self.status_update.emit("Starte Fertigteilmaß auslesen....")
-        bild_pfad_relavtiv = Path(".") / "utils" / "automation_bilder" / "bauteil.png"
-        bild_pfad_absolut = bild_pfad_relavtiv.resolve()
+        bild_pfad_relativ = Path(".") / "utils" / "automation_bilder" / "bauteil.png"
+        bild_pfad_absolut = bild_pfad_relativ.resolve()
         verweilzeit = self.verweilzeit  # festlegen der Sleep Zeit
         pag.doubleClick(2109, 668)  # Doppelklick auf Layer
         sleep(verweilzeit)  # Verweilzeit
