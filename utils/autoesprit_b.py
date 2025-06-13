@@ -48,11 +48,8 @@ class EspritB(QObject):
         :return: None """
         if self.typ_b == "Ausfüllhilfe B":
             self.status_update_b.emit("Starte 'Ausfüllhilfe_B'")
+            self.esprit_a_sicherung_speichern_b()
             self.ausfuellhilfe_b()
-
-            if self.esprit_dateiname_pruefen_b():
-                self.esprit_datei_speichern_b()
-
             self.abgeschlossen_b()
 
         elif self.typ_b == "TEST_B":
@@ -86,8 +83,9 @@ class EspritB(QObject):
 
         self.status_update_b.emit("Dateiname und Pfad sind gültig.")
         return True, ""
-
-    def esprit_datei_speichern_b(self):
+    
+    # funktioniert
+    def esprit_a_sicherung_speichern_b(self):
         pag.doubleClick(2109, 668)            # Doppelklick auf Layer
         sleep(self.verweilzeit)                     # Verweilzeit
         pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
@@ -96,15 +94,13 @@ class EspritB(QObject):
         sleep(4)                                    # Verweilzeit
         pag.doubleClick(2109, 668)            # Doppelklick auf Layer
         sleep(self.verweilzeit)                     # Verweilzeit
-
-        # wird evtl. nicht gebraucht --> TESTEN
         pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)                     # Verweilzeit
-        pag.click(2197, 728)                  # Klick auf "Alles auswählen"
-        sleep(self.verweilzeit)                     # Verweilzeit
-        pag.click(2000, 698)                  # Alle Layer ausblenden (Haken)
-        sleep(self.verweilzeit)                     # Verweilzeit
-        pag.doubleClick(2038, 713)            # Doppelklick auf Solid Layer
+        # pag.click(2197, 728)                  # Klick auf "Alles auswählen"
+        # sleep(self.verweilzeit)                     # Verweilzeit
+        # pag.click(2000, 698)                  # Alle Layer ausblenden (Haken)
+        # sleep(self.verweilzeit)                     # Verweilzeit
+        # pag.doubleClick(2038, 713)            # Doppelklick auf Solid Layer
 
     def fertigteil_bounding_box_auslesen(self) -> None:
         """Mithilfe von pyautogui und Hilfsmodul click_image wird in Esprit die Bounding Box des aktuellen Bauteils ausgelesen."""
@@ -191,14 +187,16 @@ class EspritB(QObject):
             msg = "Ausgelesene Fertigteilmaße sind keine gültigen Zahlen."
             self.status_update_b.emit(f"Fehler: {msg}")
             return False, msg
-
+    # funktioniert
     def ausfuellhilfe_b(self):
         self.status_update_b.emit("Ausfüllhilfe B-Seite gestartet...")
-        pag.click(2438, 122)
+        pag.click(2094, 591)  # Klick auf Layer (Fokussieren)
+        sleep(self.verweilzeit)  # Verweilzeit
+        pag.click(2438, 122) # # eigenschaften öffnen
         sleep(0.2)
         self.status_update_b.emit("PGM-Name wird auf _B geändert...")
-        pag.click(2679, 258)
-        for i in range(11):
+        pag.click(2679, 258) # reiter in eigenschaften öffnen
+        for i in range(10):
             sleep(0.05)
             pag.press('tab')
         pag.press('delete')
@@ -211,8 +209,13 @@ class EspritB(QObject):
         self.status_update_b.emit("Eigenschaften Fenster schließen...")
         pag.press('Enter')
         sleep(self.verweilzeit)
-        pag.doubleClick(2109, 668)
-        sleep(self.verweilzeit)
+        pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
+        sleep(self.verweilzeit)                     # Verweilzeit
+        # pag.doubleClick(2109, 668)
+        # sleep(self.verweilzeit)
+        # pag.click(2000, 700) # Standard layer einblenden
+        # sleep(self.verweilzeit)
+        # pag.click(2000, 716) # Solid layer einblenden
 
 
     def rohteilmitnahme(self):
