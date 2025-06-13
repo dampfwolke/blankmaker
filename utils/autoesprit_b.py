@@ -20,7 +20,7 @@ class EspritB(QObject):
     ausgelesene_fertig_werte_b = Signal(str, str, str)
 
     # Konstante Pfade für Rohteilmitnahme und Allmatic 125 Schraubstock
-    PFAD_ROHTEILMITNAHME = Path(r"C:\Users\hasanovic\Desktop\Rohteilmitnahme\Hasanovic")
+    PFAD_ROHTEILMITNAHME = Path(r"C:\Users\hasanovic\Desktop\Rohteilmitnahme\Hasanovic.stl")
     PFAD_ALLMATIC_125 = Path(r"C:\Users\hasanovic\Desktop\Spannmittel\19_Allmatic_125_EVO_100")
 
     def __init__(self, pgm_name_b: str, typ_b: str, pfad_b: Path, sleep_timer: int):
@@ -37,14 +37,13 @@ class EspritB(QObject):
         self.x_fertig = None
         self.y_fertig = None
         self.z_fertig = None
+        self.spanntiefe = None
 
-    def abgeschlossen_b(self) -> None:
-        """Sendet das finale Erfolgssignal."""
-        self.finished_b.emit(True, f"Automatisierung '{self.typ_b}' erfolgreich abgeschlossen.")
+
 
     def automations_typ_bestimmen_b(self):
         """ Hier wird entschieden welche Autoaktionsabschnitte ausgeführt werden z.B. nur Ausfüllhilfe oder vollständig etc.
-        abhängig von dem übergebenen Wert aus der "cb_bearbeitung_auswahl" im main script.
+        abhängig von dem übergebenen Wert aus der "cb_bearbeitung_auswahl_b" im main script.
         :return: None """
         if self.typ_b == "Ausfüllhilfe B":
             self.status_update_b.emit("Starte 'Ausfüllhilfe_B'")
@@ -192,10 +191,14 @@ class EspritB(QObject):
     def fertig_abmasse_eintragen_b(self):
         pass
 
-    def esprit_datei_speichern_b():
+    def esprit_datei_speichern_b(self):
         '''Datei von A-Seite auf B-Seite mit _B speichern'''
         pass
-    
+
+    def abgeschlossen_b(self) -> None:
+        """Sendet das finale Erfolgssignal."""
+        self.finished_b.emit(True, f"Automatisierung '{self.typ_b}' erfolgreich abgeschlossen.")
+
     # funktioniert
     def ausfuellhilfe_b(self):
         self.status_update_b.emit("Ausfüllhilfe B-Seite gestartet...")
