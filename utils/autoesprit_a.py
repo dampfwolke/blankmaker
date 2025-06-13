@@ -195,7 +195,7 @@ class EspritA(QObject):
         sleep(verweilzeit)  # Verweilzeit
         pag.hotkey('ctrl', 'a')  # Alles markieren (Solid)
         sleep(verweilzeit)  # Verweilzeit
-        #click_image(str(bild_pfad_absolut), toleranz=0.65)  # Auf Bauteil Reiter klicken mit Bilderkennung
+        click_image(str(bild_pfad_absolut), toleranz=0.65)  # Auf Bauteil Reiter klicken mit Bilderkennung
         self.status_update.emit("Reiter Bauteil gefunden...")
         sleep(verweilzeit)  # Verweilzeit
         pag.click(1291, 47)  # Auf Erkunden Reiter im Bauteil Menü klicken
