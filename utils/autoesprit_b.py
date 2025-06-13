@@ -11,27 +11,27 @@ from utils.zeitstempel import zeitstempel
 
 class EspritB(QObject):
     # Signal(str) -> sendet eine Statusmeldung als Text
-    status_update_b = Signal(str)
+    status_update = Signal(str)
     # Signal(str, str) -> sendet Titel und Text für eine Informations-MessageBox
-    show_info_dialog_b = Signal(str, str)
+    show_info_dialog = Signal(str, str)
     # Signal(bool, str) -> sendet Beendigungsstatus (Erfolg/Fehler) und eine finale Nachricht
-    finished_b = Signal(bool, str)
+    finished = Signal(bool, str)
     # Signal Fertigteil Abmasse X Y Z ausgelesen
-    ausgelesene_fertig_werte_b = Signal(str, str, str)
+    ausgelesene_fertig_werte = Signal(str, str, str)
 
     # Konstante Pfade für Rohteilmitnahme und Allmatic 125 Schraubstock
     PFAD_ROHTEILMITNAHME = Path(r"C:\Users\hasanovic\Desktop\Rohteilmitnahme\Hasanovic.stl")
     PFAD_ALLMATIC_125 = Path(r"C:\Users\hasanovic\Desktop\Spannmittel\19_Allmatic_125_EVO_100")
 
-    def __init__(self, pgm_name_b: str, typ_b: str, pfad_b: Path, sleep_timer: int):
+    def __init__(self, pgm_name: str, typ: str, pfad: Path, sleep_timer: int):
         super().__init__()
-        self.pgm_name_b = pgm_name_b
-        self.typ_b = typ_b
-        self.pfad_b = pfad_b
+        self.pgm_name = pgm_name
+        self.typ = typ
+        self.pfad = pfad
         self.sleep_timer = sleep_timer
 
-        # Verzögerung zwischen den Aktionen (min. 0.2s, max. 10.2s) je nach QSlider Einstellung im main script
-        self.verweilzeit: float = round(0.1 + (self.sleep_timer / 20), 2)
+        # Verzögerung zwischen den Aktionen (min. 0.081s, max. 3.175s) je nach QSlider Einstellung im main script
+        self.verweilzeit: float = round(0.1 + (self.sleep_timer / 32), 2)
 
         # Fertigteil Abmaße von dem aktuellen Solid Bauteil (werden in dieser Klasse ausgelesen und weiter verarbeitet)
         self.x_fertig = None
@@ -40,52 +40,50 @@ class EspritB(QObject):
         self.spanntiefe = None
 
 
-
     def automations_typ_bestimmen_b(self):
         """ Hier wird entschieden welche Autoaktionsabschnitte ausgeführt werden z.B. nur Ausfüllhilfe oder vollständig etc.
         abhängig von dem übergebenen Wert aus der "cb_bearbeitung_auswahl_b" im main script.
         :return: None """
-        if self.typ_b == "Ausfüllhilfe B":
-            self.status_update_b.emit("Starte 'Ausfüllhilfe_B'")
+        if self.typ == "Ausfüllhilfe B":
+            self.status_update.emit("Starte 'Ausfüllhilfe_B'")
             self.esprit_a_sicherung_speichern_b()
             self.ausfuellhilfe_b()
             self.abgeschlossen_b()
 
-        elif self.typ_b == "TEST_B":
-            self.status_update_b.emit("Platzhalter-Funktion wurde aufgerufen.")
+        elif self.typ == "TEST_B":
+            self.status_update.emit("Platzhalter-Funktion wurde aufgerufen.")
             self.fertigteil_bounding_box_auslesen_b()
-            self.finished_b.emit(True, "Platzhalter-Funktion beendet.")
+            self.finished.emit(True, "Platzhalter-Funktion beendet.")
             pass  # Platzhalter für Testfunktionen
 
         else:
             error_msg = "Kein gültiger 'automations_typ' ausgewählt!"
-            self.status_update_b.emit(error_msg)
-            self.show_info_dialog_b.emit("Auswahlfehler", error_msg)
-            self.finished_b.emit(False, error_msg)
-
+            self.status_update.emit(error_msg)
+            self.show_info_dialog.emit("Auswahlfehler", error_msg)
+            self.finished.emit(False, error_msg)
 
     def esprit_dateiname_pruefen_b(self) -> tuple[bool, str]:
         """ Prüfung, ob der Pfad existiert und ob eine Datei mit demselben Namen bereits im Ordner ist.
          :return: (bool, str)"""
-        if not self.pfad_b.is_dir():
-            error_msg = f"Fehler: Der angegebene Pfad '{self.pfad_b}' existiert nicht oder ist kein Ordner."
-            self.status_update_b.emit(error_msg)
+        if not self.pfad.is_dir():
+            error_msg = f"Fehler: Der angegebene Pfad '{self.pfad}' existiert nicht oder ist kein Ordner."
+            self.status_update.emit(error_msg)
             return False, error_msg
 
-        dateiname_mit_endung = f"{self.pgm_name_b}_B.esp"
-        zieldatei_pfad = self.pfad_b / dateiname_mit_endung
+        dateiname_mit_endung = f"{self.pgm_name}_B.esp"
+        zieldatei_pfad = self.pfad / dateiname_mit_endung
 
         if zieldatei_pfad.exists():
             error_msg = f"Die Datei '{dateiname_mit_endung}' existiert bereits im Zielordner."
-            self.status_update_b.emit(f"Abbruch: {error_msg}")
+            self.status_update.emit(f"Abbruch: {error_msg}")
             return False, error_msg
 
-        self.status_update_b.emit("Dateiname und Pfad sind gültig.")
+        self.status_update.emit("Dateiname und Pfad sind gültig.")
         return True, ""
     
     # funktioniert
     def esprit_a_sicherung_speichern_b(self) -> None:
-        '''Speichert nocheinmal die A-Seite zur Sicherheit ab, bevor Automation für B-Seite beginnt.'''
+        '''Speichert noch einmal die A-Seite zur Sicherheit ab, bevor Automation für B-Seite beginnt.'''
         pag.doubleClick(2109, 668)            # Doppelklick auf Layer
         sleep(self.verweilzeit)                     # Verweilzeit
         pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
@@ -104,7 +102,7 @@ class EspritB(QObject):
 
     def fertigteil_bounding_box_auslesen_b(self) -> None:
         """Mithilfe von pyautogui und Hilfsmodul click_image wird in Esprit die Bounding Box des aktuellen Bauteils ausgelesen."""
-        self.status_update_b.emit("Starte Fertigteilmaß auslesen....")
+        self.status_update.emit("Starte Fertigteilmaß auslesen....")
         bild_pfad_relativ = Path(".") / "utils" / "automation_bilder" / "bauteil.png"
         bild_pfad_absolut = bild_pfad_relativ.resolve()
 
@@ -127,7 +125,7 @@ class EspritB(QObject):
         sleep(verweilzeit)  # Verweilzeit
         pag.doubleClick(2038, 713)  # Doppelklick auf Solid Layer
         sleep(verweilzeit)  # Verweilzeit
-        self.status_update_b.emit("Fertigteilmaß wird ausgelesen...")
+        self.status_update.emit("Fertigteilmaß wird ausgelesen...")
         pag.click(2481, 68)  # Nur Volumenmodell Auswahl anklicken (aufklappen)
         sleep(verweilzeit)  # Verweilzeit
         pag.click(2480, 434)  # Nur Volumenmodell auswählen
@@ -139,10 +137,10 @@ class EspritB(QObject):
         pag.hotkey('ctrl', 'a')  # Alles markieren (Solid)
         sleep(verweilzeit)  # Verweilzeit
         click_image(str(bild_pfad_absolut), toleranz=0.65)  # Auf Bauteil Reiter klicken mit Bilderkennung
-        self.status_update_b.emit("Reiter Bauteil gefunden...")
+        self.status_update.emit("Reiter Bauteil gefunden...")
         sleep(verweilzeit)  # Verweilzeit
         pag.click(1291, 47)  # Auf Erkunden Reiter im Bauteil Menü klicken
-        self.status_update_b.emit("Abmaße werden in Zwischenspeicher kopiert...")
+        self.status_update.emit("Abmaße werden in Zwischenspeicher kopiert...")
         sleep(verweilzeit)  # Verweilzeit
         pag.doubleClick(1669, 331)  # Doppelklick auf Länge des Bauteils
         sleep(verweilzeit)  # Verweilzeit
@@ -166,33 +164,33 @@ class EspritB(QObject):
         self.x_fertig = abmasse[0]
         self.y_fertig = abmasse[1]
         self.z_fertig = abmasse[2]
-        self.status_update_b.emit(f"Ausgelesen: X={self.x_fertig}, Y={self.y_fertig}, Z={self.z_fertig}")
+        self.status_update.emit(f"Ausgelesen: X={self.x_fertig}, Y={self.y_fertig}, Z={self.z_fertig}")
 
     def fertig_abmasse_pruefen_b(self) -> tuple[bool, str]:
         """ Es wird geprüft ob, die Fertigteilmaße korrekt ausgelesen wurden. :return: (bool, str)"""
         try:
             if self.x_fertig is None or self.y_fertig is None or self.z_fertig is None:
                 msg = "Fertigteilmaße wurden nicht ausgelesen."
-                self.status_update_b.emit(f"Fehler: {msg}")
+                self.status_update.emit(f"Fehler: {msg}")
                 return False, msg
 
             if float(self.x_fertig) > 0 and float(self.y_fertig) > 0 and float(self.z_fertig) > 0:
-                self.status_update_b.emit("Fertigteilmaße erfolgreich validiert.")
+                self.status_update.emit("Fertigteilmaße erfolgreich validiert.")
                 return True, ""
             else:
                 msg = "Ausgelesene Fertigteilmaße müssen größer als 0 sein."
-                self.status_update_b.emit(f"Fehler: {msg}")
+                self.status_update.emit(f"Fehler: {msg}")
                 return False, msg
         except (ValueError, TypeError):
             msg = "Ausgelesene Fertigteilmaße sind keine gültigen Zahlen."
-            self.status_update_b.emit(f"Fehler: {msg}")
+            self.status_update.emit(f"Fehler: {msg}")
             return False, msg
     
     def fertig_abmasse_eintragen_b(self):
         x = str(self.x_fertig)
         y = str(self.y_fertig)
         z = str(self.z_fertig)
-        self.ausgelesene_fertig_werte_b.emit(x, y, z)
+        self.ausgelesene_fertig_werte.emit(x, y, z)
 
     def esprit_datei_speichern_b(self):
         '''Datei von A-Seite auf B-Seite mit _B speichern'''
@@ -200,28 +198,28 @@ class EspritB(QObject):
 
     def abgeschlossen_b(self) -> None:
         """Sendet das finale Erfolgssignal."""
-        self.finished_b.emit(True, f"Automatisierung '{self.typ_b}' erfolgreich abgeschlossen.")
+        self.finished.emit(True, f"Automatisierung '{self.typ}' erfolgreich abgeschlossen.")
 
     # funktioniert
     def ausfuellhilfe_b(self):
-        self.status_update_b.emit("Ausfüllhilfe B-Seite gestartet...")
+        self.status_update.emit("Ausfüllhilfe B-Seite gestartet...")
         pag.click(2094, 591)  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)  # Verweilzeit
         pag.click(2438, 122) # # eigenschaften öffnen
         sleep(0.2)
-        self.status_update_b.emit("PGM-Name wird auf _B geändert...")
+        self.status_update.emit("PGM-Name wird auf _B geändert...")
         pag.click(2679, 258) # reiter in eigenschaften öffnen
         for i in range(10):
             sleep(0.05)
             pag.press('tab')
         pag.press('delete')
         sleep(self.verweilzeit)
-        pgm_name_mit_endung = f"{self.pgm_name_b}_B".strip()
+        pgm_name_mit_endung = f"{self.pgm_name}_B".strip()
         clipboard.copy(pgm_name_mit_endung)
         sleep(self.verweilzeit)
         pag.hotkey("ctrl", "v")
         sleep(self.verweilzeit)
-        self.status_update_b.emit("Eigenschaften Fenster schließen...")
+        self.status_update.emit("Eigenschaften Fenster schließen...")
         pag.press('Enter')
         sleep(self.verweilzeit)
         pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
@@ -267,7 +265,7 @@ class EspritB(QObject):
         sleep(verweilzeit)  # Verweilzeit
 
         sleep(self.verweilzeit)
-        self.status_update_b.emit("Rohteilmitnahme STL wird importiert...")
+        self.status_update.emit("Rohteilmitnahme STL wird importiert...")
         pfad_rohteilmitnahme = self.PFAD_ROHTEILMITNAHME
         clipboard.copy(str(pfad_rohteilmitnahme))
         sleep(0.1)
@@ -337,18 +335,18 @@ class EspritB(QObject):
         sleep(verweilzeit)  # Verweilzeit
 
 
-    # Für Zukünftige Automatisierung --> Prüft ob der NP auf der B-Seite stimmt
+    # Für zukünftige Automatisierung → Prüft ob der NP auf der B-Seite stimmt
     def nullpunkt_pruefen(self):
         pass
 
-    def run_b(self):
+    def run(self):
         """Hauptmethode des Workers, die beim Start des Threads ausgeführt wird."""
         try:
             self.automations_typ_bestimmen_b()
         except Exception as e:
             # Bei einem Fehler, sende ein Fehlersignal mit der Fehlermeldung
             error_message = f"Ein unerwarteter Fehler ist aufgetreten: {e}"
-            self.status_update_b.emit(error_message)
-            self.show_info_dialog_b.emit("Kritischer Fehler", error_message)
-            self.finished_b.emit(False, error_message)
+            self.status_update.emit(error_message)
+            self.show_info_dialog.emit("Kritischer Fehler", error_message)
+            self.finished.emit(False, error_message)
             print(f"[FEHLER] im EspritA Worker: {e}")

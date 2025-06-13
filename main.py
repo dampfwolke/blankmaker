@@ -110,148 +110,133 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
     @qtc.Slot()
     def on_wizard_a_clicked(self):
-        # 1. Prüfen, ob bereits ein Wizard läuft, um doppelte Starts zu verhindern
+        """Sammelt Daten für den A-Seiten-Wizard und startet ihn."""
+        pgm_name = self.le_zeichnungsnr.text()
+        typ = self.cb_auto_option_a.currentText()
+
+        # A-Seiten spezifische Daten
+        x_roh = self.le_rechteck_laenge.text()
+        y_roh = self.le_rechteck_breite.text()
+        z_roh = self.le_rechteck_hoehe.text()
+        bearbeitung = self.cb_bearbeitung_auswahl.currentText()
+
+        if not all([x_roh, y_roh, z_roh]) and typ != "Bounding Box auslesen":
+            self.statusBar().showMessage("Fehler: Bitte Rohteilmaße für A-Seite sicherstellen.", 7000)
+            return
+
+        # Argumente für den Worker als Dictionary vorbereiten
+        worker_args = {
+            "pgm_name": pgm_name,
+            "x_roh": x_roh,
+            "y_roh": y_roh,
+            "z_roh": z_roh,
+            "bearbeitung_auswahl": bearbeitung,
+            "typ": typ
+        }
+
+        # Die zentrale Start-Methode aufrufen
+        self.start_wizard(worker_class=EspritA, worker_args=worker_args, description="A-Seite")
+#######################################################################################################################
+# NOCH NICHT FERTIG!!!! MUSS GETESTET WERDEN
+    @qtc.Slot()
+    def on_wizard_b_clicked(self):
+        """Sammelt Daten für den B-Seiten-Wizard und startet ihn."""
+        pgm_name = self.le_zeichnungsnr.text()
+        typ = self.cb_auto_option_b.currentText()
+
+        # B-Seiten spezifische Daten (hier gibt es weniger)
+        worker_args = {
+            "pgm_name": pgm_name,
+            "typ": typ
+        }
+
+        # Die zentrale Start-Methode aufrufen
+        self.start_wizard(worker_class=EspritB, worker_args=worker_args, description="B-Seite")
+
+#######################################################################################################################
+
+    def start_wizard(self, worker_class, worker_args: dict, description: str):
+        """
+        Eine zentrale Methode zum Starten von JEDEM Wizard-Typ (A, B, etc.).
+        - worker_class: Die zu instanziierende Klasse (z.B. EspritA oder EspritB)
+        - worker_args: Ein Dictionary mit den Argumenten für den Konstruktor der Worker-Klasse
+        - description: Ein Text für die Status-Nachrichten (z.B. "A-Seite")
+        """
+        # 1. Prüfen, ob bereits ein Prozess läuft (unverändert)
         if self.wizard_thread and self.wizard_thread.isRunning():
             self.statusBar().showMessage("Ein Automatisierungs-Prozess läuft bereits.", 5000)
             return
 
-        # 2. Daten wie bisher sammeln
-        pgm_name = self.le_zeichnungsnr.text()
-        x_roh = self.le_rechteck_laenge.text()
-        y_roh = self.le_rechteck_breite.text()
-        z_roh = self.le_rechteck_hoehe.text()
+        # 2. Pfad und Sleep-Timer holen (sind für beide gleich)
         pfad = self._get_and_validate_target_dir()
         if not pfad: return
-        bearbeitung = self.cb_bearbeitung_auswahl.currentText()
-        typ = self.cb_auto_option_a.currentText()
         sleep_timer = self.hsl_sleep_timer.value()
 
-        if not all([x_roh, y_roh, z_roh]) and typ != "Bounding Box auslesen":
-            self.statusBar().showMessage("Fehler: Bitte Rohteilmaße sicherstellen.", 7000)
-            return
+        # Allgemeine Argumente zum Dictionary hinzufügen
+        worker_args["pfad"] = pfad
+        worker_args["sleep_timer"] = sleep_timer
 
         # 3. Thread und Worker erstellen und verbinden
         self.wizard_thread = qtc.QThread()
-        self.wizard_worker = EspritA(
-            pgm_name=pgm_name, x_roh=x_roh, y_roh=y_roh, z_roh=z_roh, pfad=pfad,
-            bearbeitung_auswahl=bearbeitung, typ=typ, sleep_timer=sleep_timer)
+        # **kwargs entpackt das Dictionary in passende Keyword-Argumente
+        self.wizard_worker = worker_class(**worker_args)
         self.wizard_worker.moveToThread(self.wizard_thread)
 
-        # 4. Signale und Slots verbinden
-        self.wizard_thread.started.connect(self.wizard_worker.run)
-        self.wizard_worker.finished.connect(self.on_wizard_a_finished)
-        self.wizard_worker.status_update.connect(self.statusBar().showMessage)
-        # <<< HIER IST DIE ÄNDERUNG >>>
-        # Wir verbinden das Signal mit unserem neuen, robusten Slot.
-        self.wizard_worker.show_info_dialog.connect(self.display_worker_message)
-        self.wizard_worker.ausgelesene_fertig_werte.connect(self.fertig_abmasse_eintragen)
+        # 4. Signale und Slots verbinden (JETZT FÜR ALLE GLEICH)
+        self.wizard_thread.started.connect(self.wizard_worker.run)  # Wichtig: run() statt run_a/run_b
 
-        # WICHTIG: Aufräum-Logik
-        # Erst wenn der Worker fertig ist, den Thread beenden.
+        # Wir verbinden mit dem NEUEN, VEREINHEITLICHTEN finished-Slot
+        self.wizard_worker.finished.connect(self.on_wizard_finished)
+        self.wizard_worker.status_update.connect(self.statusBar().showMessage)
+        self.wizard_worker.show_info_dialog.connect(self.display_worker_message)
+
+        # Das 'ausgelesene_fertig_werte' Signal wird nur von EspritA gesendet.
+        # Es schadet aber nicht, es auch bei EspritB zu verbinden, falls es dort nicht existiert.
+        # PySide/PyQt ist hier robust.
+        if hasattr(self.wizard_worker, 'ausgelesene_fertig_werte'):
+            self.wizard_worker.ausgelesene_fertig_werte.connect(self.fertig_abmasse_eintragen)
+
+        # 5. Aufräum-Logik (unverändert und für beide gültig)
         self.wizard_worker.finished.connect(self.wizard_thread.quit)
-        # Erst wenn der Thread beendet ist, die Objekte zum Löschen markieren.
         self.wizard_thread.finished.connect(self.wizard_worker.deleteLater)
         self.wizard_thread.finished.connect(self.wizard_thread.deleteLater)
-        # UND: Wenn der Thread gelöscht ist, die Python-Referenz entfernen!
         self.wizard_thread.finished.connect(self.clear_wizard_thread_reference)
-        
-        # 5. Den Thread starten
+
+        # 6. Den Thread starten und UI anpassen
         self.wizard_thread.start()
-        
-        # UI anpassen
+
         self.pb_wizard_a.setEnabled(False)
         self.pb_wizard_b.setEnabled(False)
         self.startzeit = time.perf_counter()
-        self.statusBar().showMessage("Automatisierung A-Seite gestartet...", 3000)
-        
-        # NEU: Slot, der die Daten vom Worker empfängt und in die UI einträgt
+        self.statusBar().showMessage(f"Automatisierung {description} gestartet...", 3000)
+
+    @qtc.Slot(bool, str)
+    def on_wizard_finished(self, success: bool, message: str):
+        """
+        Dieser EINE Slot wird aufgerufen, egal ob Wizard A oder B fertig ist.
+        """
+        print(f"Wizard beendet. Erfolg: {success}. Nachricht: {message}")
+        if success:
+            self.endzeit = time.perf_counter()
+            duration = self.endzeit - self.startzeit
+            minutes = int(duration // 60)
+            seconds = int(duration % 60)
+            self.statusBar().showMessage(f"Erfolg: {message}! (Laufzeit: {minutes}m {seconds}s))", 10000)
+        else:
+            # Bei Fehlern ist die Nachricht oft in einer MessageBox, aber wir zeigen sie auch hier.
+            self.statusBar().showMessage(f"Abbruch: {message} ({zeitstempel(1)})", 12000)
+
+        # UI wieder freigeben
+        self.pb_wizard_a.setEnabled(True)
+        self.pb_wizard_b.setEnabled(True)
+
     @qtc.Slot(str, str, str)
     def fertig_abmasse_eintragen(self, x: str, y: str, z: str):
         """Dieser Slot wird aufgerufen, wenn der Worker das Signal 'ausgelesene_fertig_werte' sendet."""
-        # KORREKTUR: Verwende die richtigen Namen der QLineEdit-Widgets ('le_' statt 'wg_')
         self.le_x_fertig.setText(x)
         self.le_y_fertig.setText(y)
         self.le_z_fertig.setText(z)
         self.statusBar().showMessage(f"Fertigmaße erfolgreich ausgelesen und eingetragen.", 5000)
-
-    @qtc.Slot(bool, str)
-    def on_wizard_a_finished(self, success: bool, message: str):
-        print(f"Wizard A beendet. Erfolg: {success}. Nachricht: {message}")
-        if success:
-            self.endzeit = time.perf_counter()
-            duration = self.endzeit - self.startzeit
-            minutes = int(duration // 60)
-            seconds = int(duration % 60)
-            self.statusBar().showMessage(f"Erfolg: {message}! (Laufzeit: {minutes}m {seconds}s))", 7000)
-        else:
-            self.statusBar().showMessage(f"Fehler: {message} ({zeitstempel(1)})", 10000)
-
-        # Wichtig: Den Button wieder aktivieren
-        self.pb_wizard_a.setEnabled(True)
-        self.pb_wizard_b.setEnabled(True)
-
-    #######################################################################################################################
-
-    @qtc.Slot()
-    def on_wizard_b_clicked(self):
-        # 1. Prüfen, ob bereits ein Wizard läuft, um doppelte Starts zu verhindern
-        if self.wizard_thread and self.wizard_thread.isRunning():
-            self.statusBar().showMessage("Ein Automatisierungs-Prozess läuft bereits.", 5000)
-            return
-
-        # 2. Daten wie bisher sammeln
-        pgm_name = self.le_zeichnungsnr.text()
-        pfad = self._get_and_validate_target_dir()
-        if not pfad: return
-        typ = self.cb_auto_option_b.currentText()
-        sleep_timer = self.hsl_sleep_timer.value()
-
-        # 3. Thread und Worker erstellen und verbinden
-        self.wizard_thread = qtc.QThread()
-        self.wizard_worker = EspritB(pgm_name_b=pgm_name, pfad_b=pfad, typ_b=typ, sleep_timer=sleep_timer)
-        self.wizard_worker.moveToThread(self.wizard_thread)
-
-        # 4. Signale und Slots verbinden
-        self.wizard_thread.started.connect(self.wizard_worker.run_b)
-        self.wizard_worker.finished_b.connect(self.on_wizard_b_finished)
-        self.wizard_worker.status_update_b.connect(self.statusBar().showMessage)
-        # <<< HIER IST DIE ÄNDERUNG >>>
-        # Wir verbinden das Signal mit unserem neuen, robusten Slot.
-        self.wizard_worker.show_info_dialog_b.connect(self.display_worker_message)
-
-        # WICHTIG: Aufräum-Logik
-        # Erst wenn der Worker fertig ist, den Thread beenden.
-        self.wizard_worker.finished_b.connect(self.wizard_thread.quit)
-        # Erst wenn der Thread beendet ist, die Objekte zum Löschen markieren.
-        self.wizard_thread.finished.connect(self.wizard_worker.deleteLater)
-        self.wizard_thread.finished.connect(self.wizard_thread.deleteLater)
-        # UND: Wenn der Thread gelöscht ist, die Python-Referenz entfernen!
-        self.wizard_thread.finished.connect(self.clear_wizard_thread_reference)
-        # 5. Den Thread starten
-        self.wizard_thread.start()
-        # UI anpassen
-        self.pb_wizard_a.setEnabled(False)
-        self.pb_wizard_b.setEnabled(False)
-        self.startzeit = time.perf_counter()
-        self.statusBar().showMessage("Automatisierung B-Seite gestartet...", 3000)
-
-    @qtc.Slot(bool, str)
-    def on_wizard_b_finished(self, success: bool, message: str):
-        print(f"Wizard B beendet. Erfolg: {success}. Nachricht: {message}")
-        if success:
-            self.endzeit = time.perf_counter()
-            duration = self.endzeit - self.startzeit
-            minutes = int(duration // 60)
-            seconds = int(duration % 60)
-            self.statusBar().showMessage(f"Erfolg: {message}! (Laufzeit: {minutes}m {seconds}s))", 7000)
-        else:
-            self.statusBar().showMessage(f"Fehler: {message} ({zeitstempel(1)})", 10000)
-
-        # Wichtig: Den Button wieder aktivieren
-        self.pb_wizard_a.setEnabled(True)
-        self.pb_wizard_b.setEnabled(True)
-
-#######################################################################################################################
 
     @qtc.Slot()
     def clear_wizard_thread_reference(self):
