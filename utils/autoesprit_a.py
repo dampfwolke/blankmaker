@@ -65,13 +65,11 @@ class EspritA(QObject):
 
         elif self.typ == "Gandalf":
             self.status_update.emit("Starte Automatisierung mit 'Gandalf'")
-            # Prüfen der Rohteilmaße
             erfolg, msg = self.roh_abmasse_pruefen()
             if not erfolg:
                 self.show_info_dialog.emit("Ungültige Eingabe", msg)
                 self.finished.emit(False, "Abbruch wegen ungültiger Rohteilabmaße.")
                 return
-            # Prüfen des Dateinamens
             erfolg, msg = self.esprit_dateiname_pruefen()
             if not erfolg:
                 self.show_info_dialog.emit("Dateifehler", msg)

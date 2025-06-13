@@ -53,8 +53,8 @@ class EspritB(QObject):
             self.abgeschlossen_b()
 
         elif self.typ_b == "TEST_B":
-            # Hier deine Logik für den Platzhalter-Typ einfügen
             self.status_update_b.emit("Platzhalter-Funktion wurde aufgerufen.")
+            self.fertigteil_bounding_box_auslesen_b()
             self.finished_b.emit(True, "Platzhalter-Funktion beendet.")
             pass  # Platzhalter für Testfunktionen
 
@@ -85,7 +85,8 @@ class EspritB(QObject):
         return True, ""
     
     # funktioniert
-    def esprit_a_sicherung_speichern_b(self):
+    def esprit_a_sicherung_speichern_b(self) -> None:
+        '''Speichert nocheinmal die A-Seite zur Sicherheit ab, bevor Automation für B-Seite beginnt.'''
         pag.doubleClick(2109, 668)            # Doppelklick auf Layer
         sleep(self.verweilzeit)                     # Verweilzeit
         pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
@@ -102,7 +103,7 @@ class EspritB(QObject):
         # sleep(self.verweilzeit)                     # Verweilzeit
         # pag.doubleClick(2038, 713)            # Doppelklick auf Solid Layer
 
-    def fertigteil_bounding_box_auslesen(self) -> None:
+    def fertigteil_bounding_box_auslesen_b(self) -> None:
         """Mithilfe von pyautogui und Hilfsmodul click_image wird in Esprit die Bounding Box des aktuellen Bauteils ausgelesen."""
         self.status_update_b.emit("Starte Fertigteilmaß auslesen....")
         bild_pfad_relativ = Path(".") / "utils" / "automation_bilder" / "bauteil.png"
@@ -187,6 +188,14 @@ class EspritB(QObject):
             msg = "Ausgelesene Fertigteilmaße sind keine gültigen Zahlen."
             self.status_update_b.emit(f"Fehler: {msg}")
             return False, msg
+    
+    def fertig_abmasse_eintragen_b(self):
+        pass
+
+    def esprit_datei_speichern_b():
+        '''Datei von A-Seite auf B-Seite mit _B speichern'''
+        pass
+    
     # funktioniert
     def ausfuellhilfe_b(self):
         self.status_update_b.emit("Ausfüllhilfe B-Seite gestartet...")
