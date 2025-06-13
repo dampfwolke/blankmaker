@@ -221,7 +221,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             duration = self.endzeit - self.startzeit
             minutes = int(duration // 60)
             seconds = int(duration % 60)
-            self.statusBar().showMessage(f"Erfolg: {message}! (Laufzeit: {minutes}m {seconds}s))", 10000)
+            self.statusBar().showMessage(f"Erfolg: {message} (Laufzeit: {minutes}m {seconds}s)", 10000)
         else:
             # Bei Fehlern ist die Nachricht oft in einer MessageBox, aber wir zeigen sie auch hier.
             self.statusBar().showMessage(f"Abbruch: {message} ({zeitstempel(1)})", 12000)

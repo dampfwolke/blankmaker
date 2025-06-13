@@ -1327,7 +1327,7 @@ class Ui_frm_main_window(object):
         self.cbx_datum_editieren.setText(QCoreApplication.translate("frm_main_window", u"Zielpfad editieren", None))
         self.gb_automatisierung.setTitle(QCoreApplication.translate("frm_main_window", u"Automatisierung", None))
         self.lb_zeichnungsnr.setText(QCoreApplication.translate("frm_main_window", u"Zeichnungsnummer:", None))
-        self.le_zeichnungsnr.setText(QCoreApplication.translate("frm_main_window", u"Zeichnungsnummer hier einf\u00fcgen...", None))
+        self.le_zeichnungsnr.setText(QCoreApplication.translate("frm_main_window", u"24T0004580", None))
         self.tb_wizard_a_aufklappen.setText(QCoreApplication.translate("frm_main_window", u"...", None))
         self.pb_wizard_a.setText(QCoreApplication.translate("frm_main_window", u"Wizard_A", None))
         self.cb_auto_option_a.setItemText(0, QCoreApplication.translate("frm_main_window", u"Gandalf", None))

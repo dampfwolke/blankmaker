@@ -195,7 +195,7 @@ class EspritA(QObject):
         sleep(verweilzeit)  # Verweilzeit
         pag.hotkey('ctrl', 'a')  # Alles markieren (Solid)
         sleep(verweilzeit)  # Verweilzeit
-        click_image(str(bild_pfad_absolut), toleranz=0.65)  # Auf Bauteil Reiter klicken mit Bilderkennung
+        #click_image(str(bild_pfad_absolut), toleranz=0.65)  # Auf Bauteil Reiter klicken mit Bilderkennung
         self.status_update.emit("Reiter Bauteil gefunden...")
         sleep(verweilzeit)  # Verweilzeit
         pag.click(1291, 47)  # Auf Erkunden Reiter im Bauteil Menü klicken
@@ -338,7 +338,7 @@ class EspritA(QObject):
         pag.hotkey("ctrl", "v")
         sleep(0.5)
         pag.press('Enter')
-        self.status_update.emit("Esprit wird Datei gespeichert...")
+        self.status_update.emit("Esprit Datei wird gespeichert...")
         sleep(4)
         self.status_update.emit(f"Esprit Datei erfolgreich gespeichert. {zeitstempel(1)}")
 
@@ -431,7 +431,7 @@ class EspritA(QObject):
 
     def spannmittel_importieren(self) -> None:
         """Spannmittel wird aus dem aktuellen KW-Wochen Ordner, in Esprit importiert und die Automatisierung abgeschlossen."""
-        self.status_update.emit(f"Spannmittel Import gestartet.  {zeitstempel(1)}")
+        self.status_update.emit(f"Spannmittel Import gestartet...")
         sleep(self.verweilzeit)
         pag.click(2109, 668)
         sleep(self.verweilzeit)
@@ -476,12 +476,10 @@ class EspritA(QObject):
         sleep(0.2)
         pag.click(2246, 96)
         sleep(self.verweilzeit)
-        self.status_update.emit(f"Automatisierung abgeschlossen! {zeitstempel(1)}")
-        # Der finale 'finished'-Aufruf wird jetzt in `automations_typ_bestimmen` gemacht.
 
     def abgeschlossen(self) -> None:
         """Sendet das finale Erfolgssignal."""
-        self.finished.emit(True, f"Automatisierung '{self.typ}' erfolgreich abgeschlossen.")
+        self.finished.emit(True, f"'{self.typ}' abgeschlossen. {zeitstempel(1)}")
 
     def run(self):
         """Hauptmethode des Workers, die beim Start des Threads ausgeführt wird."""
