@@ -50,20 +50,10 @@ class EspritA(QObject):
                 f"Umfang der Automation: {self.typ}\n"
                 f"Verweilzeit: {self.sleep_timer} Sekunden")
 
-    def abgeschlossen(self) -> None:
-        """Sendet das finale Erfolgssignal."""
-        self.finished.emit(True, f"Automatisierung '{self.typ}' erfolgreich abgeschlossen.")
-
     def automations_typ_bestimmen(self) -> None:
         """ Hier wird entschieden welche Autoaktionsabschnitte ausgeführt werden z.B. nur Ausfüllhilfe oder vollständig etc.
-        abhängig von dem übergebenen Wert aus der "cb_bearbeitung_auswahl" im main script.
-        :return: None """
-        if self.typ == "Ausfüllhilfe":
-            self.status_update.emit("Starte 'Ausfüllhilfe'")
-            self.ausfuellhilfe_a()
-            self.abgeschlossen()
-
-        elif self.typ == "Gandalf":
+        abhängig von dem übergebenen Wert aus der "cb_auto_option_a" im main script. :return: None """
+        if self.typ == "Gandalf":
             self.status_update.emit("Starte Automatisierung mit 'Gandalf'")
             erfolg, msg = self.roh_abmasse_pruefen()
             if not erfolg:
@@ -75,9 +65,6 @@ class EspritA(QObject):
                 self.show_info_dialog.emit("Dateifehler", msg)
                 self.finished.emit(False, "Abbruch wegen Dateikonflikt.")
                 return
-            # Aktionen durchführen
-            self.ausfuellhilfe_a()
-            self.esprit_datei_speichern()
             # Fertigteilmaße auslesen und prüfen
             self.fertigteil_bounding_box_auslesen()
             erfolg, msg = self.fertig_abmasse_pruefen()
@@ -91,11 +78,16 @@ class EspritA(QObject):
                 self.show_info_dialog.emit("Fehler im Aufmaß", msg)
                 self.finished.emit(False, "Abbruch: Aufmaß außerhalb der Toleranzen.")
                 return
-
-            # Restliche Aktionen
+            # Aktionen durchführen
+            self.ausfuellhilfe_a()
             self.esprit_datei_speichern()
             self.rohteil_erstellen()
             self.spannmittel_importieren()
+            self.abgeschlossen()
+
+        elif self.typ == "Ausfüllhilfe":
+            self.status_update.emit("Starte 'Ausfüllhilfe'")
+            self.ausfuellhilfe_a()
             self.abgeschlossen()
 
         elif self.typ == "Bounding Box auslesen":
@@ -108,7 +100,7 @@ class EspritA(QObject):
             self.fertig_abmasse_eintragen()
             self.abgeschlossen()
 
-        elif self.typ == "Platzhalter":
+        elif self.typ == "TEST_A":
             # Hier deine Logik für den Platzhalter-Typ einfügen
             self.status_update.emit("Platzhalter-Funktion wurde aufgerufen.")
             self.finished.emit(True, "Platzhalter-Funktion beendet.")
@@ -119,6 +111,25 @@ class EspritA(QObject):
             self.status_update.emit(error_msg)
             self.show_info_dialog.emit("Auswahlfehler", error_msg)
             self.finished.emit(False, error_msg)
+
+    def esprit_dateiname_pruefen(self) -> tuple[bool, str]:
+        """ Prüfung, ob der Pfad existiert und ob eine Datei mit demselben Namen bereits im Ordner ist.
+         :return: (bool, str)"""
+        if not self.pfad.is_dir():
+            error_msg = f"Fehler: Der angegebene Pfad '{self.pfad}' existiert nicht oder ist kein Ordner."
+            self.status_update.emit(error_msg)
+            return False, error_msg
+
+        dateiname_mit_endung = f"{self.pgm_name}_A.esp"
+        zieldatei_pfad = self.pfad / dateiname_mit_endung
+
+        if zieldatei_pfad.exists():
+            error_msg = f"Die Datei '{dateiname_mit_endung}' existiert bereits im Zielordner."
+            self.status_update.emit(f"Abbruch: {error_msg}")
+            return False, error_msg
+
+        self.status_update.emit("Dateiname und Pfad sind gültig.")
+        return True, ""
 
     def roh_abmasse_pruefen(self) -> tuple[bool, str]:
         """ Prüfung ob Rohteilmaße gültig sind. :return: (bool, str)"""
@@ -242,25 +253,6 @@ class EspritA(QObject):
         y = str(self.y_fertig)
         z = str(self.z_fertig)
         self.ausgelesene_fertig_werte.emit(x, y, z)
-
-    def esprit_dateiname_pruefen(self) -> tuple[bool, str]:
-        """ Prüfung, ob der Pfad existiert und ob eine Datei mit demselben Namen bereits im Ordner ist.
-         :return: (bool, str)"""
-        if not self.pfad.is_dir():
-            error_msg = f"Fehler: Der angegebene Pfad '{self.pfad}' existiert nicht oder ist kein Ordner."
-            self.status_update.emit(error_msg)
-            return False, error_msg
-
-        dateiname_mit_endung = f"{self.pgm_name}_A.esp"
-        zieldatei_pfad = self.pfad / dateiname_mit_endung
-
-        if zieldatei_pfad.exists():
-            error_msg = f"Die Datei '{dateiname_mit_endung}' existiert bereits im Zielordner."
-            self.status_update.emit(f"Abbruch: {error_msg}")
-            return False, error_msg
-
-        self.status_update.emit("Dateiname und Pfad sind gültig.")
-        return True, ""
 
     def ausfuellhilfe_a(self) -> None:
         """ Datei und Programmname werden in den Eigenschaften eingefügt."""
@@ -459,6 +451,10 @@ class EspritA(QObject):
         sleep(self.verweilzeit)
         self.status_update.emit(f"Automatisierung abgeschlossen! {zeitstempel(1)}")
         # Der finale 'finished'-Aufruf wird jetzt in `automations_typ_bestimmen` gemacht.
+
+    def abgeschlossen(self) -> None:
+        """Sendet das finale Erfolgssignal."""
+        self.finished.emit(True, f"Automatisierung '{self.typ}' erfolgreich abgeschlossen.")
 
     def run(self):
         """Hauptmethode des Workers, die beim Start des Threads ausgeführt wird."""

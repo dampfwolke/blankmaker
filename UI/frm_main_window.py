@@ -692,8 +692,8 @@ class Ui_frm_main_window(object):
         self.cb_auto_option_a.addItem("")
         self.cb_auto_option_a.addItem("")
         self.cb_auto_option_a.setObjectName(u"cb_auto_option_a")
-        self.cb_auto_option_a.setMinimumSize(QSize(150, 20))
-        self.cb_auto_option_a.setMaximumSize(QSize(200, 25))
+        self.cb_auto_option_a.setMinimumSize(QSize(170, 20))
+        self.cb_auto_option_a.setMaximumSize(QSize(205, 25))
 
         self.horizontalLayout_22.addWidget(self.cb_auto_option_a)
 
@@ -789,8 +789,8 @@ class Ui_frm_main_window(object):
         self.cb_auto_option_b.addItem("")
         self.cb_auto_option_b.addItem("")
         self.cb_auto_option_b.setObjectName(u"cb_auto_option_b")
-        self.cb_auto_option_b.setMinimumSize(QSize(150, 20))
-        self.cb_auto_option_b.setMaximumSize(QSize(200, 25))
+        self.cb_auto_option_b.setMinimumSize(QSize(170, 20))
+        self.cb_auto_option_b.setMaximumSize(QSize(205, 25))
 
         self.horizontalLayout_23.addWidget(self.cb_auto_option_b)
 

@@ -1976,13 +1976,13 @@
            <widget class="QComboBox" name="cb_auto_option_a">
             <property name="minimumSize">
              <size>
-              <width>150</width>
+              <width>170</width>
               <height>20</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>200</width>
+              <width>205</width>
               <height>25</height>
              </size>
             </property>
@@ -2256,13 +2256,13 @@
            <widget class="QComboBox" name="cb_auto_option_b">
             <property name="minimumSize">
              <size>
-              <width>150</width>
+              <width>170</width>
               <height>20</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>200</width>
+              <width>205</width>
               <height>25</height>
              </size>
             </property>
