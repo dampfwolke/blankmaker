@@ -35,8 +35,8 @@ class EspritA(QObject):
         self.typ = typ
         self.sleep_timer = sleep_timer
 
-        # Verzögerung zwischen den Aktionen (min. 0.2s, max. 10.2s) je nach QSlider Einstellung im main script
-        self.verweilzeit: float = round(0.1 + (self.sleep_timer / 20), 2)
+        # Verzögerung zwischen den Aktionen (min. 0.081s, max. 3.175s) je nach QSlider Einstellung im main script
+        self.verweilzeit: float = round(0.05 + (self.sleep_timer / 32), 2)
 
         # Fertigteil Abmaße von dem aktuellen Solid Bauteil (werden in dieser Klasse ausgelesen und weiter verarbeitet)
         self.x_fertig = None
@@ -85,6 +85,20 @@ class EspritA(QObject):
             self.spannmittel_importieren()
             self.abgeschlossen()
 
+        elif self.typ == "Gandalf Fmax":
+            self.status_update.emit("Starte Automatisierung mit 'Gandalf Fmax'")
+            erfolg, msg = self.esprit_dateiname_pruefen()
+            if not erfolg:
+                self.show_info_dialog.emit("Dateifehler", msg)
+                self.finished.emit(False, "Abbruch wegen Dateikonflikt.")
+                return
+            # Aktionen durchführen
+            self.ausfuellhilfe_a()
+            self.esprit_datei_speichern()
+            self.rohteil_erstellen()
+            self.spannmittel_importieren()
+            self.abgeschlossen()
+
         elif self.typ == "Ausfüllhilfe":
             self.status_update.emit("Starte 'Ausfüllhilfe'")
             self.ausfuellhilfe_a()
@@ -101,7 +115,7 @@ class EspritA(QObject):
             self.abgeschlossen()
 
         elif self.typ == "TEST_A":
-            # Hier deine Logik für den Platzhalter-Typ einfügen
+            # Für zukünftige Testfunktionen
             self.status_update.emit("Platzhalter-Funktion wurde aufgerufen.")
             self.finished.emit(True, "Platzhalter-Funktion beendet.")
             pass  # Platzhalter für Testfunktionen
@@ -125,6 +139,19 @@ class EspritA(QObject):
 
         if zieldatei_pfad.exists():
             error_msg = f"Die Datei '{dateiname_mit_endung}' existiert bereits im Zielordner."
+            self.status_update.emit(f"Abbruch: {error_msg}")
+            return False, error_msg
+        # Muss noch getestet werden!
+        dxf_datei = "!rohteil.dxf"
+        dxf_pfad = self.pfad / dxf_datei
+        if not dxf_pfad.exists():
+            error_msg = f"Es befindet sich keine '!rohteil.dxf' Datei im Zielordner!"
+            self.status_update.emit(f"Abbruch: {error_msg}")
+            return False, error_msg
+        schraubstock_datei = "!schraubstock.step"
+        schraubstock_pfad = self.pfad / schraubstock_datei
+        if not schraubstock_pfad.exists():
+            error_msg = f"Es befindet sich keine '!schraubstock.step' Datei im Zielordner!"
             self.status_update.emit(f"Abbruch: {error_msg}")
             return False, error_msg
 

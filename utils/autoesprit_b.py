@@ -189,7 +189,10 @@ class EspritB(QObject):
             return False, msg
     
     def fertig_abmasse_eintragen_b(self):
-        pass
+        x = str(self.x_fertig)
+        y = str(self.y_fertig)
+        z = str(self.z_fertig)
+        self.ausgelesene_fertig_werte_b.emit(x, y, z)
 
     def esprit_datei_speichern_b(self):
         '''Datei von A-Seite auf B-Seite mit _B speichern'''
