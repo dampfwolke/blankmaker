@@ -46,17 +46,29 @@ class EspritB(QObject):
         :return: None """
         if self.typ == "Saruman":
             self.status_update.emit("Starte 'Saruman'")
+            self.esprit_a_sicherung_speichern_b()
+            self.ausfuellhilfe_b()
+            self.esprit_datei_speichern_b()
+            self.zusammenfassung_funktionen()
+
         elif self.typ == "Saruman light":
             self.status_update.emit("Starte 'Saruman light'")
+
+
         elif self.typ == "Ausfüllhilfe B":
             self.status_update.emit("Starte 'Ausfüllhilfe_B'")
             self.esprit_a_sicherung_speichern_b()
             self.ausfuellhilfe_b()
+            self.esprit_datei_speichern_b()
             self.abgeschlossen_b()
+
+
         elif self.typ == "Bounding Box auslesen B":
             self.status_update.emit("Starte 'Saruman light'")
             self.fertigteil_bounding_box_auslesen_b()
             self.finished.emit(True, "Starte 'Saruman light' beendet.")
+
+
         else:
             error_msg = "Kein gültiger 'automations_typ' ausgewählt!"
             self.status_update.emit(error_msg)
