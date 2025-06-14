@@ -10,6 +10,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\stats\Sicherungen\laufzeit_vorlage.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\stats\Sicherungen\rohteil_fehler_vorlage.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\stats\laufzeit.csv">
           <value>
             <Attribute>

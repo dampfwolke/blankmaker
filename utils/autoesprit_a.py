@@ -8,6 +8,7 @@ import clipboard
 
 from utils.click_image import click_image
 from utils.zeitstempel import zeitstempel
+from utils.stats_to_csv import rohteil_fehler_eintragen
 
 
 class EspritA(QObject):
@@ -77,6 +78,7 @@ class EspritA(QObject):
             if not erfolg:
                 self.show_info_dialog.emit("Fehler im Aufmaß", msg)
                 self.finished.emit(False, "Abbruch: Aufmaß außerhalb der Toleranzen.")
+                rohteil_fehler_eintragen(self.pgm_name, self.x_roh, self.y_roh, self.z_roh, self.x_fertig, self.y_fertig, self.z_fertig)
                 return
             # Aktionen durchführen
             self.ausfuellhilfe_a()
@@ -195,7 +197,10 @@ class EspritA(QObject):
         sleep(verweilzeit)  # Verweilzeit
         pag.hotkey('ctrl', 'a')  # Alles markieren (Solid)
         sleep(verweilzeit)  # Verweilzeit
-        click_image(str(bild_pfad_absolut), toleranz=0.65)  # Auf Bauteil Reiter klicken mit Bilderkennung
+#########################################################################################################################################################################
+###########################################WIEDER EINBLENDEN IN DER ARBEIT NUR FÜR TESTEN ZU HAUSE#######################################################################
+        # click_image(str(bild_pfad_absolut), toleranz=0.65)  # Auf Bauteil Reiter klicken mit Bilderkennung
+#########################################################################################################################################################################
         self.status_update.emit("Reiter Bauteil gefunden...")
         sleep(verweilzeit)  # Verweilzeit
         pag.click(1291, 47)  # Auf Erkunden Reiter im Bauteil Menü klicken
