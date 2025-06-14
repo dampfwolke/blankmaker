@@ -36,9 +36,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.setupUi(self)
         self.frm_settings = Settings()
         self.settings = load_settings()
-        
-        # Anpassung erfolgreich
-        self.cbx_at_nr_editieren.setChecked(True)
+
         # Zeitmessung
         self.startzeit = None
         self.endzeit = None
@@ -57,6 +55,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.fr_scripts.setHidden(True)
         self.wg_fertigtielmasse.setHidden(True)
         self.wg_sleep_timer.setHidden(True)
+        self.cbx_at_nr_editieren.setChecked(True)
         self.de_datum.setDate(qtc.QDate.currentDate())
         self.pfad_aktualisieren()
         self.anim_tabs = AnimatedTabHelper(self.tw_rohteil_erstellen)
@@ -92,7 +91,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.setup_script_buttons()
         self.pb_esprit_start_makro.clicked.connect(self.on_esprit_makro_clicked)
         self.pb_wizard_a.clicked.connect(self.on_wizard_a_clicked)
-
         self.pb_wizard_b.clicked.connect(self.on_wizard_b_clicked)
 
         # --- Python Commander Setup ---
@@ -131,13 +129,11 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             "y_roh": y_roh,
             "z_roh": z_roh,
             "bearbeitung_auswahl": bearbeitung,
-            "typ": typ
-        }
+            "typ": typ}
 
         # Die zentrale Start-Methode aufrufen
         self.start_wizard(worker_class=EspritA, worker_args=worker_args, description="A-Seite")
-#######################################################################################################################
-# NOCH NICHT FERTIG!!!! MUSS GETESTET WERDEN
+
     @qtc.Slot()
     def on_wizard_b_clicked(self):
         """Sammelt Daten für den B-Seiten-Wizard und startet ihn."""
@@ -152,8 +148,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
         # Die zentrale Start-Methode aufrufen
         self.start_wizard(worker_class=EspritB, worker_args=worker_args, description="B-Seite")
-
-#######################################################################################################################
 
     def start_wizard(self, worker_class, worker_args: dict, description: str):
         """
