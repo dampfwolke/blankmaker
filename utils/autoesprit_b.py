@@ -255,7 +255,7 @@ class EspritB(QObject):
 
     def abgeschlossen_b(self) -> None:
         """Sendet das finale Erfolgssignal."""
-        self.finished.emit(True, f"'{self.typ}' erfolgreich abgeschlossen.{zeitstempel(1)}")
+        self.finished.emit(True, f"'{self.typ}' abgeschlossen.")
 
 ############################# MUSS ALLES NOCH GETESTET WERDEN   #################################################
     def rohteilmitnahme(self):
