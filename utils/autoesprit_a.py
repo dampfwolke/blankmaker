@@ -198,7 +198,7 @@ class EspritA(QObject):
         pag.hotkey('ctrl', 'a')  # Alles markieren (Solid)
         sleep(verweilzeit)  # Verweilzeit
 #########################################################################################################################################################################
-###########################################WIEDER EINBLENDEN IN DER ARBEIT NUR FÜR TESTEN ZU HAUSE#######################################################################
+########################################### WIEDER EINBLENDEN IN DER ARBEIT NUR FÜR TESTEN ZU HAUSE #####################################################################
         # click_image(str(bild_pfad_absolut), toleranz=0.65)  # Auf Bauteil Reiter klicken mit Bilderkennung
 #########################################################################################################################################################################
         self.status_update.emit("Reiter Bauteil gefunden...")

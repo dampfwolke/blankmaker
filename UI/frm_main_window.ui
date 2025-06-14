@@ -2276,7 +2276,7 @@
             </item>
             <item>
              <property name="text">
-              <string>ohne Spannmittel</string>
+              <string>Saruman light</string>
              </property>
             </item>
             <item>
@@ -2287,11 +2287,6 @@
             <item>
              <property name="text">
               <string>Bounding Box auslesen B</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>TEST_B</string>
              </property>
             </item>
            </widget>
