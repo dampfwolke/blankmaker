@@ -81,6 +81,7 @@ class EspritA(QObject):
                 rohteil_fehler_eintragen(self.pgm_name, self.x_roh, self.y_roh, self.z_roh, self.x_fertig, self.y_fertig, self.z_fertig)
                 return
             # Aktionen durchführen
+            self.fertig_abmasse_eintragen()
             self.ausfuellhilfe_a()
             self.esprit_datei_speichern()
             self.rohteil_erstellen()

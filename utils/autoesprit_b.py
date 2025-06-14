@@ -23,21 +23,18 @@ class EspritB(QObject):
     PFAD_ROHTEILMITNAHME = Path(r"C:\Users\hasanovic\Desktop\Rohteilmitnahme\Hasanovic.stl")
     PFAD_DIR_ALLMATIC_125 = Path(r"C:\Users\hasanovic\Desktop\Spannmittel\19_Allmatic_125_EVO_100")
 
-    def __init__(self, pgm_name: str, typ: str, pfad: Path, sleep_timer: int):
+    def __init__(self, pgm_name: str, typ: str, pfad: Path, sleep_timer: int, x_fertig: str, y_fertig: str, z_fertig: str, spanntiefe: str):
         super().__init__()
         self.pgm_name = pgm_name
         self.typ = typ
         self.pfad = pfad
         self.sleep_timer = sleep_timer
-
+        self.x_fertig = x_fertig
+        self.y_fertig = y_fertig
+        self.z_fertig = z_fertig
+        self.spanntiefe = spanntiefe
         # Verzögerung zwischen den Aktionen (min. 0.081s, max. 3.175s) je nach QSlider Einstellung im main script
         self.verweilzeit: float = round(0.1 + (self.sleep_timer / 32), 2)
-
-        # Fertigteil Abmaße von dem aktuellen Solid Bauteil (werden in dieser Klasse ausgelesen und weiter verarbeitet)
-        self.x_fertig = None
-        self.y_fertig = None
-        self.z_fertig = None
-        self.spanntiefe = None
 
 
     def automations_typ_bestimmen_b(self):
@@ -97,6 +94,7 @@ class EspritB(QObject):
 
         self.status_update.emit("Dateiname und Pfad sind gültig.")
         return True, ""
+
 
     def esprit_a_sicherung_speichern_b(self) -> None:
         '''Speichert noch einmal die A-Seite zur Sicherheit ab, bevor Automation für B-Seite beginnt.'''

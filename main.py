@@ -140,13 +140,19 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         """Sammelt Daten für den B-Seiten-Wizard und startet ihn."""
         pgm_name = self.le_zeichnungsnr.text()
         typ = self.cb_auto_option_b.currentText()
-
+        x_fertig = self.le_x_fertig.text()
+        y_fertig = self.le_y_fertig.text()
+        z_fertig = self.le_z_fertig.text()
+        spanntiefe = self.le_spanntiefe_b.text()
         # B-Seiten spezifische Daten (hier gibt es weniger)
         worker_args = {
             "pgm_name": pgm_name,
-            "typ": typ
+            "typ": typ,
+            "x_fertig": x_fertig,
+            "y_fertig": y_fertig,
+            "z_fertig": z_fertig,
+            "spanntiefe": spanntiefe
         }
-
         # Die zentrale Start-Methode aufrufen
         self.start_wizard(worker_class=EspritB, worker_args=worker_args, description="B-Seite")
 
@@ -233,6 +239,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.le_x_fertig.setText(x)
         self.le_y_fertig.setText(y)
         self.le_z_fertig.setText(z)
+        self.fertig_abmasse_a.emit(x, y, z)
         self.statusBar().showMessage(f"Fertigmaße erfolgreich ausgelesen und eingetragen.", 5000)
 
     @qtc.Slot()
