@@ -20,6 +20,7 @@ from utils.input_validators import validate_dimensions, validate_circle_dimensio
 from utils.ui_helpers import populate_combobox_with_subfolders
 from utils.autoesprit_a import EspritA
 from utils.autoesprit_b import EspritB
+from utils.stats_to_csv import laufzeit_eintragen
 
 from UI.frm_main_window import Ui_frm_main_window
 from UI.animated_tabhelper import AnimatedTabHelper
@@ -215,6 +216,8 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             duration = self.endzeit - self.startzeit
             minutes = int(duration // 60)
             seconds = int(duration % 60)
+            laufzeit_csv = f"{minutes}:{seconds}"
+            laufzeit_eintragen(laufzeit_csv,message)
             self.statusBar().showMessage(f"Erfolg: {message} (Laufzeit: {minutes}m {seconds}s)", 10000)
         else:
             # Bei Fehlern ist die Nachricht oft in einer MessageBox, aber wir zeigen sie auch hier.

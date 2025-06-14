@@ -479,7 +479,7 @@ class EspritA(QObject):
 
     def abgeschlossen(self) -> None:
         """Sendet das finale Erfolgssignal."""
-        self.finished.emit(True, f"'{self.typ}' abgeschlossen. {zeitstempel(1)}")
+        self.finished.emit(True, f"'{self.typ}' abgeschlossen.")
 
     def run(self):
         """Hauptmethode des Workers, die beim Start des Threads ausgeführt wird."""
