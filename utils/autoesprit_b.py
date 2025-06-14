@@ -98,6 +98,7 @@ class EspritB(QObject):
 
     def esprit_a_sicherung_speichern_b(self) -> None:
         '''Speichert noch einmal die A-Seite zur Sicherheit ab, bevor Automation für B-Seite beginnt.'''
+        self.status_update.emit("A-Seite wird gespeichert...")
         pag.doubleClick(2109, 668)            # Doppelklick auf Layer
         sleep(self.verweilzeit)                     # Verweilzeit
         pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
@@ -254,7 +255,7 @@ class EspritB(QObject):
 
     def abgeschlossen_b(self) -> None:
         """Sendet das finale Erfolgssignal."""
-        self.finished.emit(True, f"Automatisierung '{self.typ}' erfolgreich abgeschlossen.")
+        self.finished.emit(True, f"'{self.typ}' erfolgreich abgeschlossen.{zeitstempel(1)}")
 
 ############################# MUSS ALLES NOCH GETESTET WERDEN   #################################################
     def rohteilmitnahme(self):
@@ -325,7 +326,7 @@ class EspritB(QObject):
         pag.click(2900, 640)  # Solid anklicken bestätigen
         sleep(verweilzeit)  # Verweilzeit
         pag.click(2425, 574)  # Aktualisieren
-
+        self.status_update.emit("Klicke von Ansicht oben...")
         sleep(verweilzeit)  # Verweilzeit
         pag.click(2904, 67)  # Arbeitsebenen
         sleep(verweilzeit)  # Verweilzeit
@@ -338,7 +339,7 @@ class EspritB(QObject):
         pag.click(2900, 640)  # Solid anklicken bestätigen
         sleep(verweilzeit)  # Verweilzeit
         pag.click(2425, 574)  # Aktualisieren
-
+        self.status_update.emit("Klicke von Ansicht isometrisch...")
         sleep(verweilzeit)  # Verweilzeit
         pag.click(2904, 67)  # Arbeitsebenen
         sleep(verweilzeit)  # Verweilzeit
@@ -346,6 +347,7 @@ class EspritB(QObject):
         sleep(verweilzeit)  # Verweilzeit
         pag.click(2175, 294)  # Fertigteil Pfeil anklicken
         sleep(verweilzeit)  # Verweilzeit
+        self.status_update.emit("Rohteilmitnahme wird als Bauteil definiert...")
         pag.click(2900, 640)  # Solid anklicken (Bauteil definieren)
         sleep(verweilzeit)  # Verweilzeit
         pag.click(2900, 640)  # Solid anklicken bestätigen
@@ -363,6 +365,7 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Beginne mit Rotation...")
         pag.click(1995, 713)  # Solid Layer einblenden (Haken)
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
@@ -383,17 +386,15 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2158, 609)  # Modifizieren im Kontextmenü klicken
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Teil wird um 180° rotiert...")
         pag.click(2943, 400)  # Modifizieren fokussieren
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.press("r")  # Rotieren mit "r" anwählen
         sleep(self.verweilzeit)  # self.verweilzeit
-
         pag.click(2756, 470)  # Original modifizieren Haken anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
-
         pag.click(2755, 588)  # Haken bei "Wähle Nullpunkt als Rotation" klicken
         sleep(self.verweilzeit)  # self.verweilzeit
-
         pag.click(2840, 625)  # Rotieren mit Mausklick auf "OK" bestätigen
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
@@ -402,6 +403,7 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.scroll(15)  # Mausrad 15 Mal nach oben bewegen
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Arbeitsebene wird wieder auf XYZ gesetzt...")
         pag.click(2684, 102)  # Arbeitsebene XYZ anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2000, 652)  # Fokussieren Klick
@@ -409,12 +411,14 @@ class EspritB(QObject):
 
     def z_verschieben(self):
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
+        self.status_update.emit("Beginne mit Z-Verschiebung..")
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2000, 652)  # Fokussieren Klick
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.hotkey('ctrl', 'a')  # Alles markieren im Solid- und Rohteilmitnahme Layer
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.rightClick(2070, 599)  # Rechtsklick für Kontextmenü
+        self.status_update.emit("Z-Verschiebung Wert in mm wird eingetragen..")
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2158, 609)  # Modifizieren im Kontextmenü klicken
         sleep(self.verweilzeit)  # self.verweilzeit
@@ -422,7 +426,6 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.press("v")  # Verschieben mit "v" anwählen
         sleep(self.verweilzeit)  # self.verweilzeit
-
         pag.click(2756, 470)  # Original modifizieren Haken anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2755, 539)  # Haken neben dem XYZ anklicken
@@ -443,17 +446,21 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)  # self.verweilzeit
+        sleep(1)
 
     def feature_symmetrie(self):
+        self.status_update.emit("Beginne mit Feature symmetrieren..")
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2197, 728)  # Klick auf "Alles auswählen"
+        self.status_update.emit("Alle Layer werden eingeblendet..")
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(1995, 697)  # Alle Layer einblenden (Haken Standard)
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2481, 68)  # Nur Feature Auswahl anklicken (aufklappen)
+        self.status_update.emit("Nur Feature wird ausgewählt...")
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2477, 119)  # Nur Feature anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
@@ -463,6 +470,7 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.hotkey('ctrl', 'a')  # Alle Feature markieren
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Feature symmetriert..")
         pag.rightClick(2070, 599)  # Rechtsklick für Kontextmenü
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2158, 609)  # Modifizieren im Kontextmenü klicken
@@ -478,9 +486,11 @@ class EspritB(QObject):
         pag.click(2755, 562)  # Haken neben dem Y Achse anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2840, 625)  # Verschieben mit Mausklick auf "OK" bestätigen
+        self.status_update.emit("Warte bis Esprit fertig ist mit rechnen :D ...")
         sleep(5)  # self.verweilzeit 5 sec
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Fehlermeldung wird weggeklickt...")
         pag.click(2879, 489)  # Klick auf Fehlermeldung (Fokussieren)
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2997, 569)  # Klick auf Fehlermeldung "OK"
@@ -490,9 +500,11 @@ class EspritB(QObject):
 
     def konturzug_links(self):
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
+        self.status_update.emit("Konturzüge werden auf links gesetzt..")
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2481, 68)  # Nur Feature Auswahl anklicken (aufklappen)
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Nur Feature wird ausgewählt...")
         pag.click(2477, 237)  # Nur Konturzüge anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2047, 699)  # Klick auf Standard um Markierung aufzuheben
@@ -501,9 +513,11 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2000, 652)  # Fokussieren Klick
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Alle Feature werden markiert...")
         pag.hotkey('ctrl', 'a')  # Alle Feature markieren
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(1124, 211)  # Klick in Eigenschaften auf Bearbeitungsseite
+        self.status_update.emit("Bearbeitunsseite wird auf links gesetzt...")
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.press("l")  # Mit "L" auf Links setzen
         sleep(0.5)  # self.verweilzeit
@@ -517,6 +531,7 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
 
     def xy_verschieben(self):
+        self.status_update.emit("Beginne mit XY-Verschiebung...")
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2000, 652)  # Fokussieren Klick
@@ -528,12 +543,14 @@ class EspritB(QObject):
         pag.click(2158, 609)  # Modifizieren im Kontextmenü klicken
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2943, 400)  # Modifizieren fokussieren
+        self.status_update.emit("Verschieben wird ausgewählt...")
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.press("v")  # Verschieben mit "v" anwählen
         sleep(0.1)  # self.verweilzeit
         pag.click(2756, 470)  # Original modifizieren Haken anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2755, 539)  # Haken neben dem XYZ anklicken
+        self.status_update.emit("Werte werden eingetragen...")
         sleep(self.verweilzeit)  # self.verweilzeit
         x_verschiebung = float(self.x_fertig)
         y_verschiebung = float(self.y_fertig)
@@ -544,19 +561,20 @@ class EspritB(QObject):
         pag.press('tab')
         pag.typewrite(str("0"))
         pag.press('tab')
-
         pag.click(2840, 625)  # Verschieben mit Mausklick auf "OK" bestätigen
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(5)  # self.verweilzeit 5 sec
 
     def solid_aktualisieren(self):
+        self.status_update.emit("Beginne Aktualisierung der Bauteile...")
         pag.doubleClick(2109, 668)  # Doppelklick auf Layer
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2000, 652)  # Fokussieren Klick
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Simulationsbauteile werden aktualisiert...")
         pag.click(2246, 96)  # Simulationsparameter
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2071, 192)  # Klick auf Bauteil

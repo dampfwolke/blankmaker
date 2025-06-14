@@ -239,7 +239,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.le_x_fertig.setText(x)
         self.le_y_fertig.setText(y)
         self.le_z_fertig.setText(z)
-        self.fertig_abmasse_a.emit(x, y, z)
         self.statusBar().showMessage(f"Fertigmaße erfolgreich ausgelesen und eingetragen.", 5000)
 
     @qtc.Slot()
