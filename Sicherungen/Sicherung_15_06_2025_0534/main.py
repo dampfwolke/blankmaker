@@ -6,11 +6,11 @@ from functools import partial
 from pathlib import Path
 import time
 
+
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtCore as qtc
 from PySide6 import QtGui as qtg
 
-# Lokale Imports
 from utils.zeitstempel import zeitstempel
 from utils.kalenderwoche import kw_ermitteln
 from utils.get_settings import load_settings, get_pfad_from_template
@@ -21,14 +21,11 @@ from utils.ui_helpers import populate_combobox_with_subfolders
 from utils.autoesprit_a import EspritA
 from utils.autoesprit_b import EspritB
 from utils.stats_to_csv import laufzeit_eintragen
-# NEU: Import des Bestätigungsdialogs
-from utils.confirmation_dialog import ConfirmationDialog
 
-# UI Imports
 from UI.frm_main_window import Ui_frm_main_window
 from UI.animated_tabhelper import AnimatedTabHelper
-from einstellungen import Settings
 
+from einstellungen import Settings
 
 class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
     # --- Python Commander Konstanten ---
@@ -102,12 +99,13 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         projekt_prefix = self.settings.get("projekt_prefix", "").replace("AT-", "")
         self.le_at_nr.setText(projekt_prefix)
         self.pb_rausspielen.clicked.connect(self.on_rausspielen_clicked)
-
+        
         # Timer für die Programmsuche
         self.nc_file_check_timer = qtc.QTimer(self)
         self.nc_file_check_timer.timeout.connect(self.update_nc_file_count)
         self.nc_file_check_timer.start(2000)
         self.update_nc_file_count()
+
 
     @qtc.Slot()
     def on_wizard_a_clicked(self):
@@ -115,6 +113,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         pgm_name = self.le_zeichnungsnr.text()
         typ = self.cb_auto_option_a.currentText()
 
+        # A-Seiten spezifische Daten
         x_roh = self.le_rechteck_laenge.text()
         y_roh = self.le_rechteck_breite.text()
         z_roh = self.le_rechteck_hoehe.text()
@@ -124,6 +123,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             self.statusBar().showMessage("Fehler: Bitte Rohteilmaße für A-Seite sicherstellen.", 7000)
             return
 
+        # Argumente für den Worker als Dictionary vorbereiten
         worker_args = {
             "pgm_name": pgm_name,
             "x_roh": x_roh,
@@ -132,6 +132,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             "bearbeitung_auswahl": bearbeitung,
             "typ": typ}
 
+        # Die zentrale Start-Methode aufrufen
         self.start_wizard(worker_class=EspritA, worker_args=worker_args, description="A-Seite")
 
     @qtc.Slot()
@@ -143,7 +144,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         y_fertig = self.le_y_fertig.text()
         z_fertig = self.le_z_fertig.text()
         spanntiefe = self.le_spanntiefe_b.text()
-
+        # B-Seiten spezifische Daten (hier gibt es weniger)
         worker_args = {
             "pgm_name": pgm_name,
             "typ": typ,
@@ -152,78 +153,60 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             "z_fertig": z_fertig,
             "spanntiefe": spanntiefe
         }
+        # Die zentrale Start-Methode aufrufen
         self.start_wizard(worker_class=EspritB, worker_args=worker_args, description="B-Seite")
 
     def start_wizard(self, worker_class, worker_args: dict, description: str):
         """
         Eine zentrale Methode zum Starten von JEDEM Wizard-Typ (A, B, etc.).
+        - worker_class: Die zu instanziierende Klasse (z.B. EspritA oder EspritB)
+        - worker_args: Ein Dictionary mit den Argumenten für den Konstruktor der Worker-Klasse
+        - description: Ein Text für die Status-Nachrichten (z.B. "A-Seite")
         """
+        # 1. Prüfen, ob bereits ein Prozess läuft (unverändert)
         if self.wizard_thread and self.wizard_thread.isRunning():
             self.statusBar().showMessage("Ein Automatisierungs-Prozess läuft bereits.", 5000)
             return
 
+        # 2. Pfad und Sleep-Timer holen (sind für beide gleich)
         pfad = self._get_and_validate_target_dir()
         if not pfad: return
         sleep_timer = self.hsl_sleep_timer.value()
 
+        # Allgemeine Argumente zum Dictionary hinzufügen
         worker_args["pfad"] = pfad
         worker_args["sleep_timer"] = sleep_timer
 
+        # 3. Thread und Worker erstellen und verbinden
         self.wizard_thread = qtc.QThread()
+        # **kwargs entpackt das Dictionary in passende Keyword-Argumente
         self.wizard_worker = worker_class(**worker_args)
         self.wizard_worker.moveToThread(self.wizard_thread)
 
-        # Standardsignale verbinden
-        self.wizard_thread.started.connect(self.wizard_worker.run)
+        # 4. Signale und Slots verbinden (JETZT FÜR ALLE GLEICH)
+        self.wizard_thread.started.connect(self.wizard_worker.run)  # Wichtig: run() statt run_a/run_b
+
+        # Wir verbinden mit dem NEUEN, VEREINHEITLICHTEN finished-Slot
         self.wizard_worker.finished.connect(self.on_wizard_finished)
         self.wizard_worker.status_update.connect(self.statusBar().showMessage)
         self.wizard_worker.show_info_dialog.connect(self.display_worker_message)
 
-        # Spezifische Signale verbinden (robust durch hasattr)
         if hasattr(self.wizard_worker, 'ausgelesene_fertig_werte'):
             self.wizard_worker.ausgelesene_fertig_werte.connect(self.fertig_abmasse_eintragen)
 
-        # NEU: Das Signal für den Bestätigungsdialog verbinden, falls der Worker es besitzt
-        if hasattr(self.wizard_worker, 'confirmation_required'):
-            self.wizard_worker.confirmation_required.connect(self.show_confirmation_dialog)
-
-        # Aufräum-Logik
+        # 5. Aufräum-Logik (unverändert und für beide gültig)
         self.wizard_worker.finished.connect(self.wizard_thread.quit)
         self.wizard_thread.finished.connect(self.wizard_worker.deleteLater)
         self.wizard_thread.finished.connect(self.wizard_thread.deleteLater)
         self.wizard_thread.finished.connect(self.clear_wizard_thread_reference)
 
-        # Thread starten und UI anpassen
+        # 6. Den Thread starten und UI anpassen
         self.wizard_thread.start()
+
         self.pb_wizard_a.setEnabled(False)
         self.pb_wizard_b.setEnabled(False)
         self.startzeit = time.perf_counter()
         self.statusBar().showMessage(f"Automatisierung {description} gestartet...", 3000)
-
-    # NEU: Dieser Slot wird vom Worker-Thread aufgerufen, um den Dialog anzuzeigen.
-    @qtc.Slot(str, str)
-    def show_confirmation_dialog(self, title: str, text: str):
-        """
-        Erstellt, zeigt den Bestätigungsdialog an und sendet das Ergebnis zurück an den Worker.
-        Diese Methode läuft im Haupt-GUI-Thread.
-        """
-        # Wir prüfen, ob überhaupt ein Worker aktiv ist, um Fehler zu vermeiden.
-        if not self.wizard_worker:
-            print("[WARNUNG] show_confirmation_dialog aufgerufen, aber kein Worker aktiv.")
-            return
-
-        dialog = ConfirmationDialog(title, text, timeout=10, parent=self)
-
-        # dialog.exec() blockiert die Ausführung DIESES SLOTS (nicht die ganze GUI),
-        # bis der Dialog geschlossen wird.
-        result = dialog.exec()
-
-        # Das Ergebnis wird an die Methode im Worker-Objekt übergeben,
-        # die dann den wartenden Thread aufweckt.
-        if result == qtw.QDialog.Accepted:
-            self.wizard_worker.set_confirmation_result(True)
-        else:
-            self.wizard_worker.set_confirmation_result(False)
 
     @qtc.Slot(bool, str)
     def on_wizard_finished(self, success: bool, message: str):
@@ -237,16 +220,19 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             minutes = int(duration // 60)
             seconds = int(duration % 60)
             laufzeit_csv = f"{minutes}:{seconds}"
-            laufzeit_eintragen(laufzeit_csv, message)
+            laufzeit_eintragen(laufzeit_csv,message)
             self.statusBar().showMessage(f"Erfolg: {message} (Laufzeit: {minutes}m {seconds}s)", 10000)
         else:
+            # Bei Fehlern ist die Nachricht oft in einer MessageBox, aber wir zeigen sie auch hier.
             self.statusBar().showMessage(f"Abbruch: {message} ({zeitstempel(1)})", 12000)
 
+        # UI wieder freigeben
         self.pb_wizard_a.setEnabled(True)
         self.pb_wizard_b.setEnabled(True)
 
     @qtc.Slot(str, str, str)
     def fertig_abmasse_eintragen(self, x: str, y: str, z: str):
+        """Dieser Slot wird aufgerufen, wenn der Worker das Signal 'ausgelesene_fertig_werte' sendet."""
         self.le_x_fertig.setText(x)
         self.le_y_fertig.setText(y)
         self.le_z_fertig.setText(z)
@@ -254,13 +240,21 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
 
     @qtc.Slot()
     def clear_wizard_thread_reference(self):
+        """Setzt die Thread- und Worker-Referenzen auf None, um Fehler zu vermeiden."""
         print("Räume Thread- und Worker-Referenzen auf.")
         self.wizard_worker = None
         self.wizard_thread = None
 
     @qtc.Slot(str, str)
     def display_worker_message(self, title: str, text: str):
-        msg_box = qtw.QMessageBox(self)
+        """
+        Erstellt und zeigt eine MessageBox an, die vom Worker-Thread getriggert wird.
+        Diese Methode ist der Slot für das 'show_info_dialog'-Signal.
+        """
+        # Wir erstellen eine Instanz, anstatt eine statische Methode zu verwenden. Das ist robuster.
+        msg_box = qtw.QMessageBox(self)  # 'self' setzt das Hauptfenster als Parent
+
+        # Entscheide über das Icon basierend auf dem Titel
         if "fehler" in title.lower() or "abbruch" in title.lower():
             msg_box.setIcon(qtw.QMessageBox.Icon.Critical)
         else:
@@ -269,12 +263,11 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         msg_box.setWindowTitle(title)
         msg_box.setText(text)
         msg_box.setStandardButtons(qtw.QMessageBox.StandardButton.Ok)
-        msg_box.exec()
-
-    # --- Rest des Skripts (unverändert) ---
+        msg_box.exec()  # Zeigt die Box an und blockiert, bis der User 'OK' klickt
 
     @qtc.Slot()
     def update_nc_file_count(self):
+        """Sucht nach .H/.h-Dateien, aktualisiert die LCD-Anzeige und den Button-Stil."""
         wks = self.settings.get("wks")
         if not wks:
             self.lcdn_programme_gefunden.display(0)
@@ -285,7 +278,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
                 self.statusBar().showMessage(f"Fehler: NC-Basispfad '{self.NC_BASE_PATH}' nicht gefunden!", 10000)
                 self.lcdn_programme_gefunden.display(-1)
             return
-
+            
         wks_folder = f"WKS{wks}"
         found_files_count = 0
         for machine in self.MACHINES:
@@ -299,9 +292,13 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             self.pb_rausspielen.setStyleSheet("background-color: #FFA500; color: black;")
         else:
             self.pb_rausspielen.setStyleSheet("")
-
+    
     @qtc.Slot()
     def on_rausspielen_clicked(self):
+        """
+        Sammelt NC-Programme, verschiebt sie in einen neuen Projektordner
+        und löscht die Originaldateien.
+        """
         at_prefix = self.le_at_nr.text()
         auftrags_nr = self.le_auftrags_nr.text()
 
@@ -311,14 +308,14 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         if not auftrags_nr:
             self.statusBar().showMessage("Fehler: Bitte eine Auftragsnummer angeben.", 7000)
             return
-
+            
         wks = self.settings.get("wks")
         if not wks:
             self.statusBar().showMessage("Fehler: 'wks' nicht in Einstellungen gefunden.", 7000)
             return
 
         wks_folder = f"WKS{wks}"
-
+        
         files_to_move = []
         for machine in self.MACHINES:
             source_dir = self.NC_BASE_PATH / machine / wks_folder
@@ -335,21 +332,20 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
             for source_file in files_to_move:
                 machine_name = source_file.parent.parent.name
                 destination_dir = self.NC_BASE_PATH / machine_name / dest_folder_name
-
+                
                 destination_dir.mkdir(parents=True, exist_ok=True)
                 destination_file = destination_dir / source_file.name
-
+                
                 shutil.copy2(source_file, destination_file)
                 source_file.unlink()
                 moved_count += 1
-
-            self.statusBar().showMessage(f"{moved_count} Programme erfolgreich nach '{dest_folder_name}' verschoben.",
-                                         7000)
+            
+            self.statusBar().showMessage(f"{moved_count} Programme erfolgreich nach '{dest_folder_name}' verschoben.", 7000)
 
         except Exception as e:
             self.statusBar().showMessage(f"Fehler beim Verschieben: {e}", 10000)
             print(f"[FEHLER] Python Commander: {e}")
-
+            
         self.update_nc_file_count()
 
     def _get_and_validate_target_dir(self) -> Path | None:
@@ -357,14 +353,14 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         if not dir_path_str:
             self.statusBar().showMessage("Fehler: Zielpfad ist nicht angegeben.", 7000)
             return None
-
+        
         target_dir = Path(dir_path_str)
         if not target_dir.is_dir():
             self.statusBar().showMessage(f"Fehler: Zielordner existiert nicht: {target_dir}", 7000)
             return None
-
+        
         return target_dir
-
+    
     @qtc.Slot(str)
     def update_spanntiefe_from_z_fertig(self, text: str):
         is_valid, spanntiefe_value = calculate_spanntiefe(text)
@@ -522,26 +518,26 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         if not spannmittel_groesse:
             self.statusBar().showMessage("Fehler: Bitte eine Spannmittel-Größe angeben.", 7000)
             return
-
+        
         ziel_ordner = self._get_and_validate_target_dir()
         if not ziel_ordner:
-            return
+            return 
 
         spannmittel_basis_pfad_str = self.settings.get("spannmittel_basis_pfad")
         if not spannmittel_basis_pfad_str:
             self.statusBar().showMessage("Fehler: 'spannmittel_basis_pfad' nicht in Einstellungen gefunden.", 7000)
             return
-
+        
         quell_ordner = Path(spannmittel_basis_pfad_str) / spannmittel_typ
         quell_datei = quell_ordner / f"{spannmittel_groesse}.step"
         ziel_datei = ziel_ordner / f"!schraubstock{quell_datei.suffix}"
-
+        
         try:
-            if not quell_datei.is_file():
+            if not quell_datei.is_file(): 
                 self.statusBar().showMessage(f"Fehler: Quelldatei nicht gefunden: {quell_datei.name}", 7000)
                 print(f"[FEHLER] Quelldatei nicht gefunden: {quell_datei}")
                 return
-
+            
             shutil.copy2(quell_datei, ziel_datei)
             self.statusBar().showMessage(f"Spannmittel '{ziel_datei.name}' erfolgreich erstellt.", 7000)
             print(f"[INFO] Spannmittel kopiert: '{quell_datei}' -> '{ziel_datei}'")
@@ -559,7 +555,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         if not is_valid:
             self.statusBar().showMessage(f"Rechteck Fehler: {error_message}", 7000)
             return
-
+        
         dir_path = self._get_and_validate_target_dir()
         if not dir_path:
             return
@@ -567,12 +563,12 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         file_name = "!rohteil.dxf"
         full_output_path = str(dir_path / file_name)
         self.statusBar().showMessage(f"Erstelle Rechteck-DXF: {file_name}...", 3000)
-
+        
         success, message_from_module = rechteck_erstellen(length, width, height, full_output_path)
-
+        
         if success:
             self.statusBar().showMessage(f"Rechteck erstellt ({zeitstempel(1)})", 7000)
-            self.spannmittel_erstellen()
+            self.spannmittel_erstellen() 
         else:
             self.statusBar().showMessage(f"Rechteck Fehler DXF: {message_from_module}", 7000)
 
@@ -584,7 +580,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         if not is_valid:
             self.statusBar().showMessage(f"Kreis Fehler: {error_message}", 7000)
             return
-
+        
         dir_path = self._get_and_validate_target_dir()
         if not dir_path:
             return
@@ -592,7 +588,7 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         file_name = "!rohteil.dxf"
         full_output_path = str(dir_path / file_name)
         self.statusBar().showMessage(f"Erstelle Kreis-DXF: {file_name}...", 3000)
-
+        
         success, message_from_module = kreis_erstellen(diameter, height, full_output_path)
 
         if success:
@@ -611,7 +607,6 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         else:
             self.le_pfad.setText("")
             self.statusBar().showMessage("Warnung: Pfad konnte nicht generiert werden.", 5000)
-
 
 if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)

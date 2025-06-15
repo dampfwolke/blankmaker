@@ -70,7 +70,8 @@ class EspritB(QObject):
             # 3. Nach dem Aufwecken das Ergebnis prüfen
             if self.confirmation_result:
                 self.status_update.emit("Bestätigung erhalten. Füge Allmatic 125 ein.")
-                self.allmatic_125() # Hier deine Funktion aufrufen
+                # self.allmatic_125() # Hier deine Funktion aufrufen
+                print("Platzhalter: self.allmatic_125() würde jetzt ausgeführt.")
             else:
                 self.status_update.emit("Allmatic 125 wurde übersprungen.")
             # --- ENDE DER NEUEN LOGIK ---
@@ -656,11 +657,11 @@ class EspritB(QObject):
         spanntiefe = int(self.spanntiefe) # Spanntiefe in integer umwandeln
 
         if spanntiefe >= 40:
-            pfad = str(f"{self.PFAD_DIR_ALLMATIC_125}\\{40}.step")
+            pfad = str(f"{self.PFAD_DIR_ALLMATIC_125}{40}.step")
         else:
             # Sicherstellen, dass spanntiefe nicht negativ ist (optional)
             spanntiefe = max(0, spanntiefe)
-            pfad = str(f"{self.PFAD_DIR_ALLMATIC_125}\\{spanntiefe}.step")
+            pfad = str(f"{self.PFAD_DIR_ALLMATIC_125}{spanntiefe}.step")
 
         print(f"Öffne Pfad: {pfad}") # Zum Debuggen
         pag.click(1973, 63) # Öffnen Allmatic.Step
