@@ -21,7 +21,6 @@ from utils.ui_helpers import populate_combobox_with_subfolders
 from utils.autoesprit_a import EspritA
 from utils.autoesprit_b import EspritB
 from utils.stats_to_csv import laufzeit_eintragen
-# NEU: Import des Bestätigungsdialogs
 from utils.confirmation_dialog import ConfirmationDialog
 
 # UI Imports

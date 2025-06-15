@@ -18,11 +18,11 @@ class ConfirmationDialog(QDialog):
 
         # Widgets
         self.info_label = QLabel(text)
-        self.info_label.setFont(QFont("Arial", 12))
+        self.info_label.setFont(QFont("Comic Sans MS", 10))
 
         self.timer_label = QLabel()
         self.timer_label.setAlignment(Qt.AlignCenter)
-        self.timer_label.setFont(QFont("Arial", 10, QFont.Bold))
+        self.timer_label.setFont(QFont("Comic Sans MS", 8, QFont.Bold))
 
         self.yes_button = QPushButton("Fortfahren (Ja)")
         self.no_button = QPushButton("Überspringen (Nein)")
