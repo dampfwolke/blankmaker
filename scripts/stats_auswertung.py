@@ -16,6 +16,7 @@ class StatsAuswertung(qtw.QMainWindow, Ui_frm_stats_auswertung):
         super().__init__()
         self.setupUi(self)
         self.lb_zeit_ausgabe.setText("")
+        self.lb_roh_ausgabe.setText("")
 
         # Modell erstellen Zeitersparnis
         self.model_zeit = qtg.QStandardItemModel()
