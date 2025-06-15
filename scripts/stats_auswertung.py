@@ -31,6 +31,14 @@ class StatsAuswertung(qtw.QMainWindow, Ui_frm_stats_auswertung):
 
         # Verbindet den Klick auf den Button mit der Auswertungsmethode.
         self.pb_auswerten_zeit.clicked.connect(self.auswerten_zeit)
+        self.pb_aktualisieren_zeit.clicked.connect(self.aktualisieren_zeit)
+
+    @qtc.Slot()
+    def aktualisieren_zeit(self):
+        self.lb_zeit_ausgabe.setText("")
+        font1 = qtg.QFont()
+        font1.setPointSize(12)
+        self.lb_zeit_ausgabe.setFont(font1)
 
     def csv_laden_rohteil(self, file):
         filepath = self.DIR_PATH_CSV / file
@@ -90,6 +98,7 @@ class StatsAuswertung(qtw.QMainWindow, Ui_frm_stats_auswertung):
         except Exception as e:
             print(f"Ein Fehler ist beim Lesen der CSV aufgetreten: {e}")
 
+    @qtc.Slot()
     def auswerten_zeit(self):
         """
         Berechnet die Summe der Zeiten aus der dritten Spalte (Index 2)
