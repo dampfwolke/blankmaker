@@ -152,7 +152,7 @@ class EspritB(QObject):
         # sleep(self.verweilzeit)                     # Verweilzeit
         # pag.click(2000, 698)                  # Alle Layer ausblenden (Haken)
         # sleep(self.verweilzeit)                     # Verweilzeit
-        pag.doubleClick(2038, 713)            # Doppelklick auf Solid Layer
+        # pag.doubleClick(2038, 713)            # Doppelklick auf Solid Layer
 
     def ausfuellhilfe_b(self):
         self.status_update.emit("Ausfüllhilfe B-Seite gestartet...")
