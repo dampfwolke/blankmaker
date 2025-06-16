@@ -94,11 +94,6 @@ class EspritB(QObject):
             self.esprit_datei_speichern_b()
             self.abgeschlossen_b()
 
-        elif self.typ == "Bounding Box auslesen B":
-            self.esprit_dateiname_pruefen_b()
-            self.status_update.emit("Starte 'Bounding Box auslesen'")
-            self.fertigteil_bounding_box_auslesen_b()
-            self.abgeschlossen_b()
         else:
             error_msg = "Kein gültiger 'automations_typ' ausgewählt!"
             self.status_update.emit(error_msg)
@@ -182,98 +177,6 @@ class EspritB(QObject):
         # pag.click(2000, 700) # Standard layer einblenden
         # sleep(self.verweilzeit)
         # pag.click(2000, 716) # Solid layer einblenden
-
-    def fertigteil_bounding_box_auslesen_b(self) -> None:
-        """Mithilfe von pyautogui und Hilfsmodul click_image wird in Esprit die Bounding Box des aktuellen Bauteils ausgelesen."""
-        self.status_update.emit("Starte Fertigteilmaß auslesen....")
-        bild_pfad_relativ = Path(".") / "utils" / "automation_bilder" / "bauteil.png"
-        bild_pfad_absolut = bild_pfad_relativ.resolve()
-
-        # KÖNNTE evtl. PASSEN --> TESTEN
-        pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
-        sleep(self.verweilzeit)                     # Verweilzeit
-        pag.click(2197, 728)                  # Klick auf "Alles auswählen"
-        sleep(self.verweilzeit)                     # Verweilzeit
-        pag.click(2000, 698)                  # Alle Layer ausblenden (Haken)
-        sleep(self.verweilzeit)                     # Verweilzeit
-        pag.doubleClick(2038, 713)            # Doppelklick auf Solid Layer
-
-        # Anpassen für B-SEITE
-        # NACH DEM AUSLESEN MUSS DERSELBE ZUSTAND WIE OHNE AUSLESEN SEIN DAMIT ROHTEILMITNAHME USW. FUNKTIONIEREN
-
-        verweilzeit = self.verweilzeit  # festlegen der Sleep Zeit
-        pag.doubleClick(2109, 668)  # Doppelklick auf Layer
-        sleep(verweilzeit)  # Verweilzeit
-        pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
-        sleep(verweilzeit)  # Verweilzeit
-        pag.doubleClick(2038, 713)  # Doppelklick auf Solid Layer
-        sleep(verweilzeit)  # Verweilzeit
-        self.status_update.emit("Fertigteilmaß wird ausgelesen...")
-        pag.click(2481, 68)  # Nur Volumenmodell Auswahl anklicken (aufklappen)
-        sleep(verweilzeit)  # Verweilzeit
-        pag.click(2480, 434)  # Nur Volumenmodell auswählen
-        sleep(verweilzeit)  # Verweilzeit
-        pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
-        sleep(verweilzeit)  # Verweilzeit
-        pag.click(2109, 640)  # Fokussieren Klick
-        sleep(verweilzeit)  # Verweilzeit
-        pag.hotkey('ctrl', 'a')  # Alles markieren (Solid)
-        sleep(verweilzeit)  # Verweilzeit
-        click_image(str(bild_pfad_absolut), toleranz=0.65)  # Auf Bauteil Reiter klicken mit Bilderkennung
-        self.status_update.emit("Reiter Bauteil gefunden...")
-        sleep(verweilzeit)  # Verweilzeit
-        pag.click(1291, 47)  # Auf Erkunden Reiter im Bauteil Menü klicken
-        self.status_update.emit("Abmaße werden in Zwischenspeicher kopiert...")
-        sleep(verweilzeit)  # Verweilzeit
-        pag.doubleClick(1669, 331)  # Doppelklick auf Länge des Bauteils
-        sleep(verweilzeit)  # Verweilzeit
-        pag.hotkey('ctrl', 'c')  # Abmaße des Fertigteils kopieren
-        sleep(verweilzeit)  # Verweilzeit
-        pag.click(2481, 68)  # Nur Volmenmodell Auswahl anklicken (aufklappen)
-        sleep(verweilzeit)  # Verweilzeit
-        pag.click(2472, 88)  # Alles auswählen
-        sleep(verweilzeit)  # Verweilzeit
-        pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
-        sleep(verweilzeit)  # Verweilzeit
-        pag.click(2109, 640)  # Fokussieren Klick
-        sleep(verweilzeit)  # Verweilzeit
-        pag.click(1308, 1009)  # Auf Feature im Projekt-Manager klicken
-        sleep(verweilzeit)  # Verweilzeit
-        pag.doubleClick(2038, 697)  # Doppelklick auf Standard Layer
-        clipboard_content = clipboard.paste()
-        string = clipboard_content.strip("()")
-        string = re.sub(r'(\d+),(\d+)', r'\1.\2', string)
-        abmasse = string.split(', ')
-        self.x_fertig = abmasse[0]
-        self.y_fertig = abmasse[1]
-        self.z_fertig = abmasse[2]
-        self.status_update.emit(f"Ausgelesen: X={self.x_fertig}, Y={self.y_fertig}, Z={self.z_fertig}")
-
-    def fertig_abmasse_pruefen_b(self) -> tuple[bool, str]:
-        """ Es wird geprüft ob, die Fertigteilmaße korrekt ausgelesen wurden. :return: (bool, str)"""
-        try:
-            if self.x_fertig is None or self.y_fertig is None or self.z_fertig is None:
-                msg = "Fertigteilmaße wurden nicht ausgelesen."
-                self.status_update.emit(f"Fehler: {msg}")
-                return False, msg
-
-            if float(self.x_fertig) > 0 and float(self.y_fertig) > 0 and float(self.z_fertig) > 0:
-                self.status_update.emit("Fertigteilmaße erfolgreich validiert.")
-                return True, ""
-            else:
-                msg = "Ausgelesene Fertigteilmaße müssen größer als 0 sein."
-                self.status_update.emit(f"Fehler: {msg}")
-                return False, msg
-        except (ValueError, TypeError):
-            msg = "Ausgelesene Fertigteilmaße sind keine gültigen Zahlen."
-            self.status_update.emit(f"Fehler: {msg}")
-            return False, msg
-    
-    def fertig_abmasse_eintragen_b(self):
-        x = str(self.x_fertig)
-        y = str(self.y_fertig)
-        z = str(self.z_fertig)
-        self.ausgelesene_fertig_werte.emit(x, y, z)
 
     def esprit_datei_speichern_b(self):
         '''Datei von A-Seite auf B-Seite mit _B speichern'''

@@ -185,6 +185,12 @@ class EspritA(QObject):
         sleep(verweilzeit)  # Verweilzeit
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(verweilzeit)  # Verweilzeit
+        pag.click(2197, 728) # Klick auf "Alles auswählen"
+        sleep(self.verweilzeit) # Verweilzeit
+        pag.click(2000, 698) # Alle Layer ausblenden (Haken)
+        sleep(self.verweilzeit) # Verweilzeit
+        pag.doubleClick(2038, 697)  # Doppelklick auf Standard Layer
+        sleep(verweilzeit)  # Verweilzeit
         pag.doubleClick(2038, 713)  # Doppelklick auf Solid Layer
         sleep(verweilzeit)  # Verweilzeit
         self.status_update.emit("Fertigteilmaß wird ausgelesen...")
@@ -218,7 +224,7 @@ class EspritA(QObject):
         sleep(verweilzeit)  # Verweilzeit
         pag.click(1308, 1009)  # Auf Feature im Projekt-Manager klicken
         sleep(verweilzeit)  # Verweilzeit
-        pag.doubleClick(2038, 697)  # Doppelklick auf Standard Layer
+        pag.doubleClick(2038, 713)  # Doppelklick auf Solid Layer
         clipboard_content = clipboard.paste()
         string = clipboard_content.strip("()")
         string = re.sub(r'(\d+),(\d+)', r'\1.\2', string)
@@ -331,15 +337,15 @@ class EspritA(QObject):
         """ Datei wird im aktuellen KW-Wochen Ordner gespeichert"""
         self.status_update.emit("Bereite speichern vor..")
         pag.click(1965, 36)
-        sleep(self.verweilzeit)
+        sleep(0.6)
         pag.click(2007, 172)
         sleep(0.5)
         pgm_name_mit_endung = f"{self.pgm_name}_A".strip()
         abs_path_mit_pgm_name = Path(self.pfad) / pgm_name_mit_endung
         clipboard.copy(str(abs_path_mit_pgm_name))
-        sleep(0.1)
+        sleep(0.4)
         pag.hotkey("ctrl", "v")
-        sleep(0.5)
+        sleep(0.4)
         pag.press('Enter')
         self.status_update.emit("Esprit Datei wird gespeichert...")
         sleep(4)
