@@ -24,7 +24,7 @@ class EspritB(QObject):
     confirmation_required = Signal(str, str)
 
     # Konstante Pfade für Rohteilmitnahme und Allmatic 125 Schraubstock
-    PFAD_ROHTEILMITNAHME = Path(r"C:\Users\hasanovic\Desktop\Rohteilmitnahme\Hasanovic.stl")
+    PFAD_ROHTEILMITNAHME = Path(r"C:\Users\hasanovic\Desktop\Rohteilmitnahme\Hasanovic")
     PFAD_DIR_ALLMATIC_125 = Path(r"C:\Users\hasanovic\Desktop\Spannmittel\19_Allmatic_125_EVO_100")
 
     def __init__(self, pgm_name: str, typ: str, pfad: Path, sleep_timer: int, x_fertig: str, y_fertig: str, z_fertig: str, spanntiefe: str):
@@ -145,13 +145,13 @@ class EspritB(QObject):
         pag.hotkey('ctrl', 's')               # A-Seite speichern
         sleep(4)                                    # Verweilzeit
         pag.doubleClick(2109, 668)            # Doppelklick auf Layer
-        sleep(self.verweilzeit)                     # Verweilzeit
-        pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
-        sleep(self.verweilzeit)                     # Verweilzeit
-        pag.click(2197, 728)                  # Klick auf "Alles auswählen"
-        sleep(self.verweilzeit)                     # Verweilzeit
-        pag.click(2000, 698)                  # Alle Layer ausblenden (Haken)
-        sleep(self.verweilzeit)                     # Verweilzeit
+        # sleep(self.verweilzeit)                     # Verweilzeit
+        # pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
+        # sleep(self.verweilzeit)                     # Verweilzeit
+        # pag.click(2197, 728)                  # Klick auf "Alles auswählen"
+        # sleep(self.verweilzeit)                     # Verweilzeit
+        # pag.click(2000, 698)                  # Alle Layer ausblenden (Haken)
+        # sleep(self.verweilzeit)                     # Verweilzeit
         pag.doubleClick(2038, 713)            # Doppelklick auf Solid Layer
 
     def ausfuellhilfe_b(self):
