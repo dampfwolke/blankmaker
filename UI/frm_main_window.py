@@ -437,8 +437,9 @@ class Ui_frm_main_window(object):
         self.fr_spannmittelauswahl.setObjectName(u"fr_spannmittelauswahl")
         self.fr_spannmittelauswahl.setMinimumSize(QSize(300, 25))
         self.fr_spannmittelauswahl.setMaximumSize(QSize(550, 30))
-        self.fr_spannmittelauswahl.setFrameShape(QFrame.Shape.StyledPanel)
-        self.fr_spannmittelauswahl.setFrameShadow(QFrame.Shadow.Raised)
+        self.fr_spannmittelauswahl.setFrameShape(QFrame.Shape.NoFrame)
+        self.fr_spannmittelauswahl.setFrameShadow(QFrame.Shadow.Plain)
+        self.fr_spannmittelauswahl.setLineWidth(0)
         self.horizontalLayout_11 = QHBoxLayout(self.fr_spannmittelauswahl)
         self.horizontalLayout_11.setSpacing(0)
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
@@ -862,7 +863,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_15.addWidget(self.lb_x_fertig)
 
-        self.horizontalSpacer_28 = QSpacerItem(45, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_28 = QSpacerItem(44, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_15.addItem(self.horizontalSpacer_28)
 
@@ -982,7 +983,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_17.addWidget(self.lb_spanntiefe_b)
 
-        self.horizontalSpacer_31 = QSpacerItem(52, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_31 = QSpacerItem(50, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_17.addItem(self.horizontalSpacer_31)
 
