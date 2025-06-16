@@ -37,6 +37,10 @@
   <property name="windowTitle">
    <string>BlankMaker</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="Icons/icons.qrc">
+    <normaloff>:/Symbole/100-percent.png</normaloff>:/Symbole/100-percent.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -129,7 +133,7 @@
          <number>0</number>
         </property>
         <property name="bottomMargin">
-         <number>0</number>
+         <number>3</number>
         </property>
         <item>
          <widget class="QWidget" name="wg_x_roh" native="true">
@@ -568,14 +572,14 @@
             <widget class="QPushButton" name="pb_rechteck">
              <property name="minimumSize">
               <size>
-               <width>0</width>
-               <height>20</height>
+               <width>120</width>
+               <height>25</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>16777215</width>
-               <height>25</height>
+               <width>135</width>
+               <height>30</height>
               </size>
              </property>
              <property name="font">
@@ -586,7 +590,11 @@
               </font>
              </property>
              <property name="text">
-              <string>Rechteck erstellen</string>
+              <string> Rechteck erstellen</string>
+             </property>
+             <property name="icon">
+              <iconset resource="Icons/icons.qrc">
+               <normaloff>:/Symbole/cuboid.png</normaloff>:/Symbole/cuboid.png</iconset>
              </property>
              <property name="autoDefault">
               <bool>true</bool>
@@ -641,7 +649,7 @@
          <number>0</number>
         </property>
         <property name="bottomMargin">
-         <number>0</number>
+         <number>3</number>
         </property>
         <item>
          <widget class="QWidget" name="wg_durchmesser" native="true">
@@ -937,14 +945,14 @@
             <widget class="QPushButton" name="pb_kreis">
              <property name="minimumSize">
               <size>
-               <width>80</width>
-               <height>20</height>
+               <width>125</width>
+               <height>25</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>100</width>
-               <height>25</height>
+               <width>135</width>
+               <height>30</height>
               </size>
              </property>
              <property name="font">
@@ -956,7 +964,11 @@
               </font>
              </property>
              <property name="text">
-              <string>Kreis erstellen</string>
+              <string> Kreis erstellen</string>
+             </property>
+             <property name="icon">
+              <iconset resource="Icons/icons.qrc">
+               <normaloff>:/Symbole/cylinder.png</normaloff>:/Symbole/cylinder.png</iconset>
              </property>
             </widget>
            </item>
@@ -991,7 +1003,7 @@
       <property name="minimumSize">
        <size>
         <width>400</width>
-        <height>100</height>
+        <height>120</height>
        </size>
       </property>
       <property name="maximumSize">
@@ -1428,13 +1440,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>25</height>
+           <height>30</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>30</height>
+           <height>35</height>
           </size>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_9">
@@ -1442,10 +1454,10 @@
            <number>0</number>
           </property>
           <property name="topMargin">
-           <number>2</number>
+           <number>4</number>
           </property>
           <property name="bottomMargin">
-           <number>2</number>
+           <number>4</number>
           </property>
           <item>
            <widget class="QToolButton" name="tb_spannmittel_aufklappen">
@@ -1508,14 +1520,14 @@
            <widget class="QPushButton" name="pb_spannmittel">
             <property name="minimumSize">
              <size>
-              <width>120</width>
-              <height>20</height>
+              <width>135</width>
+              <height>27</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>150</width>
-              <height>25</height>
+              <width>160</width>
+              <height>32</height>
              </size>
             </property>
             <property name="font">
@@ -1526,7 +1538,17 @@
              </font>
             </property>
             <property name="text">
-             <string>Spannmittel erstellen</string>
+             <string> Spannmittel erstellen</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Icons/icons.qrc">
+              <normaloff>:/Symbole/vice(1).png</normaloff>:/Symbole/vice(1).png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>22</width>
+              <height>20</height>
+             </size>
             </property>
             <property name="autoDefault">
              <bool>true</bool>
@@ -1833,7 +1855,7 @@
              </font>
             </property>
             <property name="text">
-             <string>24T0004580</string>
+             <string>Zeichnungsnummer  hier einfügen...</string>
             </property>
            </widget>
           </item>
@@ -1931,14 +1953,14 @@
            <widget class="QPushButton" name="pb_wizard_a">
             <property name="minimumSize">
              <size>
-              <width>70</width>
-              <height>20</height>
+              <width>90</width>
+              <height>25</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>100</width>
-              <height>25</height>
+              <height>30</height>
              </size>
             </property>
             <property name="font">
@@ -1949,7 +1971,11 @@
              </font>
             </property>
             <property name="text">
-             <string>Wizard_A</string>
+             <string> Wizard_A</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Icons/icons.qrc">
+              <normaloff>:/Symbole/automation.png</normaloff>:/Symbole/automation.png</iconset>
             </property>
             <property name="autoDefault">
              <bool>true</bool>
@@ -2214,14 +2240,14 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>70</width>
-              <height>20</height>
+              <width>90</width>
+              <height>25</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>100</width>
-              <height>25</height>
+              <height>30</height>
              </size>
             </property>
             <property name="font">
@@ -2232,7 +2258,11 @@
              </font>
             </property>
             <property name="text">
-             <string>Wizard_B</string>
+             <string> Wizard_B</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Icons/icons.qrc">
+              <normaloff>:/Symbole/circular-arrows.png</normaloff>:/Symbole/circular-arrows.png</iconset>
             </property>
             <property name="autoDefault">
              <bool>true</bool>
@@ -2282,11 +2312,6 @@
             <item>
              <property name="text">
               <string>Ausfüllhilfe B</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Bounding Box auslesen B</string>
              </property>
             </item>
            </widget>
@@ -3221,13 +3246,13 @@
             <property name="minimumSize">
              <size>
               <width>100</width>
-              <height>20</height>
+              <height>25</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>125</width>
-              <height>25</height>
+              <height>30</height>
              </size>
             </property>
             <property name="font">
@@ -3238,7 +3263,17 @@
              </font>
             </property>
             <property name="text">
-             <string>Starten</string>
+             <string> Starten</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Icons/icons.qrc">
+              <normaloff>:/Symbole/radioactive.png</normaloff>:/Symbole/radioactive.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>18</width>
+              <height>18</height>
+             </size>
             </property>
             <property name="autoDefault">
              <bool>true</bool>
@@ -3385,6 +3420,10 @@
             </property>
             <property name="text">
              <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Icons/icons.qrc">
+              <normaloff>:/Symbole/rpa.png</normaloff>:/Symbole/rpa.png</iconset>
             </property>
             <property name="shortcut">
              <string notr="true"/>
@@ -3691,7 +3730,9 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="Icons/icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>tb_spannmittel_aufklappen</sender>

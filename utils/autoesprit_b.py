@@ -129,7 +129,6 @@ class EspritB(QObject):
         self.wait_condition.wakeAll() # Weckt den wartenden Thread auf
         self.mutex.unlock()
 
-
     def esprit_a_sicherung_speichern_b(self) -> None:
         '''Speichert noch einmal die A-Seite zur Sicherheit ab, bevor Automation für B-Seite beginnt.'''
         self.status_update.emit("A-Seite wird gespeichert...")
