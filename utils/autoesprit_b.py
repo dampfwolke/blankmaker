@@ -583,8 +583,14 @@ class EspritB(QObject):
         sleep(self.verweilzeit)
         pag.hotkey("ctrl", "v")
         sleep(self.verweilzeit)
+        fertigteil_y = int(self.y_fertig)
+        if fertigteil_y > 100:
+             backen_verschieben = str(f"{(-fertigteil_y + 100)}")
+        else:
+            backen_verschieben = str(100-fertigteil_y)
+        clipboard.copy(backen_verschieben)
         pag.click(3151, 793) # Öffnen Allmatic.Step
-        sleep(2) # Längere self.verweilzeit nach dem Öffnen
+        sleep(self.verweilzeit) # verweilzeit nach dem Öffnen
 
     # Für zukünftige Automatisierung → Prüft ob der NP auf der B-Seite stimmt
     def nullpunkt_pruefen(self):
