@@ -22,6 +22,7 @@ from utils.autoesprit_a import EspritA
 from utils.autoesprit_b import EspritB
 from utils.stats_to_csv import laufzeit_eintragen
 from utils.confirmation_dialog import ConfirmationDialog
+from utils.close_nc_editor import find_and_close_error_windows
 
 # UI Imports
 from UI.frm_main_window import Ui_frm_main_window
@@ -95,6 +96,8 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.pb_esprit_start_makro.clicked.connect(self.on_esprit_makro_clicked)
         self.pb_wizard_a.clicked.connect(self.on_wizard_a_clicked)
         self.pb_wizard_b.clicked.connect(self.on_wizard_b_clicked)
+        # neues Signal close_nc_editor
+        self.pb_rausspielen.clicked.connect(self.nc_editor_schliessen)
 
         # --- Python Commander Setup ---
         self.le_at_nr.setDisabled(False)
@@ -107,6 +110,14 @@ class MainWindow(qtw.QMainWindow, Ui_frm_main_window):
         self.nc_file_check_timer.timeout.connect(self.update_nc_file_count)
         self.nc_file_check_timer.start(2000)
         self.update_nc_file_count()
+
+    @qtc.Slot()
+    def nc_editor_schliessen(self):
+        if find_and_close_error_windows(""):
+            print("NC-Editor gefunden und geschlossen!")
+        else:
+            print("Fehler: Kein NC-Editor Fenster zum Schließen gefunden!")
+
 
     @qtc.Slot()
     def on_wizard_a_clicked(self):
