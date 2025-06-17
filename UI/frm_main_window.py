@@ -111,7 +111,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout.addWidget(self.lb_rechteck_laenge)
 
-        self.horizontalSpacer_14 = QSpacerItem(71, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_14 = QSpacerItem(70, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer_14)
 
@@ -226,7 +226,7 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_4.setSpacing(0)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalLayout_4.setContentsMargins(-1, 0, -1, 0)
-        self.horizontalSpacer = QSpacerItem(118, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer = QSpacerItem(117, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_4.addItem(self.horizontalSpacer)
 
@@ -348,7 +348,7 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_5.setSpacing(0)
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.horizontalLayout_5.setContentsMargins(-1, 0, -1, 0)
-        self.horizontalSpacer_4 = QSpacerItem(126, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_4 = QSpacerItem(124, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_5.addItem(self.horizontalSpacer_4)
 
@@ -497,7 +497,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_12.addWidget(self.lb_spannmittel_wert)
 
-        self.horizontalSpacer_11 = QSpacerItem(25, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_11 = QSpacerItem(26, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_12.addItem(self.horizontalSpacer_11)
 
@@ -863,7 +863,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_15.addWidget(self.lb_x_fertig)
 
-        self.horizontalSpacer_28 = QSpacerItem(44, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_28 = QSpacerItem(46, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_15.addItem(self.horizontalSpacer_28)
 
@@ -903,7 +903,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_16.addWidget(self.lb_y_fertig)
 
-        self.horizontalSpacer_29 = QSpacerItem(45, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_29 = QSpacerItem(47, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_16.addItem(self.horizontalSpacer_29)
 
@@ -943,7 +943,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_14.addWidget(self.lb_z_fertig)
 
-        self.horizontalSpacer_30 = QSpacerItem(45, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_30 = QSpacerItem(46, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_14.addItem(self.horizontalSpacer_30)
 
@@ -983,7 +983,7 @@ class Ui_frm_main_window(object):
 
         self.horizontalLayout_17.addWidget(self.lb_spanntiefe_b)
 
-        self.horizontalSpacer_31 = QSpacerItem(50, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_31 = QSpacerItem(49, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_17.addItem(self.horizontalSpacer_31)
 
@@ -1120,7 +1120,7 @@ class Ui_frm_main_window(object):
         self.horizontalLayout_21.setSpacing(0)
         self.horizontalLayout_21.setObjectName(u"horizontalLayout_21")
         self.horizontalLayout_21.setContentsMargins(-1, 0, -1, 0)
-        self.horizontalSpacer_9 = QSpacerItem(118, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_9 = QSpacerItem(117, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_21.addItem(self.horizontalSpacer_9)
 
@@ -1282,7 +1282,7 @@ class Ui_frm_main_window(object):
         frm_main_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(frm_main_window)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 489, 33))
+        self.menubar.setGeometry(QRect(0, 0, 489, 21))
         self.menuDatei = QMenu(self.menubar)
         self.menuDatei.setObjectName(u"menuDatei")
         frm_main_window.setMenuBar(self.menubar)

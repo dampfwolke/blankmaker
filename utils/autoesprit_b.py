@@ -137,6 +137,7 @@ class EspritB(QObject):
         pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)                     # Verweilzeit
         pag.hotkey('ctrl', 's')               # A-Seite speichern
+        self.status_update.emit("A-Seite gespeichert!")
         sleep(4)                                    # Verweilzeit
         pag.doubleClick(2109, 668)            # Doppelklick auf Layer
         # sleep(self.verweilzeit)                     # Verweilzeit
@@ -171,6 +172,7 @@ class EspritB(QObject):
         sleep(self.verweilzeit)
         pag.click(2109, 668)                  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)                     # Verweilzeit
+        self.status_update.emit("Ausfüllhilfe B-Seite abgeschlossen.")
         # pag.doubleClick(2109, 668)
         # sleep(self.verweilzeit)
         # pag.click(2000, 700) # Standard layer einblenden
@@ -180,6 +182,7 @@ class EspritB(QObject):
     def esprit_datei_speichern_b(self):
         '''Datei von A-Seite auf B-Seite mit _B speichern'''
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
+        self.status_update.emit("B-Seite wird gespeichert...")
         sleep(self.verweilzeit)
         pag.click(1965, 36)
         sleep(self.verweilzeit)
@@ -190,8 +193,8 @@ class EspritB(QObject):
         sleep(self.verweilzeit)
         pag.hotkey("ctrl", "v")
         sleep(self.verweilzeit)
-        sleep(self.verweilzeit)
         pag.press('Enter')
+        self.status_update.emit("B-Seite erfolgreich gespeichert!")
         sleep(4)
 
     def abgeschlossen_b(self) -> None:
@@ -211,6 +214,7 @@ class EspritB(QObject):
         sleep(verweilzeit)  # Verweilzeit
         pag.click(1996, 697)  # Alle Layer ausblenden (Haken)
         sleep(verweilzeit)  # Verweilzeit
+        self.status_update.emit("Müll- und Spannmittel-Layer werden eingeblendet...")
         pag.doubleClick(2038, 827)  # Doppelklick auf Müll Layer
         sleep(verweilzeit)  # Verweilzeit
         pag.doubleClick(2038, 875)  # Doppelklick auf Spannmittel Layer
@@ -258,6 +262,7 @@ class EspritB(QObject):
         sleep(verweilzeit)  # Verweilzeit
         pag.click(2904, 67)  # Arbeitsebenen
         sleep(verweilzeit)  # Verweilzeit
+        self.status_update.emit("Klicke von Ansicht vorne...")
         pag.click(2904, 133)  # Arbeitsebene Vorne
         sleep(verweilzeit)  # Verweilzeit
         pag.click(2175, 294)  # Fertigteil Pfeil anklicken
@@ -302,21 +307,23 @@ class EspritB(QObject):
         sleep(verweilzeit)  # Verweilzeit
 
     def rotieren(self):
+        self.status_update.emit("Beginne mit Rotation...")
         pag.doubleClick(2109, 668)  # Doppelklick auf Layer
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)  # self.verweilzeit
-        self.status_update.emit("Beginne mit Rotation...")
         pag.click(1995, 713)  # Solid Layer einblenden (Haken)
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Einleitung der Rotations-Sequenz...")
         pag.click(2684, 67)  # Arbeitsebenen anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.moveTo(2684, 102)  # Arbeitsebene XYZ Maus zur Position bewegen
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.scroll(15)  # Mausrad 15 Mal nach oben bewegen
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Arbeitsebene wird auf vorne gesetzt...")
         pag.click(2684, 176)  # Arbeitsebene hinten anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
@@ -359,7 +366,7 @@ class EspritB(QObject):
         pag.hotkey('ctrl', 'a')  # Alles markieren im Solid- und Rohteilmitnahme Layer
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.rightClick(2070, 599)  # Rechtsklick für Kontextmenü
-        self.status_update.emit("Z-Verschiebung Wert in mm wird eingetragen..")
+        self.status_update.emit("Verschieben wird ausgewählt...")
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2158, 609)  # Modifizieren im Kontextmenü klicken
         sleep(self.verweilzeit)  # self.verweilzeit
@@ -371,6 +378,7 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2755, 539)  # Haken neben dem XYZ anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Z-Verschiebung Wert in mm wird eingetragen...")
         pag.press('tab')  # Tabulator
         sleep(0.05)  # self.verweilzeit
         pag.typewrite("0")  # "0" in X eingeben
@@ -411,12 +419,13 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.hotkey('ctrl', 'a')  # Alle Feature markieren
         sleep(self.verweilzeit)  # self.verweilzeit
-        self.status_update.emit("Feature symmetriert..")
+        self.status_update.emit("Feature wird symmetriert..")
         pag.rightClick(2070, 599)  # Rechtsklick für Kontextmenü
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2158, 609)  # Modifizieren im Kontextmenü klicken
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2943, 400)  # Modifizieren fokussieren
+        self.status_update.emit("Symmetrie wird ausgewählt...")
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.press("s")  # Symmetrie mit "s" anwählen
         sleep(0.1)  # self.verweilzeit
@@ -429,6 +438,7 @@ class EspritB(QObject):
         pag.click(2840, 625)  # Verschieben mit Mausklick auf "OK" bestätigen
         self.status_update.emit("Warte bis Esprit fertig ist mit rechnen :D ...")
         sleep(5)  # self.verweilzeit 5 sec
+        self.status_update.emit("Feature symmetriert..")
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(self.verweilzeit)  # self.verweilzeit
         self.status_update.emit("Fehlermeldung wird weggeklickt...")
@@ -445,7 +455,7 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2481, 68)  # Nur Feature Auswahl anklicken (aufklappen)
         sleep(self.verweilzeit)  # self.verweilzeit
-        self.status_update.emit("Nur Feature wird ausgewählt...")
+        self.status_update.emit("Nur Konturzüge wird ausgewählt...")
         pag.click(2477, 237)  # Nur Konturzüge anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2047, 699)  # Klick auf Standard um Markierung aufzuheben
@@ -477,6 +487,7 @@ class EspritB(QObject):
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2000, 652)  # Fokussieren Klick
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Alles wird markiert...")
         pag.hotkey('ctrl', 'a')  # Alles markieren
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.rightClick(2070, 599)  # Rechtsklick für Kontextmenü
@@ -491,7 +502,7 @@ class EspritB(QObject):
         pag.click(2756, 470)  # Original modifizieren Haken anklicken
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2755, 539)  # Haken neben dem XYZ anklicken
-        self.status_update.emit("Werte werden eingetragen...")
+        self.status_update.emit("X und Y Werte werden eingetragen...")
         sleep(self.verweilzeit)  # self.verweilzeit
         x_verschiebung = float(self.x_fertig)
         y_verschiebung = float(self.y_fertig)
@@ -504,6 +515,7 @@ class EspritB(QObject):
         pag.press('tab')
         pag.click(2840, 625)  # Verschieben mit Mausklick auf "OK" bestätigen
         sleep(self.verweilzeit)  # self.verweilzeit
+        self.status_update.emit("Warte bis Esprit fertig ist mit rechnen :D ...")
         pag.click(2109, 668)  # Klick auf Layer (Fokussieren)
         sleep(5)  # self.verweilzeit 5 sec
 
@@ -529,6 +541,7 @@ class EspritB(QObject):
         pag.click(2425, 574)  # Aktualisieren
         sleep(self.verweilzeit)  # self.verweilzeit
         pag.click(2333, 618)  # OK Klicken
+        self.status_update.emit("Aktualisierung der Simulationsbauteile abgeschlossen!")
 
     def zusammenfassung_funktionen(self):
         """Eine Zusammenfassung folgender Funktionen: 1. rohteilmitnahme, 2. rotieren, 3. z_verschieben,
@@ -542,6 +555,7 @@ class EspritB(QObject):
         self.solid_aktualisieren()
 
     def allmatic_125(self):
+        self.status_update.emit("Allmatic wird geöffnet...")
         pag.doubleClick(2109, 668) # Doppelklick auf Layer
         sleep(self.verweilzeit)
         pag.click(2000, 652) # Fokussieren Klick
@@ -551,10 +565,6 @@ class EspritB(QObject):
         pag.click(1996, 697) # Alle Layer ausblenden (Haken)
         sleep(self.verweilzeit)
         pag.doubleClick(2038, 827) # Doppelklick auf Müll Layer
-
-        ###########################################################
-        # Hier muss eine Abfrage mit einer Msg-Box programmiert werden!!!
-
         spanntiefe = int(self.spanntiefe) # Spanntiefe in integer umwandeln
 
         if spanntiefe >= 40:
