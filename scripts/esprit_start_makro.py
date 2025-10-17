@@ -2,7 +2,7 @@ import pyautogui as pa
 
 from time import sleep
 
-def klicken(x, y, verweilzeit=0.7):
+def klicken(x, y, verweilzeit=0.8):
     pa.click(x,y)
     sleep(verweilzeit)
 
@@ -30,7 +30,8 @@ def main():
     # Optionen
     klicken(2658, 854)
     # Haken bei Zusammentreffende Oberflächen verbinden
-    klicken(2803, 635)
+    ###########
+    klicken(2815, 632)
     # Ok klicken
     klicken(2954, 755)
     # Öffnen klicken
